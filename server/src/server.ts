@@ -6,13 +6,15 @@ import cors from 'cors';
 import nodemailer from 'nodemailer';
 
 import { getEnvironmentVariables } from './environments/env';
+import UserRouter from './routers/UserRouter';
 import { ContactEmail } from './middlewares/ContactEmail';
 
 export class Server {
     public app: express.Application = express();
-    
+
     constructor() {
         this.setConfigurations();
+        this.setRoutes();
         this.error404Handler();
         this.handleErrors();
     }
@@ -35,6 +37,10 @@ export class Server {
         mongoose.connection.on('open', () => {
           console.log('connection successfully made with database');
         });
+    }
+
+    setRoutes() {
+      this.app.use('/user', UserRouter);
     }
 
     configureBodyParser() {
