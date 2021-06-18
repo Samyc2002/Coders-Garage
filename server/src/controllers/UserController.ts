@@ -40,7 +40,6 @@ export class UserController {
     }
 
     static async updateUser(req: Request, res: Response, next: NextFunction) {
-
         
         try {
 

@@ -11,6 +11,10 @@ const UserSchema: Schema = new Schema({
         type: String,
         required: true
     },
+    loggedIn: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const User: Model<UserDocument> = model('User', UserSchema);

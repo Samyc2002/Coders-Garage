@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "firebase": "^8.6.8",
     "moment": "^2.29.1",
     "mongoose": "^5.12.14",
     "nodemailer": "^6.6.1"

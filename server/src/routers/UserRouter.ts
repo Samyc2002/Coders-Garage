@@ -17,7 +17,7 @@ class UserRouter {
 
     postRoutes() {
 
-        this.router.post('/login', UserController.createUser);
+        this.router.post('/post', UserController.createUser);
     }
 
     putRoutes() {
