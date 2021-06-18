@@ -5,6 +5,7 @@ import IDE from '../pages/IDE';
 import Login from '../pages/Login';
 
 const Routes: React.FC = () => (
+    
     <Switch>
         <Route path="/ide" exact component={IDE}/>
         <Route path="/login" component={Login}/>
