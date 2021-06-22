@@ -1,6 +1,4 @@
-import React from 'react';
 import { Grid, List, ListItem, makeStyles, Typography } from '@material-ui/core';
-import { Copyright } from '@material-ui/icons';
 
 import './styles.css';
 
@@ -46,7 +44,7 @@ const Footer = () => {
         <footer className={classes.footer}>
             <Grid container justify="center" spacing={3}>
                 <Grid item xs={12} sm={6} justify="flex-start">
-                    <Typography variant="h5" align="left" style={{ color: '#ffffff', fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder' }}>
+                    <Typography variant="h5" align="left" style={{ color: '#ffffff', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 'bolder' }}>
                         QUICK LINKS
                     </Typography>
                     <List>
@@ -68,7 +66,7 @@ const Footer = () => {
                     </List>
                 </Grid>
                 <Grid item xs={12} sm={6} justify="flex-start">
-                    <Typography variant="h5" align="left" style={{ color: '#ffffff', fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder' }}>
+                    <Typography variant="h5" align="left" style={{ color: '#ffffff', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 'bolder' }}>
                         CONTACT US
                     </Typography>
                     <List>
@@ -82,7 +80,7 @@ const Footer = () => {
                         <ListItem className="li" disableGutters>
                             <a href="tel:+919674950307" style={{ textDecoration: 'none' }}>
                                 <Typography variant="subtitle1" style={{ color: '#ffffff',fontFamily: "'Quicksand', sans-serif" }}>
-                                    Call Us at <span>+919674950307</span>
+                                    Call Us at <span style={{ fontWeight: 'bolder' }}>+919674950307</span>
                                 </Typography>
                             </a>
                         </ListItem>

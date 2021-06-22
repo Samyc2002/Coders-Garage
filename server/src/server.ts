@@ -1,5 +1,4 @@
-import express from 'express';
-import { Response } from 'express';
+import express, { Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -23,7 +22,35 @@ export class Server {
         this.connectMongoDb();
         this.configureBodyParser();
         this.configureNodemailer();
-        this.app.use(cors());
+		const server = require("http").createServer(this.app);
+		const io = require('socket.io')(server, {
+			cors: {
+				origin: '*',
+				methods: [ 'GET', 'POST' ]
+			}
+		});
+		this.app.use(cors());
+		interface call{
+			userToCall: any,
+			signalData: any,
+			from: string,
+			name: string
+		}
+		io.on("connection", (socket: any) => {
+			socket.emit("me", socket.id);
+		
+			socket.on("disconnect", () => {
+				socket.broadcast.emit("callEnded")
+			});
+		
+			socket.on("callUser", ({ userToCall, signalData, from, name }: call) => {
+				io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+			});
+		
+			socket.on("answerCall", (data: any) => {
+				io.to(data.to).emit("callAccepted", data.signal)
+			});
+		});
         console.log('Configurations set up successfully');
     }
 

@@ -100,10 +100,13 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(7) + 1,
         [theme.breakpoints.up("sm")]: {
           width: theme.spacing(9) + 1
+        },
+        [theme.breakpoints.down("xs")]: {
+            display: 'none',
+            transition: 'ease-in-out'
         }
     }
   }),
-  
 );
 
 const IDE = () => {
@@ -133,6 +136,7 @@ const IDE = () => {
     const handleTheme = () => {
         setTheme(!theme);
     }
+
 	const handleTab = () => {
 		setTab(!tab);
 	}
