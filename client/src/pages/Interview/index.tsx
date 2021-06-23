@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { AppBar, createStyles, CssBaseline, Divider, IconButton, makeStyles, Toolbar, Typography, Theme, Drawer, List, ListItem, ListItemIcon, ListItemText, Paper, Tabs, Tab, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon } from '@material-ui/icons';
+import { AppBar, createStyles, CssBaseline, Divider, IconButton, makeStyles, Toolbar, Typography, Theme, Drawer, List, ListItem, ListItemIcon, ListItemText, Paper, Tabs, Tab, Grid, FormControl, InputLabel, Select, MenuItem, useMediaQuery, Button, Menu, TextField } from '@material-ui/core';
+import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, AddCircleRounded as AddCircleRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
 
 import Footer from '../../components/footer';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import Ide from '../../components/IDE';
-import Logo from '../../assets/Logo';
+import Logo from '../../assets/LogoBlue.png';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -123,6 +123,7 @@ const Interview = () => {
     const classes = useStyles();
     const dark = "material-darker";
     const light = "eclipse";
+    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
 
 	const [code, setCode] = useLocalStorage('code', '');
     const [open, setOpen] = useState(false);
@@ -130,6 +131,7 @@ const Interview = () => {
 	const [theme, setTheme] = useState(true);
     const [tab, setTab] = useState(false);
 	const [content, setContent] = useState(0);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
 	const handleDrawer = () => {
         setOpen(!open);
@@ -154,6 +156,14 @@ const Interview = () => {
 	const handleContent = (event: React.ChangeEvent<{}>, newContent: number) => {
 		setContent(newContent);
 	}
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
 	const language = [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ];
     const format = [ 'c', 'cpp', 'csharp' , 'java', 'python3', 'ruby', 'kotlin', 'swift' ];
@@ -232,7 +242,7 @@ const Interview = () => {
 	);
 
 	const editor = () => (
-		<div className={classes.action} style={{ paddingTop: '30px', paddingRight: '3.5vw' }}>
+		<div className={classes.action} style={{ paddingTop: '30px', paddingRight: '2.5vw', paddingLeft: '7.5vw', width: '99vw' }}>
 			<Ide
 				value={code}
 				onChange={setCode}
@@ -263,7 +273,7 @@ const Interview = () => {
                     position="fixed"
                     className={classes.appBar}
                 >
-                    <Toolbar style={{ justifyContent: 'space-between' }}>
+                    <Toolbar style={{ justifyContent: 'space-between', paddingLeft: '0px', paddingRight: '0px' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 color="primary"
@@ -279,62 +289,103 @@ const Interview = () => {
                             </IconButton>
                             <div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
                                 <a href="/">
-                                    <Logo col="#3f51b5"/>
+                                    <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'200px':'300px' }}/>
                                 </a>
                             </div>
                         </div>
                         {(content===1) && (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <FormControl className={classes.formControl} style={{ marginLeft: '10px' }}>
-                                    <InputLabel id="demo-simple-select-label">Language</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={language[index]}
-                                        onChange={handleChange}
+                            isTabletorMobile?(
+                                <div>
+                                    <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                        <IconButton
+                                            color="primary"
+                                            aria-label="open tabs"
+                                            edge="end"
+                                            title="Tabs"
+                                        >
+                                            <AddCircleRoundedIcon/>
+                                        </IconButton>
+								    </Button>
+                                    <Menu
+                                        id="simple-menu"
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
                                     >
-                                        {language.map((value, index) => (
-                                            <MenuItem value={index}>{value}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <IconButton
-                                    color="primary"
-                                    aria-label="open drawer"
-                                    edge="end"
-                                    onClick={handleTheme}
-                                    title="IDE theme"
-                                    style={{
-                                        marginLeft: '10px'
-                                    }}
-                                >
-                                    {theme?<Brightness4RoundedIcon/>:<Brightness7RoundedIcon/>}
-                                </IconButton>
-                                <IconButton
-                                    color="primary"
-                                    aria-label="open drawer"
-                                    edge="end"
-                                    onClick={handleReset}
-                                    title="Reset Code"
-                                    style={{
-                                        marginLeft: '10px'
-                                    }}
-                                >
-                                    <RotateLeftRoundedIcon/>
-                                </IconButton>
-                                <IconButton
-                                    color="primary"
-                                    aria-label="open drawer"
-                                    edge="end"
-                                    onClick={handleDrawer}
-                                    title="Run"
-                                    style={{
-                                        marginLeft: '10px'
-                                    }}
-                                >
-                                    {open?<CloseIcon />:<PlayArrowRoundedIcon />}
-                                </IconButton>
-                            </div>
+                                        <MenuItem>
+                                            <FormControl className={classes.formControl} style={{ marginLeft: '10px' }}>
+                                                <InputLabel id="demo-simple-select-label">Language</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={language[index]}
+                                                    onChange={handleChange}
+                                                >
+                                                    {language.map((value, index) => (
+                                                        <MenuItem value={index}>{value}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </MenuItem>
+                                        <MenuItem onClick={handleTheme}>Editor Theme</MenuItem>
+                                        <MenuItem onClick={handleReset}>Reset Code</MenuItem>
+                                        <MenuItem onClick={handleDrawer}>Compile and Run</MenuItem>
+                                    </Menu>
+                                </div>
+                            ):(
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <FormControl className={classes.formControl} style={{ marginLeft: '10px' }}>
+                                        <InputLabel id="demo-simple-select-label">Language</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={language[index]}
+                                            onChange={handleChange}
+                                        >
+                                            {language.map((value, index) => (
+                                                <MenuItem value={index}>{value}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <IconButton
+                                        color="primary"
+                                        aria-label="open drawer"
+                                        edge="end"
+                                        onClick={handleTheme}
+                                        title="IDE theme"
+                                        style={{
+                                            marginLeft: '10px'
+                                        }}
+                                    >
+                                        {theme?<Brightness4RoundedIcon/>:<Brightness7RoundedIcon/>}
+                                    </IconButton>
+                                    <IconButton
+                                        color="primary"
+                                        aria-label="open drawer"
+                                        edge="end"
+                                        onClick={handleReset}
+                                        title="Reset Code"
+                                        style={{
+                                            marginLeft: '10px'
+                                        }}
+                                    >
+                                        <RotateLeftRoundedIcon/>
+                                    </IconButton>
+                                    <IconButton
+                                        color="primary"
+                                        aria-label="open drawer"
+                                        edge="end"
+                                        onClick={handleDrawer}
+                                        title="Run"
+                                        style={{
+                                            marginLeft: '10px'
+                                        }}
+                                    >
+                                        {open?<CloseIcon />:<PlayArrowRoundedIcon />}
+                                    </IconButton>
+                                </div>
+                            )
                         )}
                     </Toolbar>
                     <Divider/>
@@ -396,6 +447,7 @@ const Interview = () => {
                             indicatorColor="primary"
                             textColor="primary"
                             onChange={handleContent}
+                            variant={isTabletorMobile?"scrollable":"standard"}
                             centered
                         >
                             <Tab label="Problem Statement"/>
@@ -406,6 +458,57 @@ const Interview = () => {
                     </Paper>
                     {setAction()}
                 </main>
+                {(content===1) && (
+                    <Drawer
+                        className={classes.drawer}
+                        variant="persistent"
+                        anchor="right"
+                        open={open}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                    >
+                        <Grid item style={{ height: '20px' }}/>
+                        <Toolbar/>
+                        <Grid container justify="center" direction="column">
+                            <Grid item xl={12}>
+                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center' }}>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="Input"
+                                        multiline
+                                        rows={15}
+                                        variant="standard"
+                                        style={{
+                                            margin: '10px',
+                                            color: '#121212'
+                                        }}
+                                    />
+                                </Paper>
+                            </Grid>
+                            <Grid item style={{ height: '20px' }}/>
+                            <Grid item xl={12}>
+                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        label="output"
+                                        multiline
+                                        rows={15}
+                                        variant="standard"
+                                        style={{
+                                            margin: '10px',
+                                            color: '#121212'
+                                        }}
+                                        disabled
+                                        autoFocus
+                                    />
+                                </Paper>
+                            </Grid>
+                            <Grid item style={{ height: '20px' }}/>
+                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }}>Run</Button>
+                        </Grid>
+                    </Drawer>
+                )}
                 <Footer/>
             </div>
         </Scrollbars>
