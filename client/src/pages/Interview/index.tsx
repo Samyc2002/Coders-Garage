@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import Footer from '../../components/footer';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import Ide from '../../components/IDE';
+import Logo from '../../assets/Logo';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -274,9 +275,11 @@ const Interview = () => {
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-                            INTERVIEW
-                        </Typography>
+                        <div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
+                            <a href="/">
+                                <Logo col="#3f51b5"/>
+                            </a>
+                        </div>
                     </div>
                     {(content===1) && (
 						<div style={{ display: 'flex', alignItems: 'center' }}>
@@ -352,7 +355,7 @@ const Interview = () => {
             >
                 <div className={classes.toolbar}/>
                 <List>
-                    <a href="/" style={{ textDecoration: 'none', color: '#121212' }}>
+                    <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
                         <ListItem button key="Home">
                             <ListItemIcon>
                                 <HomeRoundedIcon/>

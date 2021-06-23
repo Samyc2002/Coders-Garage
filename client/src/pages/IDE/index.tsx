@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AppBar, Button, createStyles, CssBaseline, Divider, Drawer, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, makeStyles, MenuItem, Paper, Select, TextField, Theme, Toolbar, Typography } from '@material-ui/core';
 import { ComputerRounded as ComputerRoundedIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Menu as MenuIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon } from '@material-ui/icons';
+import clsx from 'clsx';
 
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/python/python';
@@ -10,9 +11,8 @@ import 'codemirror/mode/swift/swift';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import Ide from '../../components/IDE';
 import Footer from '../../components/footer';
-
+import Logo from '../../assets/Logo';
 import './styles.css';
-import clsx from 'clsx';
 
 const drawerWidth = 240;
 
@@ -176,9 +176,11 @@ const IDE = () => {
                             >
                                 <MenuIcon/>
                             </IconButton>
-                            <Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-                                CODE EDITOR
-                            </Typography>
+                            <div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
+                                <a href="/">
+                                    <Logo col="#3f51b5"/>
+                                </a>
+                            </div>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <FormControl className={classes.formControl} style={{ marginLeft: '10px' }}>
@@ -252,7 +254,7 @@ const IDE = () => {
                 >
                     <div className={classes.toolbar}/>
                     <List>
-                        <a href="/" style={{ textDecoration: 'none', color: '#121212' }}>
+                        <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
                             <ListItem button key="Home">
                                 <ListItemIcon>
                                     <HomeRoundedIcon/>
