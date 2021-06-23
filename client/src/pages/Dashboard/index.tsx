@@ -1,5 +1,6 @@
 import React from 'react';
-import { CssBaseline, makeStyles, Theme, createStyles, AppBar, Toolbar, IconButton, Typography, Divider } from '@material-ui/core';
+import { CssBaseline, makeStyles, Theme, createStyles, AppBar, Toolbar, Typography, Divider } from '@material-ui/core';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Landing from '../../components/landing';
 import Dash from '../../components/dashboard';
@@ -106,36 +107,38 @@ const Dashboard = () => {
     const classes = useStyles();
 
     return (
-        <div>
-            <Landing/>
-            <CssBaseline />
-            <AppBar
-                position="sticky"
-                className={classes.appBar}
-            >
-                <Toolbar style={{ justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
-                        <a href="/">
-                            <Logo col="#3f51b5"/>
-                        </a>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-                            <a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Home</a>
-                        </Typography>
-                        <Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
-                            <a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>IDE</a>
-                        </Typography>
-                        <Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-                            <a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
-                        </Typography>
-                    </div>
-                </Toolbar>
-                <Divider/>
-            </AppBar>
-            <Dash/>
-            <Footer/>
-        </div>
+		<Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
+			<div>
+				<Landing/>
+				<CssBaseline />
+				<AppBar
+					position="sticky"
+					className={classes.appBar}
+				>
+					<Toolbar style={{ justifyContent: 'space-between' }}>
+						<div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
+							<a href="/">
+								<Logo col="#3f51b5"/>
+							</a>
+						</div>
+						<div style={{ display: 'flex', alignItems: 'center' }}>
+							<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
+								<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Home</a>
+							</Typography>
+							<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
+								<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>IDE</a>
+							</Typography>
+							<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+								<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
+							</Typography>
+						</div>
+					</Toolbar>
+					<Divider/>
+				</AppBar>
+				<Dash/>
+				<Footer/>
+			</div>
+		</Scrollbars>
     )
 }
 

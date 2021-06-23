@@ -2,6 +2,7 @@
 
 declare module 'react-reveal/Fade';
 declare module 'react-reveal/Wobble';
+declare module 'react-custom-scrollbars';
 
 declare module '*.scss' {
     const content: {[className: string]: string};
