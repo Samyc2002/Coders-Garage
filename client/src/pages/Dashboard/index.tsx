@@ -167,6 +167,11 @@ const Dashboard = () => {
 											<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 										</Typography>
 									</MenuItem>
+									<MenuItem onClick={handleClose}>
+										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+											<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
+										</Typography>
+									</MenuItem>
 								</Menu>
 						  	</div>
 						):(
@@ -177,9 +182,14 @@ const Dashboard = () => {
 								<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
 									<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>IDE</a>
 								</Typography>
-								<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+								<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
 									<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 								</Typography>
+								<Button variant="contained" color="primary" size="small">
+									<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+										<a href="!#" style={{ textDecoration: 'none', color: '#ffffff', fontWeight: 'bolder', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
+									</Typography>
+								</Button>
 							</div>
 						)}
 					</Toolbar>

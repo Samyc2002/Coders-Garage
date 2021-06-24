@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon } from '@material-ui/icons';
+import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography } from '@material-ui/core';
+import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, AddCircleRounded as AddCircleRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
 
 import Logo from '../../assets/LogoBlue.png';
+import './styles.css';
 
 const drawerWidth = 240;
 
@@ -110,6 +111,15 @@ const useStyles = makeStyles((theme: Theme) =>
 		[theme.breakpoints.up("lg")]: {
 			paddingLeft: '4.5vw'
 		}
+	},
+	icon: {
+		color: '#3f51b5'
+	},
+	text: {
+		color: '#3f51b5'
+	},
+	back: {
+		backgroundColor: '#cee8fc'
 	}
   }),
 );
@@ -120,10 +130,19 @@ const Home = () => {
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
     
     const [tab, setTab] = useState(false);
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleTab = () => {
 		setTab(!tab);
 	}
+
+	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
     
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
@@ -133,7 +152,7 @@ const Home = () => {
                     position="fixed"
                     className={classes.appBar}
                 >
-                    <Toolbar style={{ justifyContent: 'space-between', paddingRight: '0px' }}>
+                    <Toolbar style={{ justifyContent: isTabletorMobile?'space-around':'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 color="primary"
@@ -152,6 +171,67 @@ const Home = () => {
                                     <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'200px':'300px' }}/>
                                 </a>
                             </div>
+                        </div>
+                        <div>
+							{isTabletorMobile?(
+								<div>
+									<Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+										<IconButton
+											color="primary"
+											aria-label="open tabs"
+											edge="end"
+											title="Tabs"
+										>
+											<AddCircleRoundedIcon/>
+										</IconButton>
+									</Button>
+									<Menu
+										id="simple-menu"
+										anchorEl={anchorEl}
+										keepMounted
+										open={Boolean(anchorEl)}
+										onClose={handleClose}
+									>
+										<MenuItem onClick={handleClose}>
+											<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
+												<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Practice</a>
+											</Typography>
+										</MenuItem>
+										<MenuItem onClick={handleClose}>
+											<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
+												<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>1v1</a>
+											</Typography>
+										</MenuItem>
+										<MenuItem onClick={handleClose}>
+											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
+												<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Contests</a>
+											</Typography>
+										</MenuItem>
+										<MenuItem onClick={handleClose}>
+											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+												<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
+											</Typography>
+										</MenuItem>
+									</Menu>
+								</div>
+							):(
+								<div style={{ display: 'flex', alignItems: 'center' }}>
+									<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
+										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Practice</a>
+									</Typography>
+									<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
+										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>1v1</a>
+									</Typography>
+									<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
+										<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Contests</a>
+									</Typography>
+									<Button variant="contained" color="primary" size="small">
+										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+											<a href="!#" style={{ textDecoration: 'none', color: '#ffffff', fontWeight: 'bolder', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
+										</Typography>
+									</Button>
+								</div>
+							)}
                         </div>
                     </Toolbar>
                     <Divider/>
@@ -175,11 +255,11 @@ const Home = () => {
                     <div className={classes.toolbar}/>
                     <List>
                         <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
-                            <ListItem button key="Home">
-                                <ListItemIcon>
+                            <ListItem button key="Home" classes={{ root: classes.back }}>
+                                <ListItemIcon classes={{ root: classes.icon }}>
                                     <HomeRoundedIcon/>
                                 </ListItemIcon>
-                                <ListItemText>
+                                <ListItemText classes={{ root: classes.text }}>
                                     Home
                                 </ListItemText>
                             </ListItem>

@@ -114,6 +114,15 @@ const useStyles = makeStyles((theme: Theme) =>
 		[theme.breakpoints.up("lg")]: {
 			paddingLeft: '4.5vw'
 		}
+	},
+	icon: {
+		color: '#3f51b5'
+	},
+	text: {
+		color: '#3f51b5'
+	},
+	back: {
+		backgroundColor: '#cee8fc'
 	}
   }),
 );
@@ -273,7 +282,7 @@ const Interview = () => {
                     position="fixed"
                     className={classes.appBar}
                 >
-                    <Toolbar style={{ justifyContent: 'space-between', paddingRight: '0px' }}>
+                    <Toolbar style={{ justifyContent: isTabletorMobile?'space-around':'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 color="primary"
@@ -429,11 +438,11 @@ const Interview = () => {
                             </ListItem>
                         </a>
                         <a href="/interview" style={{ textDecoration: 'none', color: '#121212' }}>
-                            <ListItem button key="Interview">
-                                <ListItemIcon>
+                            <ListItem button key="Interview" classes={{ root: classes.back }}>
+                                <ListItemIcon classes={{ root: classes.icon }}>
                                     <ComputerRoundedIcon/>
                                 </ListItemIcon>
-                                <ListItemText>
+                                <ListItemText classes={{ root: classes.text }}>
                                     Interview
                                 </ListItemText>
                             </ListItem>

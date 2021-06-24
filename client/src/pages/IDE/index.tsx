@@ -106,7 +106,16 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'none',
             transition: 'ease-in-out'
         }
-    }
+    },
+	icon: {
+		color: '#3f51b5'
+	},
+	text: {
+		color: '#3f51b5'
+	},
+	back: {
+		backgroundColor: '#cee8fc'
+	}
   }),
 );
 
@@ -174,7 +183,7 @@ const IDE = () => {
                         position="fixed"
                         className={classes.appBar}
                     >
-                        <Toolbar style={{ justifyContent: 'space-between' }}>
+                        <Toolbar style={{ justifyContent: isTabletorMobile?'space-around':'space-between' }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton
                                     color="primary"
@@ -318,11 +327,11 @@ const IDE = () => {
                                 </ListItem>
                             </a>
                             <a href="/ide" style={{ textDecoration: 'none', color: '#121212' }}>
-                                <ListItem button key="IDE">
-                                    <ListItemIcon>
+                                <ListItem button key="IDE" classes={{ root: classes.back }}>
+                                    <ListItemIcon classes={{ root: classes.icon }}>
                                         <CodeRoundedIcon/>
                                     </ListItemIcon>
-                                    <ListItemText>
+                                    <ListItemText classes={{ root: classes.text }}>
                                         IDE
                                     </ListItemText>
                                 </ListItem>
