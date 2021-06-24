@@ -5,6 +5,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import clsx from 'clsx';
 
 import Logo from '../../assets/LogoBlue.png';
+import Footer from '../../components/footer';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -289,6 +290,7 @@ const Home = () => {
                 <main className={classes.content}>
 
                 </main>
+                <Footer/>
             </div>
         </Scrollbars>
     )
