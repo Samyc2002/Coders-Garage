@@ -127,10 +127,10 @@ const Dashboard = () => {
 					position="sticky"
 					className={classes.appBar}
 				>
-					<Toolbar style={{ justifyContent: 'space-between', paddingLeft: '0px' }}>
+					<Toolbar style={{ justifyContent: 'space-between' }}>
 						<div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
 							<a href="/">
-								<img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'200px':'300px' }}/>
+								<img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'25x':'50px' }}/>
 							</a>
 						</div>
 						{isTabletorMobile?(

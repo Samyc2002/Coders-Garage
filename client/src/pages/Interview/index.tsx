@@ -298,7 +298,7 @@ const Interview = () => {
                             </IconButton>
                             <div style={{ display: 'flex', alignItems: 'center', transform: 'scale(0.7, 0.7)' }}>
                                 <a href="/">
-                                    <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'200px':'300px' }}/>
+                                    <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'25px':'50px' }}/>
                                 </a>
                             </div>
                         </div>
