@@ -174,7 +174,7 @@ const IDE = () => {
                         position="fixed"
                         className={classes.appBar}
                     >
-                        <Toolbar style={{ justifyContent: 'space-between', paddingLeft: '0px' }}>
+                        <Toolbar style={{ justifyContent: 'space-between' }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton
                                     color="primary"

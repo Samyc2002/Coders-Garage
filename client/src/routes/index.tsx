@@ -5,11 +5,13 @@ import IDE from '../pages/IDE';
 import Login from '../pages/Login';
 import Interview from '../pages/Interview';
 import Dashboard from '../pages/Dashboard';
+import Home from '../pages/Home';
 
 const Routes: React.FC = () => (
     
     <Switch>
         <Route path="/" exact component={Dashboard}/>
+        <Route path="/home" component={Home}/>
         <Route path="/ide" component={IDE}/>
         <Route path="/login" component={Login}/>
         <Route path="/interview" component={Interview}/>

@@ -273,7 +273,7 @@ const Interview = () => {
                     position="fixed"
                     className={classes.appBar}
                 >
-                    <Toolbar style={{ justifyContent: 'space-between', paddingLeft: '0px', paddingRight: '0px' }}>
+                    <Toolbar style={{ justifyContent: 'space-between', paddingRight: '0px' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 color="primary"
