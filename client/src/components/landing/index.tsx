@@ -2,7 +2,7 @@ import { useMediaQuery } from '@material-ui/core';
 import React from 'react';
 import { Parallax } from 'react-parallax';
 import Fade from 'react-reveal/Fade';
-import Wobble from 'react-reveal/Wobble';
+import Pulse from 'react-reveal/Pulse';
 
 import Logo from '../../assets/LogoWhite.png';
 
@@ -17,11 +17,11 @@ const Landing = () => {
             <Parallax bgImage={Background} strength={500}>
                 <div style={{ minHeight: '100vh' }}>
                     <div style={{ ...insideStyles }}>
-                        <Wobble>
+                        <Pulse>
                             <Fade>
                                 <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'300px':'600px' }}/>
                             </Fade>
-                        </Wobble>
+                        </Pulse>
                     </div>
                 </div>
             </Parallax>
