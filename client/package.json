@@ -31,6 +31,7 @@
     "react-parallax": "^3.3.0",
     "react-reveal": "^1.2.2",
     "react-scripts": "4.0.3",
+    "react-visibility-sensor": "^5.1.1",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "simple-peer": "^9.11.0",

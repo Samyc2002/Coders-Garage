@@ -2,6 +2,8 @@
 
 declare module 'react-reveal/Fade';
 declare module 'react-reveal/Wobble';
+declare module 'react-reveal/Zoom';
+declare module 'react-reveal/Slide';
 declare module 'react-custom-scrollbars';
 
 declare module '*.scss' {
