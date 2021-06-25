@@ -1,54 +1,30 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { Button, CssBaseline, makeStyles, Grid, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, useTheme, TextField } from '@material-ui/core';
 import firebase from 'firebase';
 
 import * as Providers from '../../config/authmethods';
 import * as Methods from '../../authentication/auth';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import Google from '../../assets/Google.png';
+import Facebook from '../../assets/Facebook.png';
+import Github from '../../assets/Github.png';
+import Twitter from '../../assets/Twitter.png';
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(2, 0),
-  },
+	background: {
+		height: '100vh',
+		backgroundImage: 'url(https://images.unsplash.com/photo-1489875347897-49f64b51c1f8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80)',
+		backgroundRepeat: 'no-repeat',
+		backgroundColor: '#ffffff',
+		backgroundSize: 'cover',
+		backgroundPosition: 'center'
+	}
 }));
 
 export default function SignIn() {
 
 	const classes = useStyles();
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
 	const login = async (provider: firebase.auth.AuthProvider) => {
 		const res = await Methods.socialMediaAuth(provider);
@@ -56,81 +32,80 @@ export default function SignIn() {
 	}
 
 	return (
-		<Container component="main" maxWidth="xs">
-		<CssBaseline />
-		<div className={classes.paper}>
-			<Avatar className={classes.avatar}>
-			<LockOutlinedIcon />
-			</Avatar>
-			<Typography component="h1" variant="h5">
-			Sign in
-			</Typography>
-			<form className={classes.form} noValidate>
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-					onClick={(e) => {
-						
-						e.preventDefault();
-
-						login(Providers.googleProvider);
-					}}
-				>
-					Google
-				</Button>
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-					onClick={(e) => {
-						
-						e.preventDefault();
-
-						login(Providers.facebookProvider);
-					}}
-				>
-					Facebook
-				</Button>
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-					onClick={(e) => {
-						
-						e.preventDefault();
-
-						login(Providers.githubProvider);
-					}}
-				>
-					Github
-				</Button>
-				<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-					onClick={(e) => {
-						
-						e.preventDefault();
-
-						login(Providers.twitterProvider);
-					}}
-				>
-					Twitter
-				</Button>
-			</form>
+		<div>
+			<CssBaseline />
+			<Grid container className={classes.background}/>
+			<Dialog
+				fullScreen={fullScreen}
+				open={true}
+				aria-labelledby="responsive-dialog-title"
+			>
+				<DialogTitle id="responsive-dialog-title" style={{ display: 'flex', justifyContent: 'center' }}>Login/Signup</DialogTitle>
+				<DialogContent>
+					<Grid container spacing={2} style={{ paddingBottom: '10px' }}>
+						<Grid item xs={12} sm={6}>
+							<TextField
+								id="fname"
+								label="First Name"
+								type="text"
+								fullWidth
+							/>
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<TextField
+								id="lname"
+								label="Last Name"
+								type="text"
+								fullWidth
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<TextField
+								required
+								id="username"
+								label="Username"
+								type="text"
+								fullWidth
+							/>
+						</Grid>
+						<Grid item xs={12} style={{ paddingBottom: '10px' }}>
+							<TextField
+								required
+								id="password"
+								label="Password"
+								type="password"
+								fullWidth
+							/>
+						</Grid>
+						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
+							<img src={Google} alt="Google Login" style={{ maxWidth: '50px' }}/>
+						</Grid>
+						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
+							<img src={Facebook} alt="Facebook Login" style={{ maxWidth: '50px' }}/>
+						</Grid>
+						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
+							<img src={Github} alt="Github Login" style={{ maxWidth: '50px' }}/>
+						</Grid>
+						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
+							<img src={Twitter} alt="Twitter Login" style={{ maxWidth: '50px' }}/>
+						</Grid>
+					</Grid>
+				</DialogContent>
+				<DialogActions>
+					<Grid container spacing={2}>
+						<Grid item xs={12} sm={6}>
+							<Button variant="contained" color="primary" fullWidth>
+								Login
+							</Button>
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<Button variant="outlined" color="primary" fullWidth>
+								Signup
+							</Button>
+						</Grid>
+					</Grid>
+				</DialogActions>
+			</Dialog>
 		</div>
-		<Box mt={8}>
-			<Copyright />
-		</Box>
-		</Container>
 	);
 }

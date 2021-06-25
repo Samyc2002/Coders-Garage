@@ -13,8 +13,8 @@ const Routes: React.FC = () => (
         <Route path="/" exact component={Dashboard}/>
         <Route path="/home" component={Home}/>
         <Route path="/ide" component={IDE}/>
-        <Route path="/login" component={Login}/>
         <Route path="/interview" component={Interview}/>
+        <Route path="/login" component={Login}/>
     </Switch>
 )
 

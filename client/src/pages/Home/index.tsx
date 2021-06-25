@@ -210,7 +210,7 @@ const Home = () => {
 										</MenuItem>
 										<MenuItem onClick={handleClose}>
 											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-												<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
+												<a href="/login" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
 											</Typography>
 										</MenuItem>
 									</Menu>
@@ -228,7 +228,7 @@ const Home = () => {
 									</Typography>
 									<Button variant="contained" color="primary" size="small">
 										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-											<a href="!#" style={{ textDecoration: 'none', color: '#ffffff', fontWeight: 'bolder', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
+											<a href="/login" style={{ textDecoration: 'none', color: '#ffffff', fontWeight: 'bolder', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
 										</Typography>
 									</Button>
 								</div>
