@@ -134,10 +134,12 @@ const Dashboard = () => {
 			
 			dispatch({ type: 'LOGOUT' });
 			history.push('/');
+			setUser(null);
 		} catch (error) {
 
 			console.log(error);
 		}
+		handleClose();
 	}
 
 	const render_small = () => {
