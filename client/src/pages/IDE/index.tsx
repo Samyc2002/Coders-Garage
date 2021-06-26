@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { AppBar, Button, createStyles, CssBaseline, Divider, Drawer, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, makeStyles, Menu, MenuItem, Paper, Select, TextField, Theme, Toolbar, useMediaQuery } from '@material-ui/core';
+import { AppBar, Button, createStyles, CssBaseline, Divider, Drawer, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, makeStyles, Menu, MenuItem, Paper, Select, Snackbar, TextField, Theme, Toolbar, useMediaQuery } from '@material-ui/core';
 import { AddCircleRounded as AddCircleRoundedIcon, ComputerRounded as ComputerRoundedIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Menu as MenuIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import axios, { Method } from 'axios';
 import clsx from 'clsx';
 
 import 'codemirror/mode/clike/clike';
@@ -15,6 +17,7 @@ import useLocalStorage from '../../Hooks/useLocalStore';
 import Ide from '../../components/IDE';
 import Footer from '../../components/footer';
 import Logo from '../../assets/LogoBlue.png';
+import { getEnvironmentVariables } from '../../environments/env';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -121,6 +124,17 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+interface Model{
+    method: Method,
+    url: string,
+    headers: any,
+    data: string
+}
+
+function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const IDE = () => {
 
     const classes = useStyles();
@@ -131,19 +145,27 @@ const IDE = () => {
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
     
     const [code, setCode] = useLocalStorage('code', '');
+    const [input, setInput] = useState('');
+    const [output, setOutput] = useState('');
+    const [time, setTime] = useState('');
+    const [memory, setMemory] = useState(0);
+    const [snack, setSnack] = useState(false);
+    const [type, setType] = useState(true);
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(-1);
     const [theme, setTheme] = useState(true);
 	const [tab, setTab] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+    const alert_type = type?"success":"error";
+    
     const handleDrawer = () => {
         setOpen(!open);
-    };
+    }
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setIndex(event.target.value as number);
-    };
+    }
 
     const handleReset = () => {
         setCode("");
@@ -176,6 +198,69 @@ const IDE = () => {
 			console.log(error);
 		}
 	}
+
+    const handleclick = () => {
+        setSnack(true);
+    };
+    
+    const handleclose = (event?: React.SyntheticEvent, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSnack(false);
+    };
+
+    const CompileRun = (lang: string) => {
+
+        setOutput('');
+
+        const config: Model = {
+    
+            method: 'POST',
+            url: `${getEnvironmentVariables().url}/create`,
+            headers: {
+                'x-rapidapi-key': `${getEnvironmentVariables().apiKey}`,
+                'x-rapidapi-host': 'paiza-io.p.rapidapi.com',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                source_code: code,
+                language: lang,
+                input: input
+            })
+        }
+
+        axios(config)
+            .then((response) => {
+    
+                setTimeout(() => {
+    
+                    axios.get(`${getEnvironmentVariables().url}/get_details`, {
+    
+                        params: {
+                            id: response.data?.id
+                        },
+                        headers: {
+                            'x-rapidapi-key': `${getEnvironmentVariables().apiKey}`,
+                            'x-rapidapi-host': 'paiza-io.p.rapidapi.com'
+                        }
+                    })
+                    .then((res) => {
+                        
+                        setOutput(res.data?.stdout || res.data.build_stderr);
+                        setTime(res.data.time);
+                        setMemory(res.data.memory);
+                        handleclick();
+                        if(res.data.build_stderr) {
+                            setType(false);
+                        }
+                    })
+                    .catch((err) => console.log(err));
+                }, 1000);
+            })
+            .catch((err) => console.log(err));
+    }
 
     const language = [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ];
     const format = [ 'c', 'cpp', 'csharp' , 'java', 'python3', 'ruby', 'kotlin', 'swift' ];
@@ -247,8 +332,8 @@ const IDE = () => {
                                                     value={language[index]}
                                                     onChange={handleChange}
                                                 >
-                                                    {language.map((value, index) => (
-                                                        <MenuItem value={index}>{value}</MenuItem>
+                                                    {language.map((value, i) => (
+                                                        <MenuItem value={i}>{value}</MenuItem>
                                                     ))}
                                                 </Select>
                                             </FormControl>
@@ -422,11 +507,14 @@ const IDE = () => {
                                         id="outlined-multiline-static"
                                         label="Input"
                                         multiline
-                                        rows={15}
+                                        rows={13}
                                         variant="standard"
                                         style={{
                                             margin: '10px',
                                             color: '#121212'
+                                        }}
+                                        onChange={(e) => {
+                                            setInput(e.target.value);
                                         }}
                                     />
                                 </Paper>
@@ -436,9 +524,9 @@ const IDE = () => {
                                 <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                                     <TextField
                                         id="outlined-multiline-static"
-                                        label="output"
+                                        label={type?"Output":"Error"}
                                         multiline
-                                        rows={15}
+                                        rows={13}
                                         variant="standard"
                                         style={{
                                             margin: '10px',
@@ -446,11 +534,38 @@ const IDE = () => {
                                         }}
                                         disabled
                                         autoFocus
+                                        value={output}
                                     />
                                 </Paper>
                             </Grid>
                             <Grid item style={{ height: '20px' }}/>
-                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }}>Run</Button>
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                style={{ marginLeft: '10px', marginRight: '10px' }}
+                                onClick={() => {
+                                    CompileRun(format[index]);
+                                }}
+                            >
+                                Run
+                            </Button>
+                            <Snackbar open={snack} autoHideDuration={6000} onClose={handleclose}>
+                                <Alert onClose={handleclose} severity={alert_type}>
+                                    {type?`Compilation Successful in ${time} seconds and needed ${memory} bytes!`:`Compilation Error`}
+                                </Alert>
+                            </Snackbar>
+                            <Grid item style={{ height: '10px' }}/>
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                style={{ marginLeft: '10px', marginRight: '10px' }}
+                                onClick={() => {
+                                    setOutput('');
+                                }}
+                            >
+                                Clear
+                            </Button>
+                            <Grid item style={{ height: '20px' }}/>
                         </Grid>
                     </Drawer>
                 </div>
