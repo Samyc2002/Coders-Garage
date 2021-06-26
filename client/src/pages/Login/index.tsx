@@ -1,5 +1,7 @@
-import React from 'react';
-import { Button, CssBaseline, makeStyles, Grid, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, useTheme, TextField } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Button, CssBaseline, makeStyles, Grid, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, useTheme, TextField, DialogContentText } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import firebase from 'firebase';
 
 import * as Providers from '../../config/authmethods';
@@ -25,16 +27,78 @@ export default function SignIn() {
 	const classes = useStyles();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+	
+	const dispatch = useDispatch();
+	const history = useHistory();
 
+	const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
+
+	useEffect(() => {
+
+		setUser(JSON.parse(localStorage.getItem('profile') as string));
+	}, []);
+	
 	const login = async (provider: firebase.auth.AuthProvider) => {
+
 		const res = await Methods.socialMediaAuth(provider);
-		console.log(res);
+		const name = res?.bc?.displayName;
+		const email = res?.bc?.email;
+		const token = res?.refreshToken;
+
+		const result = {
+			name: name,
+			email: email
+		}
+
+		try {
+
+			dispatch({ type: 'AUTH', data: { result, token } });
+			history.push('/');
+		} catch (error) {
+			
+			console.log(error);
+		}
 	}
 
-	return (
-		<div>
-			<CssBaseline />
-			<Grid container className={classes.background}/>
+	const Logout = () => {
+
+		try {
+			
+			dispatch({ type: 'LOGOUT' });
+			history.push('/');
+		} catch (error) {
+
+			console.log(error);
+		}
+	}
+
+	const render = () => {
+		if(user?.token) {
+			return (
+				<Dialog
+					fullScreen={fullScreen}
+					open={true}
+					aria-labelledby="responsive-dialog-title"
+				>
+					<DialogTitle id="responsive-dialog-title" style={{ display: 'flex', justifyContent: 'center' }}>Logout</DialogTitle>
+					<DialogContent>
+					<DialogContentText id="alert-dialog-description">
+						You are already Logged in. Logout first to Login with a new id.
+					</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+					<Button variant="contained" onClick={Logout} color="primary">
+						Logout
+					</Button>
+					<Button variant="outlined" onClick={() => history.goBack()} color="primary">
+						Cancel
+					</Button>
+					</DialogActions>
+				</Dialog>
+			)
+		}
+
+		return (
 			<Dialog
 				fullScreen={fullScreen}
 				open={true}
@@ -78,16 +142,16 @@ export default function SignIn() {
 							/>
 						</Grid>
 						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
-							<img src={Google} alt="Google Login" style={{ maxWidth: '50px' }}/>
+							<img src={Google} alt="Google Login" style={{ maxWidth: '50px', cursor: 'pointer' }} onClick={() => login(Providers.googleProvider)}/>
 						</Grid>
 						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
-							<img src={Facebook} alt="Facebook Login" style={{ maxWidth: '50px' }}/>
+							<img src={Facebook} alt="Facebook Login" style={{ maxWidth: '50px', cursor: 'pointer' }} onClick={() => login(Providers.facebookProvider)}/>
 						</Grid>
 						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
-							<img src={Github} alt="Github Login" style={{ maxWidth: '50px' }}/>
+							<img src={Github} alt="Github Login" style={{ maxWidth: '50px', cursor: 'pointer' }} onClick={() => login(Providers.githubProvider)}/>
 						</Grid>
 						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
-							<img src={Twitter} alt="Twitter Login" style={{ maxWidth: '50px' }}/>
+							<img src={Twitter} alt="Twitter Login" style={{ maxWidth: '50px', cursor: 'pointer' }} onClick={() => login(Providers.twitterProvider)}/>
 						</Grid>
 					</Grid>
 				</DialogContent>
@@ -106,6 +170,14 @@ export default function SignIn() {
 					</Grid>
 				</DialogActions>
 			</Dialog>
+		)
+	}
+	
+	return (
+		<div>
+			<CssBaseline />
+			<Grid container className={classes.background}/>
+			{render()}
 		</div>
 	);
 }

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { AppBar, createStyles, CssBaseline, Divider, IconButton, makeStyles, Toolbar, Typography, Theme, Drawer, List, ListItem, ListItemIcon, ListItemText, Paper, Tabs, Tab, Grid, FormControl, InputLabel, Select, MenuItem, useMediaQuery, Button, Menu, TextField } from '@material-ui/core';
-import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, AddCircleRounded as AddCircleRoundedIcon } from '@material-ui/icons';
+import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
 import Footer from '../../components/footer';
@@ -130,6 +132,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const Interview = () => {
 
     const classes = useStyles();
+    const history = useHistory();
+    const dispatch = useDispatch();
     const dark = "material-darker";
     const light = "eclipse";
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
@@ -274,6 +278,18 @@ const Interview = () => {
 		}
 	}
 
+    const Logout = () => {
+
+		try {
+			
+			dispatch({ type: 'LOGOUT' });
+			history.push('/');
+		} catch (error) {
+
+			console.log(error);
+		}
+	}
+
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
             <div>
@@ -415,39 +431,71 @@ const Interview = () => {
                     onMouseEnter={() => (!tab && setTab(true))}
                     onMouseLeave={handleTab}
                 >
-                    <div className={classes.toolbar}/>
-                    <List>
-                        <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
-                            <ListItem button key="Home">
-                                <ListItemIcon>
-                                    <HomeRoundedIcon/>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    Home
-                                </ListItemText>
-                            </ListItem>
-                        </a>
-                        <a href="/ide" style={{ textDecoration: 'none', color: '#121212' }}>
-                            <ListItem button key="IDE">
-                                <ListItemIcon>
-                                    <CodeRoundedIcon/>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    IDE
-                                </ListItemText>
-                            </ListItem>
-                        </a>
-                        <a href="/interview" style={{ textDecoration: 'none', color: '#121212' }}>
-                            <ListItem button key="Interview" classes={{ root: classes.back }}>
-                                <ListItemIcon classes={{ root: classes.icon }}>
-                                    <ComputerRoundedIcon/>
-                                </ListItemIcon>
-                                <ListItemText classes={{ root: classes.text }}>
-                                    Interview
-                                </ListItemText>
-                            </ListItem>
-                        </a>
-                    </List>
+                    <div>
+                        <div className={classes.toolbar}/>
+                        <List>
+                            <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
+                                <ListItem button key="Home">
+                                    <ListItemIcon>
+                                        <HomeRoundedIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                        Home
+                                    </ListItemText>
+                                </ListItem>
+                            </a>
+                            <a href="/ide" style={{ textDecoration: 'none', color: '#121212' }}>
+                                <ListItem button key="IDE">
+                                    <ListItemIcon>
+                                        <CodeRoundedIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                        IDE
+                                    </ListItemText>
+                                </ListItem>
+                            </a>
+                            <a href="/interview" style={{ textDecoration: 'none', color: '#121212' }}>
+                                <ListItem button key="Interview" classes={{ root: classes.back }}>
+                                    <ListItemIcon classes={{ root: classes.icon }}>
+                                        <ComputerRoundedIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText classes={{ root: classes.text }}>
+                                        Interview
+                                    </ListItemText>
+                                </ListItem>
+                            </a>
+                        </List>
+                    </div>
+                    <div>
+						<List>
+							<ListItem button key="Theme">
+								<ListItemIcon>
+									<PaletteIcon/>
+								</ListItemIcon>
+								<ListItemText>
+									Theme
+								</ListItemText>
+							</ListItem>
+							<a href="/profile" style={{ textDecoration: 'none', color: '#121212' }}>
+								<ListItem button key="Dashboard">
+									<ListItemIcon>
+										<DashboardRoundedIcon/>
+									</ListItemIcon>
+									<ListItemText>
+										Dashboard
+									</ListItemText>
+								</ListItem>
+							</a>
+							<ListItem button key="Logout" onClick={Logout}>
+								<ListItemIcon>
+									<ExitToAppRoundedIcon/>
+								</ListItemIcon>
+								<ListItemText>
+									Logout
+								</ListItemText>
+							</ListItem>
+						</List>
+					</div>
                 </Drawer>
                 <main className={classes.content}>
                     <Paper square elevation={0}>

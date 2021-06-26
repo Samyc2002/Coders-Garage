@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { AppBar, Button, createStyles, CssBaseline, Divider, Drawer, FormControl, Grid, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, makeStyles, Menu, MenuItem, Paper, Select, TextField, Theme, Toolbar, useMediaQuery } from '@material-ui/core';
-import { AddCircleRounded as AddCircleRoundedIcon, ComputerRounded as ComputerRoundedIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Menu as MenuIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon } from '@material-ui/icons';
+import { AddCircleRounded as AddCircleRoundedIcon, ComputerRounded as ComputerRoundedIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Menu as MenuIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
 import 'codemirror/mode/clike/clike';
@@ -122,6 +124,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const IDE = () => {
 
     const classes = useStyles();
+    const history = useHistory();
+    const dispatch = useDispatch();
     const dark = "material-darker";
     const light = "eclipse";
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
@@ -160,6 +164,18 @@ const IDE = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const Logout = () => {
+
+		try {
+			
+			dispatch({ type: 'LOGOUT' });
+			history.push('/');
+		} catch (error) {
+
+			console.log(error);
+		}
+	}
 
     const language = [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ];
     const format = [ 'c', 'cpp', 'csharp' , 'java', 'python3', 'ruby', 'kotlin', 'swift' ];
@@ -252,8 +268,8 @@ const IDE = () => {
                                             value={language[index]}
                                             onChange={handleChange}
                                         >
-                                            {language.map((value, index) => (
-                                                <MenuItem value={index}>{value}</MenuItem>
+                                            {language.map((value, i) => (
+                                                <MenuItem value={i}>{value}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
@@ -314,39 +330,71 @@ const IDE = () => {
                         onMouseEnter={() => (!tab && setTab(true))}
                         onMouseLeave={handleTab}
                     >
-                        <div className={classes.toolbar}/>
-                        <List>
-                            <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
-                                <ListItem button key="Home">
+                        <div>
+                            <div className={classes.toolbar}/>
+                            <List>
+                                <a href="/home" style={{ textDecoration: 'none', color: '#121212' }}>
+                                    <ListItem button key="Home">
+                                        <ListItemIcon>
+                                            <HomeRoundedIcon/>
+                                        </ListItemIcon>
+                                        <ListItemText>
+                                            Home
+                                        </ListItemText>
+                                    </ListItem>
+                                </a>
+                                <a href="/ide" style={{ textDecoration: 'none', color: '#121212' }}>
+                                    <ListItem button key="IDE" classes={{ root: classes.back }}>
+                                        <ListItemIcon classes={{ root: classes.icon }}>
+                                            <CodeRoundedIcon/>
+                                        </ListItemIcon>
+                                        <ListItemText classes={{ root: classes.text }}>
+                                            IDE
+                                        </ListItemText>
+                                    </ListItem>
+                                </a>
+                                <a href="/interview" style={{ textDecoration: 'none', color: '#121212' }}>
+                                    <ListItem button key="Interview">
+                                        <ListItemIcon>
+                                            <ComputerRoundedIcon/>
+                                        </ListItemIcon>
+                                        <ListItemText>
+                                            Interview
+                                        </ListItemText>
+                                    </ListItem>
+                                </a>
+                            </List>
+                        </div>
+                        <div>
+                            <List>
+                                <ListItem button key="Theme">
                                     <ListItemIcon>
-                                        <HomeRoundedIcon/>
+                                        <PaletteIcon/>
                                     </ListItemIcon>
                                     <ListItemText>
-                                        Home
+                                        Theme
                                     </ListItemText>
                                 </ListItem>
-                            </a>
-                            <a href="/ide" style={{ textDecoration: 'none', color: '#121212' }}>
-                                <ListItem button key="IDE" classes={{ root: classes.back }}>
-                                    <ListItemIcon classes={{ root: classes.icon }}>
-                                        <CodeRoundedIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText classes={{ root: classes.text }}>
-                                        IDE
-                                    </ListItemText>
-                                </ListItem>
-                            </a>
-                            <a href="/interview" style={{ textDecoration: 'none', color: '#121212' }}>
-                                <ListItem button key="Interview">
+                                <a href="/profile" style={{ textDecoration: 'none', color: '#121212' }}>
+                                    <ListItem button key="Dashboard">
+                                        <ListItemIcon>
+                                            <DashboardRoundedIcon/>
+                                        </ListItemIcon>
+                                        <ListItemText>
+                                            Dashboard
+                                        </ListItemText>
+                                    </ListItem>
+                                </a>
+                                <ListItem button key="Logout" onClick={Logout}>
                                     <ListItemIcon>
-                                        <ComputerRoundedIcon/>
+                                        <ExitToAppRoundedIcon/>
                                     </ListItemIcon>
                                     <ListItemText>
-                                        Interview
+                                        Logout
                                     </ListItemText>
                                 </ListItem>
-                            </a>
-                        </List>
+                            </List>
+                        </div>
                     </Drawer>
                     <main className={classes.content}>
                         <Ide

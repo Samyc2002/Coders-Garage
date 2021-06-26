@@ -2,7 +2,7 @@ import { Grid, Typography, useMediaQuery } from '@material-ui/core';
 import React from 'react';
 import { Parallax } from 'react-parallax';
 import Fade from 'react-reveal/Fade';
-import Pulse from 'react-reveal/Pulse';
+import Rotate from 'react-reveal/Rotate';
 import Slide from 'react-reveal/Slide';
 
 import Logo from '../../assets/LogoWhite.png';
@@ -24,9 +24,9 @@ const Landing = () => {
                         </Slide>
                         <br/>
                         <Fade>
-                            <Pulse delay={1000}>
+                            <Rotate>
                                 <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'50px':'100px' }}/>
-                            </Pulse>
+                            </Rotate>
                             <br/>
                             <Slide top>
                                 <Typography variant="h5" style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder', color: 'white' }}>WELCOME TO</Typography>

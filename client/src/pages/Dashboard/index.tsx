@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CssBaseline, makeStyles, Theme, createStyles, AppBar, Toolbar, Typography, Divider, useMediaQuery, Button, Menu, MenuItem, IconButton } from '@material-ui/core';
 import { AddCircleRounded as AddCircleRoundedIcon } from '@material-ui/icons'
 import { Scrollbars } from 'react-custom-scrollbars';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import Landing from '../../components/landing';
 import Dash from '../../components/dashboard';
@@ -106,9 +108,17 @@ const useStyles = makeStyles((theme: Theme) =>
 const Dashboard = () => {
 
     const classes = useStyles();
+	const history = useHistory();
+	const dispatch = useDispatch();
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
+
+	useEffect(() => {
+
+		setUser(JSON.parse(localStorage.getItem('profile') as string));
+	}, []);
 
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -117,6 +127,97 @@ const Dashboard = () => {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
+	const Logout = () => {
+
+		try {
+			
+			dispatch({ type: 'LOGOUT' });
+			history.push('/');
+		} catch (error) {
+
+			console.log(error);
+		}
+	}
+
+	const render_small = () => {
+		if(user?.token) {
+			return (
+				<div>
+					<MenuItem onClick={handleClose}>
+						<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+							<a href="/profile" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>
+								Profile
+							</a>
+						</Typography>
+					</MenuItem>
+					<MenuItem onClick={Logout}>
+						<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+							Logout
+						</Typography>
+					</MenuItem>
+				</div>
+			)
+		}
+
+		return (
+			<div>
+				<MenuItem onClick={handleClose}>
+					<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+						<a href="/login" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>
+							Login
+						</a>
+					</Typography>
+				</MenuItem>
+			</div>
+		)
+	}
+
+	const render_big = () => {
+		if(user?.token) {
+			return (
+				<div>
+					<Button variant="contained" color="primary" size="small" aria-controls="big-menu" aria-haspopup="true"  onClick={handleClick}>
+						<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', color: '#ffffff', fontFamily: "'Quicksand', sans-serif" }}>
+							Profile
+						</Typography>
+					</Button>
+					<Menu
+						id="big-menu"
+						anchorEl={anchorEl}
+						keepMounted
+						open={Boolean(anchorEl)}
+						onClose={handleClose}
+					>
+						<MenuItem onClick={handleClose}>
+							<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+								<a href="/profile" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bolder', fontFamily: "'Quicksand', sans-serif" }}>
+									Dashboard
+								</a>
+							</Typography>
+						</MenuItem>
+						<MenuItem onClick={Logout}>
+							<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', color: '#3f51b5', fontFamily: "'Quicksand', sans-serif" }}>
+								Logout
+							</Typography>
+						</MenuItem>
+					</Menu>
+				</div>
+			)
+		}
+
+		return (
+			<div>
+				<Button variant="contained" color="primary" size="small" aria-controls="big-menu" aria-haspopup="true"  onClick={handleClick}>
+					<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+						<a href="/login" style={{ textDecoration: 'none', fontWeight: 'bold', color: '#ffffff', fontFamily: "'Quicksand', sans-serif" }}>
+							Login
+						</a>
+					</Typography>
+				</Button>
+			</div>
+		)
+	}
 
     return (
 		<Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
@@ -135,7 +236,7 @@ const Dashboard = () => {
 						</div>
 						{isTabletorMobile?(
 							<div>
-								<Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+								<Button aria-controls="small-menu" aria-haspopup="true" onClick={handleClick}>
 									<IconButton
 										color="primary"
 										aria-label="open tabs"
@@ -146,7 +247,7 @@ const Dashboard = () => {
 									</IconButton>
 								</Button>
 								<Menu
-									id="simple-menu"
+									id="small-menu"
 									anchorEl={anchorEl}
 									keepMounted
 									open={Boolean(anchorEl)}
@@ -167,11 +268,7 @@ const Dashboard = () => {
 											<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 										</Typography>
 									</MenuItem>
-									<MenuItem onClick={handleClose}>
-										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-											<a href="/login" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
-										</Typography>
-									</MenuItem>
+									{render_small()}
 								</Menu>
 						  	</div>
 						):(
@@ -185,11 +282,7 @@ const Dashboard = () => {
 								<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
 									<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 								</Typography>
-								<Button variant="contained" color="primary" size="small">
-									<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-										<a href="/login" style={{ textDecoration: 'none', color: '#ffffff', fontWeight: 'bolder', fontFamily: "'Quicksand', sans-serif" }}>Profile</a>
-									</Typography>
-								</Button>
+								{render_big()}
 							</div>
 						)}
 					</Toolbar>
