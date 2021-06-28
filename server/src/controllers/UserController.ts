@@ -1,18 +1,29 @@
 import { Request, Response, NextFunction } from 'express';
+import { Types } from 'mongoose';
+
 import User from '../models/User';
 
 export class UserController {
+
     static async getUser(req: Request, res: Response, next: NextFunction) {
+
         try {
 
-            const user = User.find({ UserName: req.body.UserName });
+            const user = await User.findOne({ Email: req.body.Email });
 
-            console.log(user);
+            if(user === null) {
+                res.status(200).json({
+                    data: null,
+                    success: false
+                });
+            }
+            else {
 
-            res.status(200).json({
-                data: user,
-                success: true
-            });
+                res.status(200).json({
+                    data: user,
+                    success: true
+                });
+            }
         } catch (error) {
 
             next(error);
@@ -45,11 +56,11 @@ export class UserController {
 
             console.log(req.body);
 
-            const update = req.body.data;
+            const { City, Country, Image, Institute, Name, Password, State, UserName, questionsCreated, questionsSolved } = req.body;
     
-            const name = req.body.UserName;
+            const email = req.body.Email;
             
-            const result = await User.findByIdAndUpdate({UserName: name}, { ...update }, {new: true});
+            const result = await User.findByIdAndUpdate(Types.ObjectId(req.body._id), { $set: { City, Country, Image, Institute, Name, Password, State, UserName, questionsCreated, questionsSolved, Email: email } }, { new : true });
 
             res.status(200).json({
                 data: result,

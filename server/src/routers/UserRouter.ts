@@ -17,12 +17,13 @@ class UserRouter {
 
     postRoutes() {
 
-        this.router.post('/post', UserController.createUser);
+        this.router.post('/', UserController.createUser);
+        this.router.post('/data', UserController.getUser);
     }
 
     putRoutes() {
 
-        this.router.put('/edit', UserController.updateUser);
+        this.router.put('/', UserController.updateUser);
     }
 }
 

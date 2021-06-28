@@ -10,6 +10,7 @@ import Google from '../../assets/Google.png';
 import Facebook from '../../assets/Facebook.png';
 import Github from '../../assets/Github.png';
 import Twitter from '../../assets/Twitter.png';
+import { createUser } from '../../actions/auth';
 
 const useStyles = makeStyles((theme) => ({
 	background: {
@@ -46,14 +47,24 @@ export default function SignIn() {
 		const token = res?.refreshToken;
 
 		const result = {
-			name: name,
-			email: email
+			UserName: "",
+			Image: "",
+			Password: "",
+			Email: email,
+			Name: name,
+			Institute: "",
+			Country: "",
+			State: "",
+			City: "",
+			questionsCreated: [""],
+			questionsSolved: [""]
 		}
 
 		try {
 
-			dispatch({ type: 'AUTH', data: { result, token } });
-			history.push('/');
+			dispatch({ type: 'AUTH', data: { formData: result, token } });
+			dispatch(createUser(result, token));
+			setTimeout(() => history.push('/'), 1000);
 		} catch (error) {
 			
 			console.log(error);

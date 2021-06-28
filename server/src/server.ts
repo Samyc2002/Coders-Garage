@@ -57,12 +57,13 @@ export class Server {
     async connectMongoDb() {
         const databaseUrl = getEnvironmentVariables().db_url;
         mongoose.connect(databaseUrl, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false
+			useNewUrlParser: true,
+			useCreateIndex: true,
+			useUnifiedTopology: true,
+			useFindAndModify: false
         });
         mongoose.connection.on('open', () => {
-          console.log('connection successfully made with database');
+          console.log('connected successfully to the database');
         });
     }
 
@@ -71,8 +72,8 @@ export class Server {
     }
 
     configureBodyParser() {
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
+		this.app.use(bodyParser.json({ limit: '50mb' }));
+        this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         console.log('body-parser setup');
     }
 
