@@ -20,14 +20,13 @@ const Landing = () => {
                 <div style={{ minHeight: '100vh' }}>
                     <div style={{ ...insideStyles }}>
                         <Slide left>
-                            <img src={hr} alt="hr" style={{ maxWidth: isTabletorMobile?'200px':'400px', maxHeight: '3px' }}/>
+                            <img src={hr} alt="hr" style={{ maxWidth: isTabletorMobile?'200px':'400px', maxHeight: '3px', marginBottom: '20px' }}/>
                         </Slide>
                         <br/>
                         <Fade>
                             <Rotate>
                                 <img src={Logo} alt="Logo" style={{ maxWidth: isTabletorMobile?'50px':'100px' }}/>
                             </Rotate>
-                            <br/>
                             <Slide top>
                                 <Typography variant="h5" style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder', color: 'white' }}>WELCOME TO</Typography>
                             </Slide>
@@ -44,9 +43,8 @@ const Landing = () => {
                                 </Grid>
                             </Grid>
                         </Fade>
-                        <br/>
                         <Slide right>
-                            <img src={hr} alt="hr" style={{ maxWidth: isTabletorMobile?'200px':'400px', maxHeight: '3px' }}/>
+                            <img src={hr} alt="hr" style={{ maxWidth: isTabletorMobile?'200px':'400px', maxHeight: '3px', marginTop: '10px' }}/>
                         </Slide>
                     </div>
                 </div>

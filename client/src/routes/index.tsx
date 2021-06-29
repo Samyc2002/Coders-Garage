@@ -7,6 +7,7 @@ import IDE from '../pages/IDE';
 import Interview from '../pages/Interview';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
+import Create_Questions from '../pages/Create_Questions';
 
 const Routes: React.FC = () => (
     
@@ -17,6 +18,7 @@ const Routes: React.FC = () => (
         <Route path="/interview" component={Interview}/>
         <Route path="/login" component={Login}/>
         <Route path="/profile" component={Profile}/>
+        <Route path="/create" component={Create_Questions}/>
     </Switch>
 )
 

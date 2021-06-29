@@ -6,6 +6,7 @@ import nodemailer from 'nodemailer';
 
 import { getEnvironmentVariables } from './environments/env';
 import UserRouter from './routers/UserRouter';
+import QuestionRouter from './routers/QuestionRouter';
 import { ContactEmail } from './middlewares/ContactEmail';
 
 export class Server {
@@ -69,6 +70,7 @@ export class Server {
 
     setRoutes() {
       this.app.use('/user', UserRouter);
+      this.app.use('/question', QuestionRouter);
     }
 
     configureBodyParser() {

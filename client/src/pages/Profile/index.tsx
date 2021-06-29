@@ -75,8 +75,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		justifyContent: 'flex-start',
 	},
 	large: {
-		width: theme.spacing(35),
-		height: theme.spacing(35),
+		width: theme.spacing(30),
+		height: theme.spacing(30),
 		marginBottom: theme.spacing(2),
 		fontSize: theme.spacing(10)
 	},
@@ -86,7 +86,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		fontWeight: 'bolder'
 	},
 	btn: {
-		fontFamily: "'Quicksand', sans-serif"		
+		fontFamily: "'Quicksand', sans-serif",
+		margin: theme.spacing(1)
 	},
 	cont: {
 		paddingTop: theme.spacing(4)
@@ -102,13 +103,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		flexDirection: 'column',
     	alignItems: 'center'
 	},
-	div: {
+	paper: {
+		margin: theme.spacing(2)
+	},
+	background: {
 		display: 'flex',
-		justifyContent: 'space-between',
+		flexDirection: 'column',
 		alignItems: 'center'
 	},
-	paper: {
-		paddingLeft: theme.spacing(2)
+	underline: {
+		backgroundColor: theme.palette.getContrastText(theme.palette.primary.contrastText)
 	}
 }))
 
@@ -177,6 +181,13 @@ const Profile = () => {
 		}
 		handleClose();
 	}
+	const handleSolve = () => {
+		history.push('/home');
+	}
+
+	const handleCreate = () => {
+		history.push('/create');
+	}
 
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
@@ -225,11 +236,16 @@ const Profile = () => {
 											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
 												<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 											</Typography>
-											<MenuItem onClick={Logout}>
-												<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-													Logout
-												</Typography>
-											</MenuItem>
+										</MenuItem>
+										<MenuItem onClick={handleClickOpen}>
+											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+												Edit
+											</Typography>
+										</MenuItem>
+										<MenuItem onClick={Logout}>
+											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
+												Logout
+											</Typography>
 										</MenuItem>
 									</Menu>
 								</div>
@@ -244,8 +260,13 @@ const Profile = () => {
 									<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingLeft: '20px' }}>
 										<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 									</Typography>
-									<Button variant="contained" color="primary" size="small" aria-controls="big-menu" aria-haspopup="true" style={{ marginLeft: '20px' }} onClick={Logout}>
+									<Button variant="contained" color="primary" size="small" aria-controls="big-menu" style={{ marginLeft: '20px' }} onClick={handleClickOpen}>
 										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', color: '#ffffff', fontFamily: "'Quicksand', sans-serif" }}>
+											Edit
+										</Typography>
+									</Button>
+									<Button variant="outlined" color="primary" size="small" aria-controls="big-menu" aria-haspopup="true" style={{ marginLeft: '20px' }} onClick={Logout}>
+										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>
 											Logout
 										</Typography>
 									</Button>
@@ -262,38 +283,41 @@ const Profile = () => {
 								<Avatar alt={user?.formData?.Image} src={user?.formData?.Image} className={clsx({[classes.purple]:true, [classes.large]: true})}/>
 							)}
 							<Typography variant="h6" gutterBottom className={classes.text}>{user?.formData?.Name}</Typography>
-							<div className={classes.div}>
-								<Typography variant="subtitle2" gutterBottom className={classes.text}>{user?.formData?.UserName}</Typography>
-								<Button variant="text" color="primary" className={classes.btn} onClick={handleClickOpen}>Edit</Button>
-							</div>
+							<Typography variant="subtitle2" gutterBottom className={classes.text}>Username: {user?.formData?.UserName}</Typography>
+							<Typography variant="subtitle2" gutterBottom className={classes.text}>Email: {user?.formData?.Email}</Typography>
+							<Typography variant="subtitle2" gutterBottom className={classes.text}>Country: {user?.formData?.Country}</Typography>
+							<Typography variant="subtitle2" gutterBottom className={classes.text}>State: {user?.formData?.State}</Typography>
+							<Typography variant="subtitle2" gutterBottom className={classes.text}>City: {user?.formData?.City}</Typography>
+							<Typography variant="subtitle2" gutterBottom className={classes.text}>Institution: {user?.formData?.Institute}</Typography>
 						</Grid>
 						<Grid item xs={12} sm={4} className={classes.grid}>
-							<Paper elevation={3}>
-								<Typography variant="h6" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
+							<Paper elevation={3} className={classes.background}>
+								<Typography variant="h6" className={clsx({[classes.text]: true, [classes.paper]: true})}>
 									Solved questions
+									<Divider className={classes.underline}/>
 								</Typography>
-								<Divider/>
 								{((user?.formData?.questionsSolved?.length === 1) && (user?.formData?.questionsSolved?.[0] === ""))?(
 									<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
-										You have not Solved any questions yet. Head on to the Home page to start your journey.
+										You have not Solved any questions yet
 									</Typography>
 								):user?.formData?.questionsSolved?.map((value: string) => (
 									<div>
-										<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>{value}</Typography>
+										<Typography variant="subtitle2" className={clsx({[classes.text]: true, [classes.paper]: true})}>{value}</Typography>
 										<Divider variant="middle"/>
 									</div>
 								))}
+								<Button variant="text" color="primary" className={classes.btn} onClick={handleSolve}>Solve Questions</Button>
 							</Paper>
 						</Grid>
 						<Grid item xs={12} sm={4} className={classes.grid}>
-							<Paper elevation={3}>
+							<Paper elevation={3} className={classes.background}>
 								<Typography variant="h6" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
 									Created questions
+									<Divider className={classes.underline}/>
 								</Typography>
-								<Divider/>
 								{((user?.formData?.questionsCreated?.length === 1) && (user?.formData?.questionsCreated?.[0] === ""))?(
 									<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
-										You have not Created any questions yet. Head on to the Home page to start your journey.
+										You have not Created any questions yet.
 									</Typography>
 								):user?.formData?.questionsCreated?.map((val: string) => (
 									<div>
@@ -301,6 +325,7 @@ const Profile = () => {
 										<Divider variant="middle"/>
 									</div>
 								))}
+								<Button variant="text" color="primary" className={classes.btn} onClick={handleCreate}>Create Questions</Button>
 							</Paper>
 						</Grid>
 					</Grid>

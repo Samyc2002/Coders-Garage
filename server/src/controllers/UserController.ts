@@ -12,6 +12,7 @@ export class UserController {
             const user = await User.findOne({ Email: req.body.Email });
 
             if(user === null) {
+
                 res.status(200).json({
                     data: null,
                     success: false
@@ -53,8 +54,6 @@ export class UserController {
     static async updateUser(req: Request, res: Response, next: NextFunction) {
         
         try {
-
-            console.log(req.body);
 
             const { City, Country, Image, Institute, Name, Password, State, UserName, questionsCreated, questionsSolved } = req.body;
     
