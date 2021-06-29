@@ -112,6 +112,7 @@ const Create_Questions = () => {
     });
     const [okay, setOkay] = useState(true);
     const [success, setSuccess] = useState(false);
+    const [typo, setTypo] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
 
     useEffect(() => {
@@ -127,6 +128,8 @@ const Create_Questions = () => {
 		setAnchorEl(null);
 	};
 
+    const isUpperCase = (string: string) => /^[A-Z]*$/.test(string);
+
     const handleSubmit = () => {
 
         setUser(JSON.parse(localStorage.getItem('profile') as string));
@@ -135,20 +138,28 @@ const Create_Questions = () => {
             
             dispatch(getQuestion(question));
             const result = JSON.parse(localStorage.getItem('tmp') as string);
-            if(result?.data !== null) {
+            if(isUpperCase(question.QuestionID)) {
 
-                setOkay(false);
+                if(result?.data !== null) {
+
+                    setOkay(false);
+                }
+                else {
+    
+                    setOkay(true);
+                    dispatch(createQuestion(question));
+                    const array = user.formData.questionsCreated;
+                    array.push(question.QuestionID);
+                    setUser({ ...user, formData: { ...user.formData, questionsCreated: array } });
+                    dispatch(updateUser(user.formData, user.token));
+                    setSuccess(true);
+                }
             }
             else {
 
-                setOkay(true);
-                dispatch(createQuestion(question));
-                const array = user.formData.questionsCreated;
-                array.push(question.QuestionID);
-                setUser({ ...user, formData: { ...user.formData, questionsCreated: array } });
-                dispatch(updateUser(user.formData, user.token));
-                setSuccess(true);
+                setTypo(true);
             }
+            
         } catch (error) {
             
             console.log(error);
@@ -250,6 +261,11 @@ const Create_Questions = () => {
                                         <Fade bottom collapse when={!okay}>
                                             <div className={classes.error}>
                                                 Question ID already exists.
+                                            </div>
+                                        </Fade>
+                                        <Fade bottom collapse when={typo}>
+                                            <div className={classes.error}>
+                                                Question ID must be made of uppercase alphabets.
                                             </div>
                                         </Fade>
                                     </Grid>

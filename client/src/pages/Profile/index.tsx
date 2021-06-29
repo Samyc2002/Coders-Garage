@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import Footer from '../../components/footer';
 import Logo from '../../assets/LogoBlue.png';
 import { updateUser } from '../../actions/auth';
+import { getQuestion, updateQuestion } from '../../actions/question';
 import './styles.css'
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -80,6 +81,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 		marginBottom: theme.spacing(2),
 		fontSize: theme.spacing(10)
 	},
+	heading: {
+		color: theme.palette.getContrastText(theme.palette.primary.contrastText),
+		fontFamily: "'Josefin Sans', sans-serif",
+		fontWeight: 'bolder'
+	},
 	text: {
 		color: theme.palette.getContrastText(theme.palette.primary.contrastText),
 		fontFamily: "'Quicksand', sans-serif",
@@ -98,6 +104,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     	alignItems: 'center',
 		paddingRight: theme.spacing(4)
 	},
+	div: {
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
 	edge: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -109,7 +119,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 	background: {
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center'
+		alignItems: 'center',
+		width: '100%'
 	},
 	underline: {
 		backgroundColor: theme.palette.getContrastText(theme.palette.primary.contrastText)
@@ -130,6 +141,9 @@ const Profile = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const [user, setUser] = useState<any>(JSON.parse(localStorage.getItem('profile') as string));
 	const [update, setUpdate] = useState<any>(JSON.parse(localStorage.getItem('profile') as string));
+	const [question, setQuestion] = useState<any>(JSON.parse(localStorage.getItem('edit') as string));
+	const [copy, setCopy] = useState<any>(JSON.parse(localStorage.getItem('edit') as string));
+	const [dialog, setDialog] = useState(false);
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
@@ -150,6 +164,8 @@ const Profile = () => {
 	};
 
 	const handleclose = () => {
+
+		setUpdate(user);
 		setOpen(false);
 	};
 
@@ -181,12 +197,59 @@ const Profile = () => {
 		}
 		handleClose();
 	}
+
 	const handleSolve = () => {
 		history.push('/home');
 	}
 
 	const handleCreate = () => {
 		history.push('/create');
+	}
+
+	const handleKilos = () => {
+		setDialog(false);
+		setTimeout(() => history.push('/profile'), 1000);
+	}
+	
+	const handleUpin = () => {
+		setDialog(true);
+	}
+	
+	const handleEdit = (val: any) => {
+
+		const formData = {
+			QuestionID: val
+		}
+
+		try {
+			
+			dispatch(getQuestion(formData));
+			const { data }: any = JSON.parse(localStorage.getItem('tmp') as string);
+			setQuestion(data);
+			setCopy(data);
+			setTimeout(() => handleUpin(), 1000);
+		} catch (error) {
+			
+			console.log(error);
+		}
+	}
+
+	const handleIdit = () => {
+
+		try {
+			
+			dispatch(updateQuestion(question));
+			handleKilos();
+		} catch (error) {
+			
+			console.log(error);
+		}
+	}
+
+	const handleKinseal = () => {
+
+		setQuestion(copy);
+		handleKilos();
 	}
 
     return (
@@ -291,10 +354,9 @@ const Profile = () => {
 							<Typography variant="subtitle2" gutterBottom className={classes.text}>Institution: {user?.formData?.Institute}</Typography>
 						</Grid>
 						<Grid item xs={12} sm={4} className={classes.grid}>
-							<Paper elevation={3} className={classes.background}>
-								<Typography variant="h6" className={clsx({[classes.text]: true, [classes.paper]: true})}>
+							<Paper elevation={2} className={classes.background}>
+								<Typography variant="h6" className={clsx({[classes.heading]: true, [classes.paper]: true})}>
 									Solved questions
-									<Divider className={classes.underline}/>
 								</Typography>
 								{((user?.formData?.questionsSolved?.length === 1) && (user?.formData?.questionsSolved?.[0] === ""))?(
 									<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
@@ -303,27 +365,27 @@ const Profile = () => {
 								):user?.formData?.questionsSolved?.map((value: string) => (
 									<div>
 										<Typography variant="subtitle2" className={clsx({[classes.text]: true, [classes.paper]: true})}>{value}</Typography>
-										<Divider variant="middle"/>
 									</div>
 								))}
 								<Button variant="text" color="primary" className={classes.btn} onClick={handleSolve}>Solve Questions</Button>
 							</Paper>
 						</Grid>
 						<Grid item xs={12} sm={4} className={classes.grid}>
-							<Paper elevation={3} className={classes.background}>
-								<Typography variant="h6" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
+							<Paper elevation={2} className={classes.background}>
+								<Typography variant="h6" gutterBottom className={clsx({[classes.heading]: true, [classes.paper]: true})}>
 									Created questions
-									<Divider className={classes.underline}/>
 								</Typography>
 								{((user?.formData?.questionsCreated?.length === 1) && (user?.formData?.questionsCreated?.[0] === ""))?(
 									<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>
 										You have not Created any questions yet.
 									</Typography>
 								):user?.formData?.questionsCreated?.map((val: string) => (
-									<div>
-										<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>{val}</Typography>
-										<Divider variant="middle"/>
-									</div>
+									(val!=="") && (
+										<div className={classes.div}>
+											<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>{val}</Typography>
+											<Button variant="text" color="primary" onClick={() => handleEdit(val)}>Edit</Button>
+										</div>
+									)
 								))}
 								<Button variant="text" color="primary" className={classes.btn} onClick={handleCreate}>Create Questions</Button>
 							</Paper>
@@ -420,6 +482,98 @@ const Profile = () => {
 								Update Profile
 							</Button>
 							<Button onClick={handleclose} color="primary">
+								Cancel
+							</Button>
+						</DialogActions>
+					</Dialog>
+					<Dialog open={dialog} onClose={handleKilos} aria-labelledby="form-dialog-title" fullScreen={isTabletorMobile}>
+						<DialogTitle id="form-dialog-title">Edit Question</DialogTitle>
+						<DialogContent>
+							<Grid container spacing={2}>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="ps"
+										label="Problem Statement"
+										type="text"
+										value={question?.ProblemStatement}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, ProblemStatement: e.target.value })}
+									/>	
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="input"
+										label="Input Description"
+										type="text"
+										value={question?.Input}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, Input: e.target.value })}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="output"
+										label="Output Description"
+										type="text"
+										value={question?.Output}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, Output: e.target.value })}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="constraints"
+										label="Constraints"
+										type="text"
+										value={question?.Constraints}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, Constraints: e.target.value })}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="sampleInput"
+										label="Sample Input"
+										type="text"
+										value={question?.SampleInput}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, SampleInput: e.target.value })}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="sampleOutput"
+										label="Sample Output"
+										type="text"
+										value={question?.SampleOutput}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, SampleOutput: e.target.value })}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										margin="dense"
+										id="explanation"
+										label="Explanation"
+										type="text"
+										value={question?.Explanation}
+										fullWidth
+										onChange={(e) => setQuestion({ ...question, Explanation: e.target.value })}
+									/>
+								</Grid>
+							</Grid>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={handleIdit} color="primary">
+								Update Question
+							</Button>
+							<Button onClick={handleKinseal} color="primary">
 								Cancel
 							</Button>
 						</DialogActions>
