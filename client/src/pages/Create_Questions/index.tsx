@@ -9,7 +9,7 @@ import Fade from 'react-reveal/Fade';
 import { createQuestion, getQuestion } from '../../actions/question';
 import { updateUser } from '../../actions/auth';
 import Footer from '../../components/footer';
-import Logo from '../../assets/LogoBlue.png';
+import Logo from '../../assets/images/LogoBlue.png';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,6 +100,7 @@ const Create_Questions = () => {
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
     const [question, setQuestion] = useState({
         QuestionID: '',
         ProblemStatement: '',
@@ -108,12 +109,12 @@ const Create_Questions = () => {
         Constraints: '',
         SampleInput: '',
         SampleOutput: '',
-        Explanation: ''
+        Explanation: '',
+        Creator: user.formData.Email
     });
     const [okay, setOkay] = useState(true);
     const [success, setSuccess] = useState(false);
     const [typo, setTypo] = useState(false);
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
 
     useEffect(() => {
 

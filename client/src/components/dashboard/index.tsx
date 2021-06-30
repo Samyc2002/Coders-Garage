@@ -4,9 +4,9 @@ import VisibilitySensor from 'react-visibility-sensor';
 import Zoom from 'react-reveal/Zoom';
 import Slide from 'react-reveal/Slide';
 
-import Home from '../../assets/Home.png';
-import IDE from '../../assets/IDE.png';
-import Interview from '../../assets/Interview.png';
+import Home from '../../assets/images/Home.png';
+import IDE from '../../assets/images/IDE.png';
+import Interview from '../../assets/images/Interview.png';
 
 const Dashboard = () => {
 

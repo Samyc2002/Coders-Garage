@@ -6,8 +6,16 @@ export const signIn = (formData: any, router: any) => async (dispatch: Function)
     try {
 
         const { data }: any = await api.signIn(formData);
-        dispatch({ type: actionTypes.AUTH, data });
-        router.push('/');
+
+        if(data.data === null) {
+            localStorage.setItem('profile', JSON.stringify({ ...data.data, token: data.data.token }));
+            dispatch({ type: actionTypes.AUTH, data: data.data });
+        }
+        else {
+            localStorage.setItem('profile', JSON.stringify({ ...data.data, token: data.data.token }));
+            dispatch({ type: actionTypes.AUTH, data: data.data });
+            router.push('/');
+        }
     } catch (error) {
 
         console.log(error);
@@ -19,8 +27,16 @@ export const signUp = (formData: any, router: any) => async (dispatch: Function)
     try {
         
         const { data }: any = await api.signUp(formData);
-        dispatch({ type: actionTypes.AUTH, data });
-        router.push('/');
+
+        if(data.data === null) {
+            localStorage.setItem('profile', JSON.stringify({ formData: null }));
+            dispatch({ type: actionTypes.AUTH, data: data.data });
+        }
+        else {
+            localStorage.setItem('profile', JSON.stringify({ ...data.data, token: data.data.token }));
+            dispatch({ type: actionTypes.AUTH, data: data.data });
+            router.push('/');
+        }
     } catch (error) {
 
         console.log(error);

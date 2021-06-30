@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
-import Logo from '../../assets/LogoBlue.png';
+import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
 import './styles.css';
 
@@ -169,7 +169,7 @@ const Home = () => {
                     position="fixed"
                     className={classes.appBar}
                 >
-                    <Toolbar style={{ justifyContent: isTabletorMobile?'space-around':'space-between' }}>
+                    <Toolbar style={{ justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 color="primary"

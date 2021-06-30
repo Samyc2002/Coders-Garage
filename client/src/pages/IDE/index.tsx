@@ -6,6 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios, { Method } from 'axios';
+import useSound from 'use-sound';
 import clsx from 'clsx';
 
 import 'codemirror/mode/clike/clike';
@@ -16,7 +17,10 @@ import 'codemirror/mode/swift/swift';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import Ide from '../../components/IDE';
 import Footer from '../../components/footer';
-import Logo from '../../assets/LogoBlue.png';
+import Logo from '../../assets/images/LogoBlue.png';
+import SuccessSFX from '../../assets/sounds/Success.mp3';
+import FailureSFX from '../../assets/sounds/Failure.mp3';
+import SwitchSFX from '../../assets/sounds/Switch.mp3';
 import { getEnvironmentVariables } from '../../environments/env';
 import './styles.css';
 
@@ -156,12 +160,11 @@ const IDE = () => {
     const [theme, setTheme] = useState(true);
 	const [tab, setTab] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [successSound] = useSound(SuccessSFX, { volume: 1 });
+    const [errorSound] = useSound(FailureSFX, { volume: 1 });
+    const [switchSound] = useSound(SwitchSFX, { volume: 1 });
 
     const alert_type = type?"success":"error";
-    
-    const handleDrawer = () => {
-        setOpen(!open);
-    }
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setIndex(event.target.value as number);
@@ -172,7 +175,9 @@ const IDE = () => {
     }
 
     const handleTheme = () => {
+        switchSound();
         setTheme(!theme);
+
     }
 
 	const handleTab = () => {
@@ -187,6 +192,11 @@ const IDE = () => {
         setAnchorEl(null);
     };
 
+    const handleDrawer = () => {
+        setOpen(!open);
+        handleClose();
+    }
+
     const Logout = () => {
 
 		try {
@@ -200,6 +210,7 @@ const IDE = () => {
 	}
 
     const handleclick = () => {
+
         setSnack(true);
     };
     
@@ -254,6 +265,11 @@ const IDE = () => {
                         handleclick();
                         if(res.data.build_stderr) {
                             setType(false);
+                            errorSound();
+                        }
+                        else {
+                            setType(true);
+                            successSound();
                         }
                     })
                     .catch((err) => console.log(err));
@@ -284,7 +300,7 @@ const IDE = () => {
                         position="fixed"
                         className={classes.appBar}
                     >
-                        <Toolbar style={{ justifyContent: isTabletorMobile?'space-around':'space-between' }}>
+                        <Toolbar style={{ justifyContent: 'space-between' }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <IconButton
                                     color="primary"
@@ -498,75 +514,76 @@ const IDE = () => {
                             paper: classes.drawerPaper,
                         }}
                     >
-                        <Grid item style={{ height: '20px' }}/>
-                        <Toolbar/>
-                        <Grid container justify="center" direction="column">
-                            <Grid item xl={12}>
-                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center' }}>
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        label="Input"
-                                        multiline
-                                        rows={13}
-                                        variant="standard"
-                                        style={{
-                                            margin: '10px',
-                                            color: '#121212'
+                        <div>
+                            <div className={classes.drawerHeader} />
+                            <Grid container style={{ marginTop: '20px' }}>
+                                <Grid item xs={12} style={{ marginBottom: '20px' }}>
+                                    <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center' }}>
+                                        <TextField
+                                            id="outlined-multiline-static"
+                                            label="Input"
+                                            multiline
+                                            rows={13}
+                                            variant="standard"
+                                            style={{
+                                                margin: '10px',
+                                                color: '#121212'
+                                            }}
+                                            onChange={(e) => {
+                                                setInput(e.target.value);
+                                            }}
+                                        />
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={12} style={{ marginBottom: '20px' }}>
+                                    <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                        <TextField
+                                            id="outlined-multiline-static"
+                                            label={type?"Output":"Error"}
+                                            multiline
+                                            rows={13}
+                                            variant="standard"
+                                            style={{
+                                                margin: '10px',
+                                                color: '#121212'
+                                            }}
+                                            disabled
+                                            autoFocus
+                                            value={output}
+                                        />
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={12} style={{ marginBottom: '20px', paddingLeft: '10px', paddingRight: '10px' }}>
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={() => {
+                                            CompileRun(format[index]);
                                         }}
-                                        onChange={(e) => {
-                                            setInput(e.target.value);
+                                        fullWidth
+                                    >
+                                        Run
+                                    </Button>
+                                </Grid>
+                                <Snackbar open={snack} autoHideDuration={6000} onClose={handleclose}>
+                                    <Alert onClose={handleclose} severity={alert_type}>
+                                        {type?`Compilation Successful in ${time} seconds and needed ${memory} bytes!`:`Compilation Error`}
+                                    </Alert>
+                                </Snackbar>
+                                <Grid item xs={12} style={{ marginBottom: '20px', paddingLeft: '10px', paddingRight: '10px' }}>
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={() => {
+                                            setOutput('');
                                         }}
-                                    />
-                                </Paper>
+                                        fullWidth
+                                    >
+                                        Clear
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item style={{ height: '20px' }}/>
-                            <Grid item xl={12}>
-                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        label={type?"Output":"Error"}
-                                        multiline
-                                        rows={13}
-                                        variant="standard"
-                                        style={{
-                                            margin: '10px',
-                                            color: '#121212'
-                                        }}
-                                        disabled
-                                        autoFocus
-                                        value={output}
-                                    />
-                                </Paper>
-                            </Grid>
-                            <Grid item style={{ height: '20px' }}/>
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                style={{ marginLeft: '10px', marginRight: '10px' }}
-                                onClick={() => {
-                                    CompileRun(format[index]);
-                                }}
-                            >
-                                Run
-                            </Button>
-                            <Snackbar open={snack} autoHideDuration={6000} onClose={handleclose}>
-                                <Alert onClose={handleclose} severity={alert_type}>
-                                    {type?`Compilation Successful in ${time} seconds and needed ${memory} bytes!`:`Compilation Error`}
-                                </Alert>
-                            </Snackbar>
-                            <Grid item style={{ height: '10px' }}/>
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                style={{ marginLeft: '10px', marginRight: '10px' }}
-                                onClick={() => {
-                                    setOutput('');
-                                }}
-                            >
-                                Clear
-                            </Button>
-                            <Grid item style={{ height: '20px' }}/>
-                        </Grid>
+                        </div>
                     </Drawer>
                 </div>
                 <Footer/>

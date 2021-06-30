@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import Landing from '../../components/landing';
 import Dash from '../../components/dashboard';
 import Footer from '../../components/footer';
-import Logo from '../../assets/LogoBlue.png';
+import Logo from '../../assets/images/LogoBlue.png';
 
 const drawerWidth = 240;
 

@@ -16,6 +16,7 @@
     height: 50%;
     width: 100%;
 }
+
 @media (min-width: 600px) {
     .MuiListItem-gutters{
         padding-left: 25px !important;

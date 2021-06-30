@@ -47,6 +47,10 @@ const QuestionSchema: Schema = new Schema({
     Explanation: {
         type: String,
         required: true
+    },
+    Creator: {
+        type: String,
+        required: true
     }
 });
 

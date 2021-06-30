@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import Footer from '../../components/footer';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import Ide from '../../components/IDE';
-import Logo from '../../assets/LogoBlue.png';
+import Logo from '../../assets/images/LogoBlue.png';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -298,7 +298,7 @@ const Interview = () => {
                     position="fixed"
                     className={classes.appBar}
                 >
-                    <Toolbar style={{ justifyContent: isTabletorMobile?'space-around':'space-between' }}>
+                    <Toolbar style={{ justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
                                 color="primary"

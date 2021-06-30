@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
 import Footer from '../../components/footer';
-import Logo from '../../assets/LogoBlue.png';
+import Logo from '../../assets/images/LogoBlue.png';
 import { updateUser } from '../../actions/auth';
 import { getQuestion, updateQuestion } from '../../actions/question';
 import './styles.css'
@@ -252,6 +252,24 @@ const Profile = () => {
 		handleKilos();
 	}
 
+	const displayEdit = (val: string) => {
+
+		const formData = {
+			QuestionID: val
+		}
+
+		try {
+			
+			dispatch(getQuestion(formData));
+			const { data }: any = JSON.parse(localStorage.getItem('tmp') as string);
+			 const isUser = (data.Creator === user.formData.Email);
+			return isUser;
+		} catch (error) {
+			
+			console.log(error);
+		}
+	}
+
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
             <div className={classes.root}>
@@ -346,12 +364,12 @@ const Profile = () => {
 								<Avatar alt={user?.formData?.Image} src={user?.formData?.Image} className={clsx({[classes.purple]:true, [classes.large]: true})}/>
 							)}
 							<Typography variant="h6" gutterBottom className={classes.text}>{user?.formData?.Name}</Typography>
-							<Typography variant="subtitle2" gutterBottom className={classes.text}>Username: {user?.formData?.UserName}</Typography>
-							<Typography variant="subtitle2" gutterBottom className={classes.text}>Email: {user?.formData?.Email}</Typography>
-							<Typography variant="subtitle2" gutterBottom className={classes.text}>Country: {user?.formData?.Country}</Typography>
-							<Typography variant="subtitle2" gutterBottom className={classes.text}>State: {user?.formData?.State}</Typography>
-							<Typography variant="subtitle2" gutterBottom className={classes.text}>City: {user?.formData?.City}</Typography>
-							<Typography variant="subtitle2" gutterBottom className={classes.text}>Institution: {user?.formData?.Institute}</Typography>
+							{user?.formData?.UserName&&(<Typography variant="subtitle2" gutterBottom className={classes.text}>Username: {user?.formData?.UserName}</Typography>)}
+							{user?.formData?.Email&&(<Typography variant="subtitle2" gutterBottom className={classes.text}>Email: {user?.formData?.Email}</Typography>)}
+							{user?.formData?.Country&&(<Typography variant="subtitle2" gutterBottom className={classes.text}>Country: {user?.formData?.Country}</Typography>)}
+							{user?.formData?.State&&(<Typography variant="subtitle2" gutterBottom className={classes.text}>State: {user?.formData?.State}</Typography>)}
+							{user?.formData?.City&&(<Typography variant="subtitle2" gutterBottom className={classes.text}>City: {user?.formData?.City}</Typography>)}
+							{user?.formData?.Institute&&(<Typography variant="subtitle2" gutterBottom className={classes.text}>Institution: {user?.formData?.Institute}</Typography>)}
 						</Grid>
 						<Grid item xs={12} sm={4} className={classes.grid}>
 							<Paper elevation={2} className={classes.background}>
@@ -383,7 +401,7 @@ const Profile = () => {
 									(val!=="") && (
 										<div className={classes.div}>
 											<Typography variant="subtitle2" gutterBottom className={clsx({[classes.text]: true, [classes.paper]: true})}>{val}</Typography>
-											<Button variant="text" color="primary" onClick={() => handleEdit(val)}>Edit</Button>
+											{displayEdit(val) && (<Button variant="text" color="primary" onClick={() => handleEdit(val)}>Edit</Button>)}
 										</div>
 									)
 								))}

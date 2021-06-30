@@ -7,6 +7,8 @@ declare module 'react-reveal/Slide';
 declare module 'react-file-base64';
 declare module 'react-custom-scrollbars';
 
+
+declare module '*.mp3';
 declare module '*.scss' {
     const content: {[className: string]: string};
     export = content;

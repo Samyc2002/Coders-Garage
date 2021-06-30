@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, CssBaseline, makeStyles, Grid, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, useTheme, TextField, DialogContentText } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { Button, CssBaseline, makeStyles, Grid, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, useTheme, TextField, DialogContentText, Paper, Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Fade from 'react-reveal/Fade';
 import firebase from 'firebase';
 
 import * as Providers from '../../config/authmethods';
 import * as Methods from '../../authentication/auth';
-import Google from '../../assets/Google.png';
-import Facebook from '../../assets/Facebook.png';
-import Github from '../../assets/Github.png';
-import Twitter from '../../assets/Twitter.png';
-import { createUser } from '../../actions/auth';
+import Google from '../../assets/images/Google.png';
+import Facebook from '../../assets/images/Facebook.png';
+import Github from '../../assets/images/Github.png';
+import Twitter from '../../assets/images/Twitter.png';
+import { signIn, signUp, createUser } from '../../actions/auth';
 
 const useStyles = makeStyles((theme) => ({
 	background: {
@@ -33,6 +34,14 @@ export default function SignIn() {
 	const history = useHistory();
 
 	const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
+	const [data, setData] = useState({
+		firstName: '',
+		lastName: '',
+		Email: '',
+		Password: ''
+	});
+	const [error1, setError1] = useState(false);
+	const [error2, setError2] = useState(false);
 
 	useEffect(() => {
 
@@ -83,6 +92,36 @@ export default function SignIn() {
 		}
 	}
 
+	const signin = () => {
+
+		try {
+			
+			dispatch(signIn(data, history));
+			const result = JSON.parse(localStorage.getItem('profile') as string);
+			if(result?.formData === null) {
+				setError1(true);
+			}
+		} catch (error) {
+			
+			console.log(error);
+		}
+	}
+
+	const signup = () => {
+
+		try {
+			
+			dispatch(signUp(data, history));
+			const result = JSON.parse(localStorage.getItem('profile') as string);
+			if(result.formData === null) {
+				setError2(true);
+			}
+		} catch (error) {
+			
+			console.log(error);
+		}
+	}
+
 	const render = () => {
 		if(user?.token) {
 			return (
@@ -118,12 +157,31 @@ export default function SignIn() {
 				<DialogTitle id="responsive-dialog-title" style={{ display: 'flex', justifyContent: 'center' }}>Login/Signup</DialogTitle>
 				<DialogContent>
 					<Grid container spacing={2} style={{ paddingBottom: '10px' }}>
+						<Grid item xs={12}>
+							<Fade top collapse when={error1}>
+								<Paper color="error">
+									<Typography variant="h6" color="error">
+										Either user doesn't exist or password is incorrect. Please try again.
+									</Typography>
+								</Paper>
+							</Fade>
+						</Grid>
+						<Grid item xs={12}>
+							<Fade top collapse when={error2}>
+								<Paper color="error">
+									<Typography variant="h6" color="error">
+										User already exists.
+									</Typography>
+								</Paper>
+							</Fade>
+						</Grid>
 						<Grid item xs={12} sm={6}>
 							<TextField
 								id="fname"
 								label="First Name"
 								type="text"
 								fullWidth
+								onChange={(e) => setData({ ...data, firstName: e.target.value })}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6}>
@@ -132,15 +190,17 @@ export default function SignIn() {
 								label="Last Name"
 								type="text"
 								fullWidth
+								onChange={(e) => setData({ ...data, lastName: e.target.value })}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
 								required
-								id="username"
-								label="Username"
-								type="text"
+								id="email"
+								label="Email"
+								type="email"
 								fullWidth
+								onChange={(e) => setData({ ...data, Email: e.target.value })}
 							/>
 						</Grid>
 						<Grid item xs={12} style={{ paddingBottom: '10px' }}>
@@ -150,6 +210,7 @@ export default function SignIn() {
 								label="Password"
 								type="password"
 								fullWidth
+								onChange={(e) => setData({ ...data, Password: e.target.value })}
 							/>
 						</Grid>
 						<Grid item xs={6} sm={3} justify="center" style={{ display: 'flex' }}>
@@ -169,12 +230,12 @@ export default function SignIn() {
 				<DialogActions>
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
-							<Button variant="contained" color="primary" fullWidth>
-								Login
+							<Button variant="contained" color="primary" fullWidth onClick={signin}>
+								Signin
 							</Button>
 						</Grid>
 						<Grid item xs={12} sm={6}>
-							<Button variant="outlined" color="primary" fullWidth>
+							<Button variant="outlined" color="primary" fullWidth onClick={signup}>
 								Signup
 							</Button>
 						</Grid>

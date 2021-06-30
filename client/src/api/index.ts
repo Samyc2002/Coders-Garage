@@ -14,8 +14,8 @@ export const getUser = (formData: any) => API.post('/user/data', formData);
 export const createUser = (formData: any) => API.post('/user', formData);
 export const updateUser = (formData: any) => API.put('/user', formData);
 
-export const signIn = (formData: any) => API.post('/user/signin', formData);
-export const signUp = (formData: any) => API.post('/user/signup', formData);
+export const signIn = (formData: any) => API.post('/auth/signin', formData);
+export const signUp = (formData: any) => API.post('/auth/signup', formData);
 
 export const getQuestion = (formData: any) => API.post('/question/data', formData);
 export const createQuestion = (formData: any) => API.post('/question', formData);
