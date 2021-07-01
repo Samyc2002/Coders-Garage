@@ -15,7 +15,10 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
+		display: 'flex',
+    	flexDirection: 'column',
+		justifyContent: 'space-between',
+        minHeight: '100vh'
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -163,7 +166,7 @@ const Home = () => {
     
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
-            <div>
+            <div className={classes.root}>
                 <CssBaseline />
                 <AppBar
                     position="fixed"

@@ -32,12 +32,6 @@ export class Server {
 			}
 		});
 		this.app.use(cors());
-		interface call{
-			userToCall: any,
-			signalData: any,
-			from: string,
-			name: string
-		}
 		io.on("connection", (socket: any) => {
 			socket.emit("me", socket.id);
 		
@@ -45,7 +39,7 @@ export class Server {
 				socket.broadcast.emit("callEnded")
 			});
 		
-			socket.on("callUser", ({ userToCall, signalData, from, name }: call) => {
+			socket.on("callUser", ({ userToCall, signalData, from, name }: any) => {
 				io.to(userToCall).emit("callUser", { signal: signalData, from, name });
 			});
 		

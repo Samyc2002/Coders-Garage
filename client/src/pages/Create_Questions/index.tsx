@@ -14,7 +14,10 @@ import Logo from '../../assets/images/LogoBlue.png';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
+        display: 'flex',
+    	flexDirection: 'column',
+		justifyContent: 'space-between',
+        minHeight: '100vh'
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -44,8 +47,6 @@ const useStyles = makeStyles((theme: Theme) =>
 		...theme.mixins.toolbar
 	},
     content: {
-      flexGrow: 1,
-    //   padding: theme.spacing(3),
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -169,7 +170,7 @@ const Create_Questions = () => {
 
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
-            <div>
+            <div className={classes.root}>
                 <CssBaseline />
 				<AppBar
 					position="sticky"
@@ -277,6 +278,8 @@ const Create_Questions = () => {
                                             name="ps"
                                             label="Problem Statement"
                                             fullWidth
+                                            multiline
+                                            rows={4}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, ProblemStatement: e.target.value })}
                                         />
@@ -288,6 +291,8 @@ const Create_Questions = () => {
                                             name="input"
                                             label="Input Description"
                                             fullWidth
+                                            multiline
+                                            rows={4}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, Input: e.target.value })}
                                         />
@@ -299,6 +304,8 @@ const Create_Questions = () => {
                                             name="output"
                                             label="Output Description"
                                             fullWidth
+                                            multiline
+                                            rows={4}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, Output: e.target.value })}
                                         />
@@ -310,6 +317,8 @@ const Create_Questions = () => {
                                             name="constraints"
                                             label="Constraints"
                                             fullWidth
+                                            multiline
+                                            rows={3}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, Constraints: e.target.value })}
                                         />
@@ -321,6 +330,8 @@ const Create_Questions = () => {
                                             name="sampleInput"
                                             label="Sample Input"
                                             fullWidth
+                                            multiline
+                                            rows={4}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, SampleInput: e.target.value })}
                                         />
@@ -332,6 +343,8 @@ const Create_Questions = () => {
                                             name="sampleOnput"
                                             label="Sample Output"
                                             fullWidth
+                                            multiline
+                                            rows={4}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, SampleOutput: e.target.value })}
                                         />
@@ -342,6 +355,8 @@ const Create_Questions = () => {
                                             name="explanation"
                                             label="Explanation"
                                             fullWidth
+                                            multiline
+                                            rows={2}
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, Explanation: e.target.value })}
                                         />

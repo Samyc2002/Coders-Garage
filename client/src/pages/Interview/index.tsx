@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppBar, createStyles, CssBaseline, Divider, IconButton, makeStyles, Toolbar, Typography, Theme, Drawer, List, ListItem, ListItemIcon, ListItemText, Paper, Tabs, Tab, Grid, FormControl, InputLabel, Select, MenuItem, useMediaQuery, Button, Menu, TextField } from '@material-ui/core';
 import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -6,10 +6,13 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
-import Footer from '../../components/footer';
+import { SocketContext } from '../../config/SocketContext';
 import useLocalStorage from '../../Hooks/useLocalStore';
-import Ide from '../../components/IDE';
 import Logo from '../../assets/images/LogoBlue.png';
+import UserVideo from '../../components/userVideo';
+import MyVideo from '../../components/myVideo';
+import Footer from '../../components/footer';
+import Ide from '../../components/IDE';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -137,6 +140,7 @@ const Interview = () => {
     const dark = "material-darker";
     const light = "eclipse";
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+    const { stream, callAccepted, callEnded }: any = useContext(SocketContext);
 
 	const [code, setCode] = useLocalStorage('code', '');
     const [open, setOpen] = useState(false);
@@ -330,7 +334,7 @@ const Interview = () => {
                                         >
                                             <AddCircleRoundedIcon/>
                                         </IconButton>
-								    </Button>
+                                    </Button>
                                     <Menu
                                         id="simple-menu"
                                         anchorEl={anchorEl}
@@ -467,37 +471,40 @@ const Interview = () => {
                         </List>
                     </div>
                     <div>
-						<List>
-							<ListItem button key="Theme">
-								<ListItemIcon>
-									<PaletteIcon/>
-								</ListItemIcon>
-								<ListItemText>
-									Theme
-								</ListItemText>
-							</ListItem>
-							<a href="/profile" style={{ textDecoration: 'none', color: '#121212' }}>
-								<ListItem button key="Dashboard">
-									<ListItemIcon>
-										<DashboardRoundedIcon/>
-									</ListItemIcon>
-									<ListItemText>
-										Dashboard
-									</ListItemText>
-								</ListItem>
-							</a>
-							<ListItem button key="Logout" onClick={Logout}>
-								<ListItemIcon>
-									<ExitToAppRoundedIcon/>
-								</ListItemIcon>
-								<ListItemText>
-									Logout
-								</ListItemText>
-							</ListItem>
-						</List>
-					</div>
+                        <List>
+                            <ListItem button key="Theme">
+                                <ListItemIcon>
+                                    <PaletteIcon/>
+                                </ListItemIcon>
+                                <ListItemText>
+                                    Theme
+                                </ListItemText>
+                            </ListItem>
+                            <a href="/profile" style={{ textDecoration: 'none', color: '#121212' }}>
+                                <ListItem button key="Dashboard">
+                                    <ListItemIcon>
+                                        <DashboardRoundedIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>
+                                        Dashboard
+                                    </ListItemText>
+                                </ListItem>
+                            </a>
+                            <ListItem button key="Logout" onClick={Logout}>
+                                <ListItemIcon>
+                                    <ExitToAppRoundedIcon/>
+                                </ListItemIcon>
+                                <ListItemText>
+                                    Logout
+                                </ListItemText>
+                            </ListItem>
+                        </List>
+                    </div>
                 </Drawer>
                 <main className={classes.content}>
+                    <div style={{ position: 'fixed', zIndex: 9999 }}>
+                        { stream && (<MyVideo/>)}
+                    </div>
                     <Paper square elevation={0}>
                         <Tabs
                             value={content}
@@ -514,6 +521,9 @@ const Interview = () => {
                         <Divider/>
                     </Paper>
                     {setAction()}
+                    <div style={{ position: 'fixed', zIndex: 9999 }}>
+                        { callAccepted && !callEnded && (<UserVideo/>)}
+                    </div>
                 </main>
                 {(content===1) && (
                     <Drawer

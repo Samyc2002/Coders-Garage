@@ -224,10 +224,12 @@ const Profile = () => {
 		try {
 			
 			dispatch(getQuestion(formData));
-			const { data }: any = JSON.parse(localStorage.getItem('tmp') as string);
-			setQuestion(data);
-			setCopy(data);
-			setTimeout(() => handleUpin(), 1000);
+			setTimeout(() => {
+				const { data }: any = JSON.parse(localStorage.getItem('tmp') as string);
+				setQuestion(data);
+				setCopy(data);
+				handleUpin()
+			}, 1000);
 		} catch (error) {
 			
 			console.log(error);
@@ -254,16 +256,9 @@ const Profile = () => {
 
 	const displayEdit = (val: string) => {
 
-		const formData = {
-			QuestionID: val
-		}
-
 		try {
 			
-			dispatch(getQuestion(formData));
-			const { data }: any = JSON.parse(localStorage.getItem('tmp') as string);
-			 const isUser = (data.Creator === user.formData.Email);
-			return isUser;
+			return user?.formData?.questionsCreated?.includes(val);
 		} catch (error) {
 			
 			console.log(error);
@@ -516,6 +511,8 @@ const Profile = () => {
 										type="text"
 										value={question?.ProblemStatement}
 										fullWidth
+										multiline
+                                        rows={4}
 										onChange={(e) => setQuestion({ ...question, ProblemStatement: e.target.value })}
 									/>	
 								</Grid>
@@ -527,6 +524,8 @@ const Profile = () => {
 										type="text"
 										value={question?.Input}
 										fullWidth
+										multiline
+                                        rows={4}
 										onChange={(e) => setQuestion({ ...question, Input: e.target.value })}
 									/>
 								</Grid>
@@ -538,6 +537,8 @@ const Profile = () => {
 										type="text"
 										value={question?.Output}
 										fullWidth
+										multiline
+                                        rows={4}
 										onChange={(e) => setQuestion({ ...question, Output: e.target.value })}
 									/>
 								</Grid>
@@ -549,6 +550,8 @@ const Profile = () => {
 										type="text"
 										value={question?.Constraints}
 										fullWidth
+										multiline
+                                        rows={3}
 										onChange={(e) => setQuestion({ ...question, Constraints: e.target.value })}
 									/>
 								</Grid>
@@ -560,6 +563,8 @@ const Profile = () => {
 										type="text"
 										value={question?.SampleInput}
 										fullWidth
+										multiline
+                                        rows={4}
 										onChange={(e) => setQuestion({ ...question, SampleInput: e.target.value })}
 									/>
 								</Grid>
@@ -571,6 +576,8 @@ const Profile = () => {
 										type="text"
 										value={question?.SampleOutput}
 										fullWidth
+										multiline
+                                        rows={4}
 										onChange={(e) => setQuestion({ ...question, SampleOutput: e.target.value })}
 									/>
 								</Grid>
@@ -582,6 +589,8 @@ const Profile = () => {
 										type="text"
 										value={question?.Explanation}
 										fullWidth
+										multiline
+                                        rows={2}
 										onChange={(e) => setQuestion({ ...question, Explanation: e.target.value })}
 									/>
 								</Grid>
