@@ -5,11 +5,13 @@ A react coding website made for the Summer of Innovation Web Development project
 # To run the client
 ```
   cd client
+  npm i
   npm start
 ```
 
 # To run the server
 ```
   cd server
+  npm i
   npm run dev
 ```
