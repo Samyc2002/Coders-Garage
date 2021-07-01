@@ -10,7 +10,7 @@ import QuestionRouter from './routers/QuestionRouter';
 import AuthRouter from './routers/AuthRouter';
 import { ContactEmail } from './middlewares/ContactEmail';
 
-export class Server {
+export class server {
     public app: express.Application = express();
 
     constructor() {
@@ -24,29 +24,8 @@ export class Server {
         this.connectMongoDb();
         this.configureBodyParser();
         this.configureNodemailer();
-		const server = require("http").createServer(this.app);
-		const io = require('socket.io')(server, {
-			cors: {
-				origin: '*',
-				methods: [ 'GET', 'POST' ]
-			}
-		});
 		this.app.use(cors());
-		io.on("connection", (socket: any) => {
-			socket.emit("me", socket.id);
 		
-			socket.on("disconnect", () => {
-				socket.broadcast.emit("callEnded")
-			});
-		
-			socket.on("callUser", ({ userToCall, signalData, from, name }: any) => {
-				io.to(userToCall).emit("callUser", { signal: signalData, from, name });
-			});
-		
-			socket.on("answerCall", (data: any) => {
-				io.to(data.to).emit("callAccepted", data.signal)
-			});
-		});
         console.log('Configurations set up successfully');
     }
 
