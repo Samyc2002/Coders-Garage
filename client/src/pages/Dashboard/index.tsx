@@ -267,7 +267,7 @@ const Dashboard = () => {
 									</MenuItem>
 									<MenuItem onClick={handleClose}>
 										<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold' }}>
-											<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
+											<a href="/interview_home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 										</Typography>
 									</MenuItem>
 									{render_small()}
@@ -282,7 +282,7 @@ const Dashboard = () => {
 									<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>IDE</a>
 								</Typography>
 								<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
-									<a href="/interview" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
+									<a href="/interview_home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Interview</a>
 								</Typography>
 								{render_big()}
 							</div>

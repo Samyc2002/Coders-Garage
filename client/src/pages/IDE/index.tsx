@@ -454,7 +454,7 @@ const IDE = () => {
                                         </ListItemText>
                                     </ListItem>
                                 </a>
-                                <a href="/interview" style={{ textDecoration: 'none', color: '#121212' }}>
+                                <a href="/interview_home" style={{ textDecoration: 'none', color: '#121212' }}>
                                     <ListItem button key="Interview">
                                         <ListItemIcon>
                                             <ComputerRoundedIcon/>

@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Home from '../pages/Home';
 import IDE from '../pages/IDE';
+import Interview_Home from '../pages/Interview_Home';
 import Interview from '../pages/Interview';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
@@ -15,6 +16,7 @@ const Routes: React.FC = () => (
         <Route path="/" exact component={Dashboard}/>
         <Route path="/home" component={Home}/>
         <Route path="/ide" component={IDE}/>
+        <Route path="/interview_home" component={Interview_Home}/>
         <Route path="/interview" component={Interview}/>
         <Route path="/login" component={Login}/>
         <Route path="/profile" component={Profile}/>
