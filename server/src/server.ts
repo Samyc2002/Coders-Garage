@@ -8,6 +8,7 @@ import { getEnvironmentVariables } from './environments/env';
 import UserRouter from './routers/UserRouter';
 import QuestionRouter from './routers/QuestionRouter';
 import AuthRouter from './routers/AuthRouter';
+import InterviewRouter from './routers/InterviewRouter';
 import { ContactEmail } from './middlewares/ContactEmail';
 
 export class server {
@@ -46,6 +47,7 @@ export class server {
       this.app.use('/user', UserRouter);
       this.app.use('/question', QuestionRouter);
       this.app.use('/auth', AuthRouter);
+	  this.app.use('/interview', InterviewRouter);
     }
 
     configureBodyParser() {

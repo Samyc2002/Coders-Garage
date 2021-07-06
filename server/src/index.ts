@@ -17,6 +17,10 @@ const io = new Server(app.listen(PORT, () => {
 io.on("connection", (socket: Socket) => {
     socket.emit("me", socket.id);
 
+    socket.on('join', id => {
+        socket.join(id);
+    })
+
     socket.on("disconnect", () => {
         socket.broadcast.emit("callEnded")
     });

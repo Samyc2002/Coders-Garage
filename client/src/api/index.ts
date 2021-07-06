@@ -20,3 +20,6 @@ export const signUp = (formData: any) => API.post('/auth/signup', formData);
 export const getQuestion = (formData: any) => API.post('/question/data', formData);
 export const createQuestion = (formData: any) => API.post('/question', formData);
 export const updateQuestion = (formData: any) => API.put('/question', formData);
+
+export const getInterview = () => API.get('/interview');
+export const createInterview = (formData: any) => API.post('/interview', formData);

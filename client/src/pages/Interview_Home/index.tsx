@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography, Grid, TextField, Paper } from '@material-ui/core';
-import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
-import { ScheduleMeeting } from 'react-schedule-meeting';
+import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography, Grid, TextField, Paper, Dialog, DialogTitle, DialogContentText, DialogActions, DialogContent } from '@material-ui/core';
+import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon, ArrowRightAlt as ArrowRightAltIcon } from '@material-ui/icons';
+import { ScheduleMeeting, StartTimeEventEmit } from 'react-schedule-meeting';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Slide from 'react-reveal/Slide';
+import crypto from 'crypto';
 import clsx from 'clsx';
 
+import { createInterview } from '../../actions/interview';
 import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
 import SimpleCard from '../../components/Card';
@@ -149,8 +151,17 @@ const Interview_Home = () => {
     const [tab, setTab] = useState(false);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [reveal, setReveal] = useState(true);
-    const [calendar, setCalendar] = useState(true);
-    const [style, setStyle] = useState(false);
+    const [calendar, setCalendar] = useState(false);
+    const [interview, setInterview] = useState({
+        RoomId: crypto.randomBytes(16).toString('hex'),
+        InterviewerEmail: JSON.parse(localStorage.getItem('profile') as string)?.formData.Email,
+        IntervieweeEmail: '',
+        Duration: '',
+        StartTime: ''
+    });
+    const [open, setOpen] = useState(false);
+    const [disabled, setDisabled] = useState(true);
+    const [roomId, setRoomId] = useState('');
 
     const handleTab = () => {
 		setTab(!tab);
@@ -178,14 +189,34 @@ const Interview_Home = () => {
 
     const onSchedule = () => {
         setReveal(false);
-        setTimeout(() => setStyle(!style), 1000);
     }
 
     const onJoin = () => {
-
+        localStorage.setItem('room', roomId);
+        history.push('/interview');
     }
 
-    const availableTimeslots = [0, 1, 2, 3, 4, 5].map((id) => {
+    const handleSubmit = () => {
+        setCalendar(true);
+    }
+
+    const handleConfirm = (e: StartTimeEventEmit) => {
+        setInterview({ ...interview, StartTime: e.startTime.toString() });
+        setOpen(true);
+    }
+
+    const handleclose = () => {
+        setOpen(false);
+    }
+
+    const handleCancel = () => {
+        dispatch(createInterview(interview));
+        setCalendar(false);
+        setOpen(false);
+        setReveal(true);
+    }
+
+    const availableTimeslots = [0, 1, 2, 3, 4, 5, 6].map((id) => {
         return {
           id,
           startTime: new Date(new Date(new Date().setDate(new Date().getDate() + id)).setHours(9, 0, 0, 0)),
@@ -261,13 +292,10 @@ const Interview_Home = () => {
 							):(
 								<div style={{ display: 'flex', alignItems: 'center' }}>
 									<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Practice</a>
-									</Typography>
-									<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>1v1</a>
+										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Home</a>
 									</Typography>
 									<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
-										<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Contests</a>
+										<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>IDE</a>
 									</Typography>
 								</div>
 							)}
@@ -363,50 +391,45 @@ const Interview_Home = () => {
                         Interview
                     </Typography>
                     <div className={classes.drawerHeader} />
-                    <Grid container direction="row">
-                        <Grid item xs={6}>
+                    <div style={{ display: 'flex' }}>
+                        <div>
                             <Slide left={reveal} right={!reveal} opposite when={reveal}>
-                                <Grid container spacing={3}>
+                                <Grid container spacing={3} direction="column">
                                     <Grid item xs={12} sm={4}>
-                                        <SimpleCard image={schedule} heading="Schedule a meet" body="" action="Schedule a meet" handleClick={onSchedule}/>
+                                        <SimpleCard image={schedule} heading="Schedule a meet" body="" handleClick={onSchedule}>
+                                            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+                                                <ArrowRightAltIcon fontSize='large' color="primary"/>
+                                            </div>
+                                        </SimpleCard>
                                     </Grid>
                                     <Grid item xs={12} sm={4}>
-                                        <SimpleCard image={join} heading="Join a meet" body="" action="Join a meet" handleClick={onJoin}/>
+                                        <SimpleCard image={join} heading="Join a meet" body="">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px' }}>
+                                            <TextField
+                                                name="RoomId"
+                                                id="RoomID"
+                                                label="Room ID"
+                                                type="text"
+                                                variant="filled"
+                                                onChange={(e) => setRoomId(e.target.value)}
+                                            />
+                                            <Button color="primary" onClick={onJoin}>JOIN INTERVIEW</Button>
+                                        </div>
+                                        </SimpleCard>
                                     </Grid>
                                 </Grid>
                             </Slide>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Slide right when={!reveal}>
-                                <Grid container spacing={3}>
-                                    <Grid item>
-                                        <Button variant="contained" color="primary" onClick={() => setCalendar(true)}>
-                                            Schedule an existing Interview
-                                        </Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant="outlined" color="primary" onClick={() => setCalendar(false)}>
-                                            Create an Interview
-                                        </Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant="text" color="primary" onClick={() => {
-                                            setReveal(true);
-                                            setCalendar(true);
-                                        }}>
-                                            Cancel
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                                <div className={classes.drawerHeader} />
+                        </div>
+                        <div>
+                            <Slide right when={!reveal} delay={!reveal?500:0}>
                                 {calendar?(
                                     <div>
                                         <ScheduleMeeting
                                             borderRadius={10}
-                                            primaryColor="#3f5b85"
-                                            eventDurationInMinutes={30}
+                                            primaryColor="#3f51b5"
+                                            eventDurationInMinutes={interview.Duration as unknown as number}
                                             availableTimeslots={availableTimeslots}
-                                            onStartTimeSelect={console.log}
+                                            onStartTimeSelect={handleConfirm}
                                         />
                                     </div>
                                 ):(
@@ -418,296 +441,51 @@ const Interview_Home = () => {
                                                         required
                                                         id="dur"
                                                         name="dur"
+                                                        label="Interviewee Email"
+                                                        type="email"
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        onChange={(e) => {
+                                                            setInterview({ ...interview, IntervieweeEmail: e.target.value });
+                                                            if(interview.IntervieweeEmail === '' || interview.Duration === '') {
+                                                                setDisabled(true);
+                                                            }
+                                                            else{
+                                                                setDisabled(false);
+                                                            }
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        required
+                                                        id="dur"
+                                                        name="dur"
                                                         label="Duration in Minutes"
                                                         type="number"
                                                         fullWidth
                                                         variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Typography variant="h5" color="primary" gutterBottom>
-                                                        Available time slots
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Typography variant="h6" color="primary">
-                                                        Time Slot 1
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        required
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Date"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        required
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Month"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        required
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="year"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        required
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time hrs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        required
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time mins"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        required
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time secs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Typography variant="h6" color="primary">
-                                                        Time Slot 2
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Date"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Month"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="year"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time hrs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time mins"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time secs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Typography variant="h6" color="primary">
-                                                        Time Slot 3
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Date"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Month"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="year"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time hrs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time mins"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time secs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12}>
-                                                    <Typography variant="h6" color="primary">
-                                                        Time Slot 4
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Date"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Month"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="year"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time hrs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time mins"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={4}>
-                                                    <TextField
-                                                        id="dt"
-                                                        name="dt"
-                                                        label="Start time secs"
-                                                        type="number"
-                                                        fullWidth
-                                                        variant="outlined"
+                                                        onChange={(e) => {
+                                                            setInterview({ ...interview, Duration: e.target.value });
+                                                            if(interview.IntervieweeEmail === '' || interview.Duration === '') {
+                                                                setDisabled(true);
+                                                            }
+                                                            else{
+                                                                setDisabled(false);
+                                                            }
+                                                        }}
                                                     />
                                                 </Grid>
                                                 <Grid item sm={3}/>
                                                 <Grid item sm={3}/>
                                                 <Grid item sm={3}>
-                                                    <Button variant="contained" color="primary" fullWidth>
+                                                    <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} disabled={disabled}>
                                                         Submit
                                                     </Button>
                                                 </Grid>
                                                 <Grid item sm={3}>
-                                                    <Button variant="text" color="primary" fullWidth onClick={() => {
-                                                        setReveal(true);
-                                                        setCalendar(true);
-                                                    }}>
-                                                        Clear
+                                                    <Button variant="text" color="primary" fullWidth onClick={() => setReveal(true)}>
+                                                        Cancel
                                                     </Button>
                                                 </Grid>
                                             </Grid>
@@ -715,8 +493,26 @@ const Interview_Home = () => {
                                     </div>
                                 )}
                             </Slide>
-                        </Grid>
-                    </Grid>
+                        </div>
+                    </div>
+                    <Dialog open={open} onClose={handleclose}>
+                        <DialogTitle>
+                            Confirmation
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Are you sure you want to Schedule an interview on { interview.StartTime.toString() } for { interview.Duration } minutes with { interview.IntervieweeEmail } ?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCancel} variant="contained" color="primary" autoFocus>
+                                Confirm
+                            </Button>
+                            <Button onClick={handleclose} variant="outlined" color="primary">
+                                Cancel
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                     <div className={classes.drawerHeader} />
                 </main>
                 <Footer/>

@@ -35,6 +35,8 @@ const ContextProvider = ({ children }: Child) => {
 			});
 		}
 
+		socket.emit('join', localStorage.getItem('room'));
+
 		socket.on('me', (id) => setMe(id));
 
 		socket.on('callUser', ({ from, name: callerName, signal }) => {
