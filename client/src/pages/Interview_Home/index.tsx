@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography, Grid, TextField, Paper, Dialog, DialogTitle, DialogContentText, DialogActions, DialogContent } from '@material-ui/core';
 import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon, ArrowRightAlt as ArrowRightAltIcon } from '@material-ui/icons';
 import { ScheduleMeeting, StartTimeEventEmit } from 'react-schedule-meeting';
@@ -9,7 +9,8 @@ import Slide from 'react-reveal/Slide';
 import crypto from 'crypto';
 import clsx from 'clsx';
 
-import { createInterview } from '../../actions/interview';
+import { createInterview, getInterview } from '../../actions/interview';
+import { SocketContext } from '../../config/SocketContext';
 import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
 import SimpleCard from '../../components/Card';
@@ -144,6 +145,7 @@ const Interview_Home = () => {
     const classes = useStyles();
 	const history = useHistory();
 	const dispatch = useDispatch();
+    const { callUser, answerCall }: any = useContext(SocketContext);
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
     const schedule = 'https://images.unsplash.com/photo-1609266378844-4a8af6d72fab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1868&q=80';
     const join = 'https://images.unsplash.com/photo-1495653797063-114787b77b23?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80';
@@ -161,7 +163,11 @@ const Interview_Home = () => {
     });
     const [open, setOpen] = useState(false);
     const [disabled, setDisabled] = useState(true);
-    const [roomId, setRoomId] = useState('');
+    const [room, setRoom] = useState({
+        RoomId: '',
+        InterviewerEmail: '',
+        IntervieweeEmail: ''
+    });
 
     const handleTab = () => {
 		setTab(!tab);
@@ -192,7 +198,10 @@ const Interview_Home = () => {
     }
 
     const onJoin = () => {
-        localStorage.setItem('room', roomId);
+        const email = JSON.parse(localStorage.getItem('profile') as string)?.formData.Email;
+        console.log(room.RoomId);
+        dispatch(getInterview(room));
+        setRoom({ ...room, InterviewerEmail: JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail, IntervieweeEmail: JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail });
         history.push('/interview');
     }
 
@@ -411,7 +420,7 @@ const Interview_Home = () => {
                                                 label="Room ID"
                                                 type="text"
                                                 variant="filled"
-                                                onChange={(e) => setRoomId(e.target.value)}
+                                                onChange={(e) => setRoom({ ...room, RoomId: e.target.value })}
                                             />
                                             <Button color="primary" onClick={onJoin}>JOIN INTERVIEW</Button>
                                         </div>

@@ -84,7 +84,7 @@ const UserVideo = () => {
                     rotateZ,
                 }}>
                     <div className={classes.video}>
-                        <video playsInline muted ref={userVideo} autoPlay/>
+                        <video playsInline ref={userVideo} autoPlay/>
                     </div>
             </animated.div>
         </div>

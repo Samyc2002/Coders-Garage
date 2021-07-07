@@ -9,7 +9,6 @@ interface Context{
 	name: string,
 	setName: React.Dispatch<React.SetStateAction<string>>,
 	callEnded: boolean,
-	me: string,
 	callUser: (id: any) => void,
 	leaveCall: () => void,
 	answerCall: () => void

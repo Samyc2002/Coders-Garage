@@ -522,7 +522,7 @@ const Interview = () => {
                     </Paper>
                     {setAction()}
                     <div style={{ position: 'fixed', zIndex: 9999 }}>
-                        { callAccepted && !callEnded && (<UserVideo/>)}
+                        { (<UserVideo/>)}
                     </div>
                 </main>
                 {(content===1) && (

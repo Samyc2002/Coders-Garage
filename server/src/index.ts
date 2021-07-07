@@ -4,8 +4,6 @@ import { server } from './server';
 const app = new server().app;
 const PORT = process.env.PORT || 5000;
 
-;
-
 const io = new Server(app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 }), {
@@ -17,19 +15,33 @@ const io = new Server(app.listen(PORT, () => {
 io.on("connection", (socket: Socket) => {
     socket.emit("me", socket.id);
 
-    socket.on('join', id => {
+    var room = '';
+
+    socket.on('join', (id, cb) => {
         socket.join(id);
+        room += id;
+        cb(`Joined room ${room}`);
+
+        socket.on('interviewerJoined', data => {
+            console.log('interviewerJoined');
+            socket.to(id).emit('interviewerJoined', data);
+        });
+
+        socket.on('intervieweeJoined', data => {
+            console.log('intervieweeJoined');
+            socket.to(id).emit('intervieweeJoined', data);
+        });
     })
 
     socket.on("disconnect", () => {
-        socket.broadcast.emit("callEnded")
+        socket.to(room).emit("callEnded")
     });
 
-    socket.on("callUser", ({ userToCall, signalData, from, name }: any) => {
-        io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+    socket.on("callUser", ({ signalData }: any) => {
+        io.to(room).emit("callUser", { signal: signalData });
     });
 
     socket.on("answerCall", (data: any) => {
-        io.to(data.to).emit("callAccepted", data.signal)
+        io.to(room).emit("callAccepted", data.signal)
     });
 });

@@ -15,10 +15,9 @@ const ContextProvider = ({ children }: Child) => {
 	
 	const [callAccepted, setCallAccepted] = useState(false);
 	const [callEnded, setCallEnded] = useState(false);
-	const [stream, setStream] = useState<any>();
+	const [stream, setStream] = useState<any>(null);
 	const [name, setName] = useState('');
 	const [call, setCall] = useState<any>({});
-	const [me, setMe] = useState('');
 
 	const myVideo = useRef<any>();
 	const userVideo = useRef<any>();
@@ -33,16 +32,59 @@ const ContextProvider = ({ children }: Child) => {
 
 				myVideo.current.srcObject = currentStream;
 			});
+			
+			socket.emit('join', JSON.parse(localStorage.getItem('room') as string)?.RoomId, (message: any) => {
+				console.log(message);
+			});
+
+			const isInterviewer = (JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
+			const isInterviewee = (JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
+
+			if(isInterviewer) {
+
+				const peer = new Peer({ initiator: true, trickle: false, stream });
+
+				peer.on('signal', data => {
+					socket.emit('interviewerJoined', data);
+				});
+
+				peer.on('stream', (currentStream) => {
+					userVideo.current.srcObject = currentStream;
+					userVideo.current.play();
+				});
+
+				socket.on('intervieweeJoined', data => {
+					peer.signal(data);
+				});
+
+				connectionRef.current = peer;
+			}
+
+			if(isInterviewee) {
+
+				const peer = new Peer({ initiator: false, trickle: false, stream });
+
+				peer.on('signal', data => {
+					socket.emit('intervieweeJoined', data);
+				});
+
+				peer.on('stream', (currentStream) => {
+					userVideo.current.srcObject = currentStream;
+					userVideo.current.play();
+				});
+
+				socket.on('interviewerJoined', data => {
+					peer.signal(data);
+				});
+
+				connectionRef.current = peer;
+			}
 		}
 
-		socket.emit('join', localStorage.getItem('room'));
-
-		socket.on('me', (id) => setMe(id));
-
-		socket.on('callUser', ({ from, name: callerName, signal }) => {
-		setCall({ isReceivingCall: true, from, name: callerName, signal });
+		socket.on('callUser', ({ signal }) => {
+			setCall({ isReceivingCall: true, signal });
 		});
-	}, [history.location.pathname]);
+	}, []);
 
 	const answerCall = () => {
 		setCallAccepted(true);
@@ -50,11 +92,11 @@ const ContextProvider = ({ children }: Child) => {
 		const peer = new Peer({ initiator: false, trickle: false, stream });
 
 		peer.on('signal', (data) => {
-		socket.emit('answerCall', { signal: data, to: call.from });
+			socket.emit('answerCall', { signal: data });
 		});
 
 		peer.on('stream', (currentStream) => {
-		userVideo.current.srcObject = currentStream;
+			userVideo.current.srcObject = currentStream;
 		});
 
 		peer.signal(call.signal);
@@ -62,21 +104,21 @@ const ContextProvider = ({ children }: Child) => {
 		connectionRef.current = peer;
 	};
 
-	const callUser = (id: any) => {
+	const callUser = () => {
 		const peer = new Peer({ initiator: true, trickle: false, stream });
 
 		peer.on('signal', (data) => {
-		socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
+			socket.emit('callUser', { signalData: data });
 		});
 
 		peer.on('stream', (currentStream) => {
-		userVideo.current.srcObject = currentStream;
+			userVideo.current.srcObject = currentStream;
 		});
 
 		socket.on('callAccepted', (signal) => {
-		setCallAccepted(true);
+			setCallAccepted(true);
 
-		peer.signal(signal);
+			peer.signal(signal);
 		});
 
 		connectionRef.current = peer;
@@ -91,7 +133,7 @@ const ContextProvider = ({ children }: Child) => {
 	};
 
 	return (
-		<SocketContext.Provider value={{ call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, me, callUser, leaveCall, answerCall }}>
+		<SocketContext.Provider value={{ call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, callUser, leaveCall, answerCall }}>
 			{children}
 		</SocketContext.Provider>
 	);

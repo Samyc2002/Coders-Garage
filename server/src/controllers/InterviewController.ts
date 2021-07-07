@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Types } from 'mongoose';
+import nodemailer from 'nodemailer';
 
 import Interview from '../models/Interview';
 
@@ -9,7 +9,7 @@ export class InterviewController {
 
         try {
 
-            const interview = await Interview.find();
+            const interview = await Interview.findOne({ RoomId: req.body.RoomId });
 
             res.status(200).json({
                 data: interview,
@@ -30,6 +30,30 @@ export class InterviewController {
         try {
 
             await newInterview.save();
+
+            const message = {
+
+                to: `${req.body.IntervieweeEmail}`,
+                from: `Coder's Garage <`+`${req.body.InterviewerEmail}>`,
+                subject: `Interview scheduled on ${req.body.StartTime}`,
+                text: `This email confirms your interview shedule on ${req.body.StartTime}. Thank You.`,
+                html: `<p>This email confirms your interview shedule on ${req.body.StartTime}.<br><br>Thank You.</p>`
+            };
+
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'coders.garage.soi@gmail.com',
+                  pass: "I won't say"
+                }
+            });
+
+            transporter.sendMail(message, (err, info) => {
+                if(err) console.log(err);
+                else {
+                    console.log(`Message sent Successfully. See details at ${nodemailer.getTestMessageUrl(info)}`);
+                }
+            })
 
             res.status(201).json({
                 data: newInterview,

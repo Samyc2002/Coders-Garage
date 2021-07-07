@@ -44,10 +44,10 @@ export class server {
     }
 
     setRoutes() {
-      this.app.use('/user', UserRouter);
-      this.app.use('/question', QuestionRouter);
-      this.app.use('/auth', AuthRouter);
-	  this.app.use('/interview', InterviewRouter);
+		this.app.use('/user', UserRouter);
+		this.app.use('/question', QuestionRouter);
+		this.app.use('/auth', AuthRouter);
+		this.app.use('/interview', InterviewRouter);
     }
 
     configureBodyParser() {
