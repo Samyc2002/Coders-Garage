@@ -9,6 +9,7 @@ import Interview from '../pages/Interview';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Create_Questions from '../pages/Create_Questions';
+import { ContextProvider } from '../config/SocketContext';
 
 const Routes: React.FC = () => (
     
@@ -16,8 +17,10 @@ const Routes: React.FC = () => (
         <Route path="/" exact component={Dashboard}/>
         <Route path="/home" component={Home}/>
         <Route path="/ide" component={IDE}/>
-        <Route path="/interview_home" component={Interview_Home}/>
-        <Route path="/interview" component={Interview}/>
+        <ContextProvider>
+            <Route path="/interview_home" component={Interview_Home}/>
+            <Route path="/interview" component={Interview}/>
+        </ContextProvider>
         <Route path="/login" component={Login}/>
         <Route path="/profile" component={Profile}/>
         <Route path="/create" component={Create_Questions}/>

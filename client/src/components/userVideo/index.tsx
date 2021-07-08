@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import { useSpring, animated, to } from '@react-spring/web';
 import { useDrag, useHover, usePinch } from 'react-use-gesture';
-import { SocketContext } from '../../config/SocketContext';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
+
+import { SocketContext } from '../../config/SocketContext';
 
 import './styles.css';
 
@@ -30,6 +31,7 @@ const UserVideo = () => {
           document.removeEventListener('gesturestart', preventDefault)
           document.removeEventListener('gesturechange', preventDefault)
         }
+
     }, []);
 
     const domTarget = useRef(null);
@@ -84,7 +86,7 @@ const UserVideo = () => {
                     rotateZ,
                 }}>
                     <div className={classes.video}>
-                        <video playsInline ref={userVideo} autoPlay/>
+                        <video ref={userVideo} autoPlay/>
                     </div>
             </animated.div>
         </div>

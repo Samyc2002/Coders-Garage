@@ -11,7 +11,8 @@ interface Context{
 	callEnded: boolean,
 	callUser: (id: any) => void,
 	leaveCall: () => void,
-	answerCall: () => void
+	answerCall: () => void,
+	connect: () => void
 }
 
 export const SocketContext = createContext<Context | null>(null);
