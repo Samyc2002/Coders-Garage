@@ -15,7 +15,6 @@ const io = new Server(httpServer, {
     }
 });
 io.on("connection", (socket: Socket) => {
-    console.log(socket.id);
 	socket.emit("me", socket.id, () => console.log('recieved'));
 
 	socket.on("disconnect", () => {

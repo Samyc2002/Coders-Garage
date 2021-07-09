@@ -9,7 +9,7 @@ import Slide from 'react-reveal/Slide';
 import crypto from 'crypto';
 import clsx from 'clsx';
 
-import { createInterview, getInterview } from '../../actions/interview';
+import { createInterview, getInterview, getQuestions } from '../../actions/interview';
 import Logo from '../../assets/images/LogoBlue.png';
 import SimpleCard from '../../components/Card';
 import Footer from '../../components/footer';
@@ -157,7 +157,8 @@ const Interview_Home = () => {
         InterviewerEmail: JSON.parse(localStorage.getItem('profile') as string)?.formData.Email,
         IntervieweeEmail: '',
         Duration: '',
-        StartTime: ''
+        StartTime: '',
+        Questions: [] as string[]
     });
     const [open, setOpen] = useState(false);
     const [disabled, setDisabled] = useState(true);
@@ -166,6 +167,7 @@ const Interview_Home = () => {
         InterviewerEmail: '',
         IntervieweeEmail: ''
     });
+    const [questions, setQuestions] = useState('');
 
     const handleTab = () => {
 		setTab(!tab);
@@ -196,13 +198,17 @@ const Interview_Home = () => {
     }
 
     const onJoin = () => {
-        console.log(room.RoomId);
         dispatch(getInterview(room));
         setRoom({ ...room, InterviewerEmail: JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail, IntervieweeEmail: JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail });
+        const qs = JSON.parse(localStorage.getItem('room') as string)?.Questions;
+        console.log(qs);
+        dispatch(getQuestions(qs));
         history.push('/interview');
+        window.location.reload();
     }
 
     const handleSubmit = () => {
+        setInterview({ ...interview, Questions: questions.split(', ') });
         setCalendar(true);
     }
 
@@ -482,14 +488,26 @@ const Interview_Home = () => {
                                                         }}
                                                     />
                                                 </Grid>
-                                                <Grid item sm={3}/>
-                                                <Grid item sm={3}/>
-                                                <Grid item sm={3}>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        required
+                                                        id="ques"
+                                                        name="ques"
+                                                        label="Enter Questions comma seperated"
+                                                        type="text"
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        onChange={(e) => setQuestions(e.target.value)}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sm={3}/>
+                                                <Grid item xs={12} sm={3}/>
+                                                <Grid item xs={12} sm={3}>
                                                     <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} disabled={disabled}>
                                                         Submit
                                                     </Button>
                                                 </Grid>
-                                                <Grid item sm={3}>
+                                                <Grid item xs={12} sm={3}>
                                                     <Button variant="text" color="primary" fullWidth onClick={() => setReveal(true)}>
                                                         Cancel
                                                     </Button>

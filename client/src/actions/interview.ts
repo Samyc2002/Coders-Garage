@@ -37,3 +37,27 @@ export const emailInterviewee = (formData: any) => async (dispatch: Function) =>
         console.log(error);
     }
 }
+
+export const getQuestions = (formData: any) => async (dispatch: Function) => {
+
+    try {
+        
+        let questions: any[] = [];
+        
+        for(let i of formData) {
+
+            const struct = {
+                QuestionID: i
+            }
+
+            const { data }: any = await api.getQuestion(struct);
+
+            questions.push(data.data);
+        }
+
+        localStorage.setItem('Questions', JSON.stringify(questions));
+    } catch (error) {
+        
+        console.log(error);
+    }
+}

@@ -6,7 +6,8 @@ interface Scheme {
     InterviewerEmail: string,
     IntervieweeEmail: string,
     Duration: string,
-    startTime: string
+    StartTime: string,
+    Questions: string[]
 }
 
 export type InterviewDocument = Scheme & Document;
@@ -17,7 +18,8 @@ const InterviewSchema: Schema = new Schema({
     InterviewerEmail: { type: String },
     IntervieweeEmail: { type: String },
     Duration: { type: String },
-    StartTime: { type: String }
+    StartTime: { type: String },
+    Questions: { type: [String] }
 });
 
 const Interview: Model<InterviewDocument> = model('Interview', InterviewSchema);

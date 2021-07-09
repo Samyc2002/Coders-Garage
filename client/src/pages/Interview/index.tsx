@@ -332,7 +332,6 @@ const Interview = () => {
     
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
-            {console.log(me)}
             <div>
                 <CssBaseline />
                 <AppBar

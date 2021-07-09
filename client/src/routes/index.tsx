@@ -18,12 +18,12 @@ const Routes: React.FC = () => (
         <Route path="/home" component={Home}/>
         <Route path="/ide" component={IDE}/>
         <Route path="/interview_home" component={Interview_Home}/>
-        <ContextProvider>
-            <Route path="/interview" component={Interview}/>
-        </ContextProvider>
         <Route path="/login" component={Login}/>
         <Route path="/profile" component={Profile}/>
         <Route path="/create" component={Create_Questions}/>
+        <ContextProvider>
+            <Route path="/interview" component={Interview}/>
+        </ContextProvider>
     </Switch>
 )
 
