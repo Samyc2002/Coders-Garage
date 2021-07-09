@@ -9,6 +9,7 @@ import Interview from '../pages/Interview';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Create_Questions from '../pages/Create_Questions';
+import Question from '../pages/Question';
 import { ContextProvider } from '../config/SocketContext';
 
 const Routes: React.FC = () => (
@@ -21,6 +22,7 @@ const Routes: React.FC = () => (
         <Route path="/login" component={Login}/>
         <Route path="/profile" component={Profile}/>
         <Route path="/create" component={Create_Questions}/>
+        <Route path="/question/:id" component={Question}/>
         <ContextProvider>
             <Route path="/interview" component={Interview}/>
         </ContextProvider>

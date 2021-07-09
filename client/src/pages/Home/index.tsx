@@ -341,7 +341,7 @@ const Home = () => {
                 </Drawer>
                 <main className={classes.content}>
 					<div className={classes.toolbar}/>
-					<Grid container spacing={3} style={{ marginLeft: '7.5vw' }}>
+					<Grid container spacing={3} style={{ marginLeft: '7.5vw', width: 'calc(100% - 7.5vw)' }}>
 						{questions.map((val: any) => (
 							<Grid item>
 								<Card className={classes.card}>
@@ -354,7 +354,7 @@ const Home = () => {
 										</Typography>
 									</CardContent>
 									<CardActions>
-										<Button color="primary" fullWidth>
+										<Button color="primary" fullWidth onClick={() => history.push(`/question/${val.QuestionID}`)}>
 											Go To Question
 										</Button>
 									</CardActions>
@@ -362,6 +362,7 @@ const Home = () => {
 							</Grid>
 						))}
 					</Grid>
+					<div className={classes.toolbar}/>
                 </main>
                 <Footer/>
             </div>
