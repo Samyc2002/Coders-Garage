@@ -23,3 +23,4 @@ export const updateQuestion = (formData: any) => API.put('/question', formData);
 
 export const getInterview = (formData: any) => API.post('/interview/data', formData);
 export const createInterview = (formData: any) => API.post('/interview', formData);
+export const emailInterviewee = (formData: any) => API.post('/interview/email', formData);

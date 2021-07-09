@@ -19,6 +19,7 @@ class InterviewRouter {
 
         this.router.post('/data', InterviewController.getInterview);
         this.router.post('/', InterviewController.createInterview);
+        this.router.post('/email', InterviewController.emailInterviewee);
     }
 }
 

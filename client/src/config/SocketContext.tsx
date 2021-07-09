@@ -28,75 +28,23 @@ const ContextProvider = ({ children }: Child) => {
 		navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 		.then((currentStream) => {
 			setStream(currentStream);
-
+			
 			if(myVideo.current) myVideo.current.srcObject = currentStream;
 		});
 		
-		socket.on('me', id => setMe(id));
-	
-		socket.emit('join', JSON.parse(localStorage.getItem('room') as string)?.RoomId, (message: any) => {
-			console.log(message);
+		socket.on('me', (id, cb) => {
+			setMe(id);
+			cb();
 		});
 
-		socket.on('disconnected', () => {
+		socket.on('callEnded', () => {
 			connectionRef.current?.destroy();
 		})
 
-		socket.on('callUser', ({ signal }) => {
-			setCall({ isReceivingCall: true, signal });
+		socket.on('callUser', ({ from, name: callerName, signal }) => {
+			setCall({ isReceivingCall: true, from, name: callerName, signal });
 		});
 	}, []);
-
-	const connect = () => {
-
-		navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-		.then((currentStream) => {
-			setStream(currentStream);
-
-			if(myVideo.current) myVideo.current.srcObject = currentStream;
-		});
-
-		// const isInterviewer = (JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
-		// const isInterviewee = (JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
-
-		// if(isInterviewer) {
-
-		// 	const peer = new Peer({ initiator: true, trickle: false, stream });
-
-		// 	peer.on('signal', data => {
-		// 		socket.emit('interviewerJoined', { signal: data });
-		// 	});
-
-		// 	peer.on('stream', (currentStream) => {
-		// 		userVideo.current.srcObject = currentStream;
-		// 	});
-
-		// 	socket.on('intervieweeJoined', data => {
-		// 		peer.signal(data);
-		// 	});
-
-		// 	connectionRef.current = peer;
-		// }
-
-		// if(isInterviewee) {
-
-		// 	const peer = new Peer({ initiator: false, trickle: false, stream });
-
-		// 	peer.on('signal', data => {
-		// 		socket.emit('intervieweeJoined', { signal: data });
-		// 	});
-
-		// 	peer.on('stream', (currentStream) => {
-		// 		userVideo.current.srcObject = currentStream;
-		// 	});
-
-		// 	socket.on('interviewerJoined', data => {
-		// 		peer.signal(data);
-		// 	});
-
-		// 	connectionRef.current = peer;
-		// }
-	}
 
 	const answerCall = () => {
 		setCallAccepted(true);
@@ -115,7 +63,7 @@ const ContextProvider = ({ children }: Child) => {
 	
 		connectionRef.current = peer;
 	};
-
+	
 	const callUser = (id: any) => {
 		const peer = new Peer({ initiator: true, trickle: false, stream });
 	
@@ -134,7 +82,7 @@ const ContextProvider = ({ children }: Child) => {
 		});
 	
 		connectionRef.current = peer;
-	  };
+	};
 
 	const leaveCall = () => {
 		setCallEnded(true);
@@ -145,7 +93,7 @@ const ContextProvider = ({ children }: Child) => {
 	};
 
 	return (
-		<SocketContext.Provider value={{ call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, callUser, leaveCall, answerCall, connect }}>
+		<SocketContext.Provider value={{ call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, callUser, leaveCall, answerCall, me }}>
 			{children}
 		</SocketContext.Provider>
 	);

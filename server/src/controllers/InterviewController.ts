@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, response } from 'express';
 import nodemailer from 'nodemailer';
 
 import Interview from '../models/Interview';
@@ -63,5 +63,39 @@ export class InterviewController {
 
             next(error);
         }
+    }
+
+    static async emailInterviewee(req: Request, res: Response, next: NextFunction) {
+
+        const interview = req.body;
+
+        const message = {
+
+            to: `${interview.IntervieweeEmail}`,
+            from: `Coder's Garage <`+`${interview.InterviewerEmail}>`,
+            subject: `Interviewer ID`,
+            text: `Use this ID to connect to interviewer ${interview.id}. Thank You.`,
+            html: `<p>Use this ID to connect to interviewer ${interview.id}.<br><br>Thank You.</p>`
+        };
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'coders.garage.soi@gmail.com',
+              pass: "I won't say"
+            }
+        });
+
+        transporter.sendMail(message, (err, info) => {
+            if(err) console.log(err);
+            else {
+                console.log(`Message sent Successfully. Get details here ${nodemailer.getTestMessageUrl(info)}`);
+            }
+        })
+
+        res.status(200).json({
+            data: message,
+            success: true
+        })
     }
 }

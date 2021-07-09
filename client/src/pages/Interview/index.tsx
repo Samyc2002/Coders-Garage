@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AppBar, createStyles, CssBaseline, Divider, IconButton, makeStyles, Toolbar, Typography, Theme, Drawer, List, ListItem, ListItemIcon, ListItemText, Paper, Tabs, Tab, Grid, FormControl, InputLabel, Select, MenuItem, useMediaQuery, Button, Menu, TextField } from '@material-ui/core';
 import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
 import { SocketContext } from '../../config/SocketContext';
+import { emailInterviewee } from '../../actions/interview';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import Logo from '../../assets/images/LogoBlue.png';
 import UserVideo from '../../components/userVideo';
@@ -128,7 +129,19 @@ const useStyles = makeStyles((theme: Theme) =>
 	},
 	back: {
 		backgroundColor: '#cee8fc'
-	}
+	},
+    background: {
+		height: '100vh',
+		backgroundColor: '#ffffff',
+		backgroundPosition: 'center',
+        alignItems: 'center',
+        justifyContent: 'center'
+	},
+    paper: {
+        margin: '35px 0px',
+        padding: '10px 20px',
+        width: '600px'
+    }
   }),
 );
 
@@ -140,7 +153,9 @@ const Interview = () => {
     const dark = "material-darker";
     const light = "eclipse";
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
-    const { stream, callAccepted, callEnded }: any = useContext(SocketContext);
+    const isInterviewer = (JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
+	const isInterviewee = (JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
+    const { stream, callAccepted, callEnded, call, setName, answerCall, me, callUser }: any = useContext(SocketContext);
 
 	const [code, setCode] = useLocalStorage('code', '');
     const [open, setOpen] = useState(false);
@@ -149,6 +164,21 @@ const Interview = () => {
     const [tab, setTab] = useState(false);
 	const [content, setContent] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [ready, setReady] = useState(false);
+    const [room, setRoom] = useState({
+        RoomId: JSON.parse(localStorage.getItem('room') as string)?.RoomId,
+        InterviewerEmail: JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail,
+        IntervieweeEmail: JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail,
+        Duration: JSON.parse(localStorage.getItem('room') as string)?.Duration,
+        StartTime: JSON.parse(localStorage.getItem('room') as string)?.StartTime,
+        id: ''
+    });
+    const [id, setId] = useState('');
+
+    useEffect(() => {
+        if(isInterviewer) setName("Interviewer");
+        if(isInterviewee) setName("Interviewee");
+    }, [isInterviewee, isInterviewer, setName]);
 
 	const handleDrawer = () => {
         setOpen(!open);
@@ -294,8 +324,15 @@ const Interview = () => {
 		}
 	}
 
+    const handleEmail = () => {
+        setRoom({ ...room, id: me });
+        console.log(room);
+        dispatch(emailInterviewee(room));
+    }
+    
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
+            {console.log(me)}
             <div>
                 <CssBaseline />
                 <AppBar
@@ -505,24 +542,78 @@ const Interview = () => {
                     <div style={{ position: 'fixed', zIndex: 9999 }}>
                         { stream && (<MyVideo/>)}
                     </div>
-                    <Paper square elevation={0}>
-                        <Tabs
-                            value={content}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            onChange={handleContent}
-                            variant={isTabletorMobile?"scrollable":"standard"}
-                            centered
-                        >
-                            <Tab label="Problem Statement"/>
-                            <Tab label="IDE"/>
-                            <Tab label="Submission"/>
-                        </Tabs>
-                        <Divider/>
-                    </Paper>
-                    {setAction()}
+                    {ready?(
+                        <div>
+                            <Paper square elevation={0}>
+                                <Tabs
+                                    value={content}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    onChange={handleContent}
+                                    variant={isTabletorMobile?"scrollable":"standard"}
+                                    centered
+                                >
+                                    <Tab label="Problem Statement"/>
+                                    <Tab label="IDE"/>
+                                    <Tab label="Submission"/>
+                                </Tabs>
+                                <Divider/>
+                            </Paper>
+                            {setAction()}
+                        </div>
+                    ):(
+                        <Grid container className={classes.background}>
+                            <Grid container direction="column" justify="center" alignItems="center">
+                                {isInterviewer && (
+                                    <Paper className={classes.paper}>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12} sm={6}>
+                                                <Button variant="contained" color="primary" fullWidth onClick={handleEmail}>Email Interviewee</Button>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <Button color="primary" fullWidth onClick={() => setReady(true)}>Ready</Button>
+                                            </Grid>
+                                            {call.isReceivingCall && !callAccepted && (
+                                                <Grid item xs={12}>
+                                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                                    <Typography variant="h6" style={{ fontFamily: "'Quicksand', sans-serif" }}>Interviewee Came</Typography>
+                                                    <Button variant="contained" color="primary" onClick={answerCall}>
+                                                        Answer
+                                                    </Button>
+                                                </div>
+                                                </Grid>
+                                            )}
+                                        </Grid>
+                                    </Paper>
+                                )}
+                                {isInterviewee && (
+                                    <Paper className={classes.paper}>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    name="id"
+                                                    id="id"
+                                                    label="Enter id sent via email to you"
+                                                    fullWidth
+                                                    required
+                                                    value={id}
+                                                    onChange={(e) => setId(e.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <Button variant="contained" color="primary" fullWidth onClick={() => callUser(id)}>Connect</Button>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <Button color="primary" fullWidth onClick={() => setReady(true)}>Ready</Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Paper>
+                                )}
+                            </Grid>
+                        </Grid>
+                    )}
                     <div style={{ position: 'fixed', zIndex: 9999 }}>
-                        { (<UserVideo/>)}
+                        {callAccepted && !callEnded && (<UserVideo/>)}
                     </div>
                 </main>
                 {(content===1) && (
