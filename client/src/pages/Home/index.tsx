@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography, Card, CardContent, Grid, CardActions } from '@material-ui/core';
 import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
+import { fetchQuestions } from '../../actions/question';
 import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
 import './styles.css';
@@ -126,7 +127,10 @@ const useStyles = makeStyles((theme: Theme) =>
 	},
 	back: {
 		backgroundColor: '#cee8fc'
-	}
+	},
+	card: {
+		minWidth: 275,
+	},
   }),
 );
 
@@ -139,6 +143,13 @@ const Home = () => {
     
     const [tab, setTab] = useState(false);
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [questions, setQuestions] = useState<any>([]);
+
+	useEffect(() => {
+
+		dispatch(fetchQuestions());
+		setTimeout(() => setQuestions(JSON.parse(localStorage.getItem('questions') as string)), 500);
+	}, [dispatch]);
 
     const handleTab = () => {
 		setTab(!tab);
@@ -329,7 +340,28 @@ const Home = () => {
 					</div>
                 </Drawer>
                 <main className={classes.content}>
-
+					<div className={classes.toolbar}/>
+					<Grid container spacing={3} style={{ marginLeft: '7.5vw' }}>
+						{questions.map((val: any) => (
+							<Grid item>
+								<Card className={classes.card}>
+									<CardContent>
+										<Typography variant="h5" color="primary" style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder' }}>
+											{val.QuestionID}
+										</Typography>
+										<Typography variant="subtitle1" color="primary" style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder' }}>
+											by {val.Creator}
+										</Typography>
+									</CardContent>
+									<CardActions>
+										<Button color="primary" fullWidth>
+											Go To Question
+										</Button>
+									</CardActions>
+								</Card>
+							</Grid>
+						))}
+					</Grid>
                 </main>
                 <Footer/>
             </div>

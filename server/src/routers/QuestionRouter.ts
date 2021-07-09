@@ -13,7 +13,7 @@ class QuestionRouter {
 
     getRoutes() {
 
-        this.router.get('/', QuestionController.getQuestion);
+        this.router.get('/', QuestionController.fetchQuestions);
     }
 
     postRoutes() {

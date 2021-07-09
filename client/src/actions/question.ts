@@ -45,3 +45,15 @@ export const updateQuestion = (formData: any) => async(dispatch: Function) => {
         console.log(error);
     }
 }
+
+export const fetchQuestions = () => async(dispatch: Function) => {
+
+    try {
+        
+        const { data }: any = await api.fetchQuestions();
+        localStorage.setItem('questions', JSON.stringify(data.data));
+    } catch (error) {
+        
+        console.log(error);
+    }
+}
