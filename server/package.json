@@ -2,7 +2,8 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "start": "node src/index.ts",
     "dev": "nodemon --exec ts-node src/index.ts"
