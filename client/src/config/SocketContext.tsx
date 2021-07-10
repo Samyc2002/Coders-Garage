@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
 
 import { SocketContext } from '../Hooks/SocketContext';
+import useLocalStorage from '../Hooks/useLocalStore';
 
 const socket = io('http://localhost:5000');
 
@@ -18,6 +19,7 @@ const ContextProvider = ({ children }: Child) => {
 	const [name, setName] = useState('');
 	const [call, setCall] = useState<any>({});
 	const [me, setMe] = useState('');
+	const [code, setCode] = useLocalStorage('code', '');
 
 	const myVideo = useRef<HTMLMediaElement>(null!);
 	const userVideo = useRef<HTMLMediaElement>(null!);
@@ -37,6 +39,8 @@ const ContextProvider = ({ children }: Child) => {
 			cb();
 		});
 
+		socket.emit('join', JSON.parse(localStorage.getItem('room') as string)?.RoomId)
+
 		socket.on('callEnded', () => {
 			connectionRef.current?.destroy();
 		})
@@ -45,6 +49,18 @@ const ContextProvider = ({ children }: Child) => {
 			setCall({ isReceivingCall: true, from, name: callerName, signal });
 		});
 	}, []);
+
+	const sendChange = useCallback((message: any) => {
+
+		socket.emit('send-code', { code: message });
+	}, [])
+
+	useEffect(() => {
+		socket.on('code', message => {
+			console.log(message);
+			setCode(message);
+		});
+	}, [sendChange, setCode])
 
 	const answerCall = () => {
 		setCallAccepted(true);
@@ -93,7 +109,7 @@ const ContextProvider = ({ children }: Child) => {
 	};
 
 	return (
-		<SocketContext.Provider value={{ call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, callUser, leaveCall, answerCall, me }}>
+		<SocketContext.Provider value={{ call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, callUser, leaveCall, answerCall, me, sendChange, code, setCode }}>
 			{children}
 		</SocketContext.Provider>
 	);

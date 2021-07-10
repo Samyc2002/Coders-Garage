@@ -12,7 +12,10 @@ interface Context{
 	callUser: (id: any) => void,
 	leaveCall: () => void,
 	answerCall: () => void,
-	me: string
+	me: string,
+	sendChange: (message: any) => void,
+	code: any,
+	setCode: any
 }
 
 export const SocketContext = createContext<Context | null>(null);

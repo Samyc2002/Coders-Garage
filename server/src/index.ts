@@ -17,6 +17,14 @@ const io = new Server(httpServer, {
 io.on("connection", (socket: Socket) => {
 	socket.emit("me", socket.id, () => console.log('recieved'));
 
+	let roomId = '';
+
+	socket.on('join', room => {
+		socket.join(room);
+
+		roomId = room;
+	})
+
 	socket.on("disconnect", () => {
 		socket.broadcast.emit("callEnded")
 	});
@@ -27,6 +35,10 @@ io.on("connection", (socket: Socket) => {
 
 	socket.on("answerCall", (data) => {
 		io.to(data.to).emit("callAccepted", data.signal)
+	});
+	
+	socket.on('send-code', data => {
+		io.to(roomId).emit('code', data.code)
 	});
 });
 

@@ -8,12 +8,11 @@ import clsx from 'clsx';
 
 import { SocketContext } from '../../config/SocketContext';
 import { emailInterviewee } from '../../actions/interview';
-import useLocalStorage from '../../Hooks/useLocalStore';
 import Logo from '../../assets/images/LogoBlue.png';
 import UserVideo from '../../components/userVideo';
 import MyVideo from '../../components/myVideo';
+import Ide from '../../components/IDE_collab';
 import Footer from '../../components/footer';
-import Ide from '../../components/IDE';
 import './styles.css';
 
 const drawerWidth = 240;
@@ -155,9 +154,8 @@ const Interview = () => {
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
     const isInterviewer = (JSON.parse(localStorage.getItem('room') as string)?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
 	const isInterviewee = (JSON.parse(localStorage.getItem('room') as string)?.IntervieweeEmail === JSON.parse(localStorage.getItem('profile') as string)?.formData.Email);
-    const { stream, callAccepted, callEnded, call, setName, answerCall, me, callUser }: any = useContext(SocketContext);
+    const { stream, callAccepted, callEnded, call, setName, answerCall, me, callUser, code, setCode }: any = useContext(SocketContext);
 
-	const [code, setCode] = useLocalStorage('code', '');
     const [open, setOpen] = useState(false);
     const [index, setIndex] = useState(-1);
 	const [theme, setTheme] = useState(true);
@@ -575,7 +573,7 @@ const Interview = () => {
                                             {call.isReceivingCall && !callAccepted && (
                                                 <Grid item xs={12}>
                                                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                                                    <Typography variant="h6" style={{ fontFamily: "'Quicksand', sans-serif" }}>Interviewee Came</Typography>
+                                                    <Typography variant="h6" style={{ fontFamily: "'Quicksand', sans-serif" }}>Interviewee Came &nsp;</Typography>
                                                     <Button variant="contained" color="primary" onClick={answerCall}>
                                                         Answer
                                                     </Button>

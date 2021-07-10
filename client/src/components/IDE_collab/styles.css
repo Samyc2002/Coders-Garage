@@ -1,0 +1,100 @@
+@import 'codemirror/lib/codemirror.css';
+@import 'codemirror/theme/material-darker.css';
+@import 'codemirror/theme/eclipse.css';
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Comfortaa:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&family=Josefin+Slab:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Sacramento&display=swap');
+
+/* .ide {
+    text-align: left;
+    flex-grow: 1;
+    width: 100%;
+} */
+.header{
+    width: 100%;
+    height: 7vh;
+    background-color: #212121;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.heading{
+    color: #3f51b5;
+    font-family: 'Quicksand', sans-serif;
+    padding-left: 10%;
+}
+#language-select{
+    color: #3f51b5;
+    width: 15vw;
+}
+#select-language{
+    color: #3f51b5 !important;
+    width: 15vw;
+    height: 50%;
+}
+.MuiSelect-select.MuiSelect-select{
+    color: #3f51b5;
+    font-family: 'Quicksand', sans-serif;
+}
+.MuiSelect-icon{
+    color: #3f51b5 !important;
+}
+.MuiSelect-nativeInput{
+    color: #3f51b5;
+    border: none;
+    background-color: transparent;
+    font-family: 'Quicksand', sans-serif;
+    font-size: large;
+}
+.MuiFormLabel-root{
+    color: #3f51b5 !important;
+    font-family: 'Quicksand', sans-serif !important;
+    font-weight: 400;
+}
+.MuiFormLabel-root.Mui-focused{
+    font-family: 'Quicksand', sans-serif;
+    color: #3f51b5;
+}
+.CodeMirror{
+    height: 83vh;
+    width: 90vw;
+}
+.CodeMirror-lines, .CodeMirror-code{
+    font-family: 'Fira Code', monospace;
+}
+.MuiFab-root{
+    position: absolute !important;
+    bottom: 10%;
+    right: 8%;
+}
+.sidebar .sidebar{
+    width: 30vw;
+}
+.close{
+    color: #3f51b5;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+}
+.output-formatting{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+}
+.input-field{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.compileAndRun{
+    color: #eeeeed;
+    padding-right: 15%;
+    margin-top: 5%;
+    transform: scale(1.1);
+}
+.sidebar .inputDiv{
+    width: 30vw;
+}
+.sidebar .outputDiv{
+    width: 30vw;
+}
