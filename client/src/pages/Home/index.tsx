@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Menu, MenuItem, Typography, Card, CardContent, Grid, CardActions } from '@material-ui/core';
-import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, AddCircleRounded as AddCircleRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
+import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Typography, Card, CardContent, Grid, CardActions, InputBase } from '@material-ui/core';
+import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon, Search as SearchIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
-import { fetchQuestions } from '../../actions/question';
+import { fetchQuestions, getQuestion } from '../../actions/question';
 import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
 import './styles.css';
@@ -131,6 +131,42 @@ const useStyles = makeStyles((theme: Theme) =>
 	card: {
 		minWidth: 275,
 	},
+	search: {
+		position: 'relative',
+		borderRadius: theme.shape.borderRadius,
+		backgroundColor: theme.palette.primary.main,
+		marginLeft: 0,
+		width: '100%',
+		[theme.breakpoints.up('sm')]: {
+		  marginLeft: theme.spacing(1),
+		  width: 'auto',
+		},
+	},
+	searchIcon: {
+		padding: theme.spacing(0, 2),
+		height: '100%',
+		position: 'absolute',
+		pointerEvents: 'none',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	inputRoot: {
+		color: theme.palette.getContrastText(theme.palette.primary.main),
+	},
+	inputInput: {
+		padding: theme.spacing(1, 1, 1, 0),
+		// vertical padding + font size from searchIcon
+		paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+		transition: theme.transitions.create('width'),
+		width: '70%',
+		[theme.breakpoints.up('sm')]: {
+		  width: '12ch',
+		  '&:focus': {
+			width: '20ch',
+		  },
+		},
+	}
   }),
 );
 
@@ -142,7 +178,7 @@ const Home = () => {
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
     
     const [tab, setTab] = useState(false);
-	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [search, setSearch] = useState('');
 	const [questions, setQuestions] = useState<any>([]);
 
 	useEffect(() => {
@@ -155,14 +191,6 @@ const Home = () => {
 		setTab(!tab);
 	}
 
-	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
 	const Logout = () => {
 
 		try {
@@ -173,6 +201,21 @@ const Home = () => {
 
 			console.log(error);
 		}
+	}
+
+	const handleChange = (e: any) => {
+		
+		setSearch(e.target.value);
+	}
+
+	const handleClick = () => {
+
+		const formData = {
+			QuestionID: search
+		}
+
+		dispatch(getQuestion(formData));
+		setTimeout(() => setQuestions([JSON.parse(localStorage.getItem('tmp') as string)?.data]), 200);
 	}
     
     return (
@@ -203,56 +246,22 @@ const Home = () => {
                                 </a>
                             </div>
                         </div>
-                        <div>
-							{isTabletorMobile?(
-								<div>
-									<Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-										<IconButton
-											color="primary"
-											aria-label="open tabs"
-											edge="end"
-											title="Tabs"
-										>
-											<AddCircleRoundedIcon/>
-										</IconButton>
-									</Button>
-									<Menu
-										id="simple-menu"
-										anchorEl={anchorEl}
-										keepMounted
-										open={Boolean(anchorEl)}
-										onClose={handleClose}
-									>
-										<MenuItem onClick={handleClose}>
-											<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-												<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Practice</a>
-											</Typography>
-										</MenuItem>
-										<MenuItem onClick={handleClose}>
-											<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-												<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>1v1</a>
-											</Typography>
-										</MenuItem>
-										<MenuItem onClick={handleClose}>
-											<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
-												<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Contests</a>
-											</Typography>
-										</MenuItem>
-									</Menu>
+                        <div style={{ display: 'flex' }}>
+							<div className={classes.search}>
+								<div className={classes.searchIcon}>
+									<SearchIcon />
 								</div>
-							):(
-								<div style={{ display: 'flex', alignItems: 'center' }}>
-									<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Practice</a>
-									</Typography>
-									<Typography variant="h6" noWrap color="primary" style={{ paddingRight: '20px' }}>
-										<a href="/home" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>1v1</a>
-									</Typography>
-									<Typography variant="h6" noWrap color="primary" style={{ fontWeight: 'bold', paddingRight: '20px' }}>
-										<a href="/ide" style={{ textDecoration: 'none', color: '#3f51b5', fontWeight: 'bold', fontFamily: "'Quicksand', sans-serif" }}>Contests</a>
-									</Typography>
-								</div>
-							)}
+								<InputBase
+									placeholder="Search…"
+									classes={{
+										root: classes.inputRoot,
+										input: classes.inputInput,
+									}}
+									inputProps={{ 'aria-label': 'search' }}
+									onChange={handleChange}
+								/>
+							</div>
+							<Button color="primary" onClick={handleClick}>SEARCH</Button>
                         </div>
                     </Toolbar>
                     <Divider/>
