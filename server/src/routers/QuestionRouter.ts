@@ -20,6 +20,7 @@ class QuestionRouter {
 
         this.router.post('/', QuestionController.createQuestion);
         this.router.post('/data', QuestionController.getQuestion);
+        this.router.post('/tags', QuestionController.getQuestionByTags);
     }
 
     putRoutes() {

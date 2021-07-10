@@ -21,6 +21,7 @@ export const fetchQuestions = () => API.get('/question');
 export const getQuestion = (formData: any) => API.post('/question/data', formData);
 export const createQuestion = (formData: any) => API.post('/question', formData);
 export const updateQuestion = (formData: any) => API.put('/question', formData);
+export const getQuestionByTags = (formData: any) => API.post('/question/tags', formData);
 
 export const getInterview = (formData: any) => API.post('/interview/data', formData);
 export const createInterview = (formData: any) => API.post('/interview', formData);

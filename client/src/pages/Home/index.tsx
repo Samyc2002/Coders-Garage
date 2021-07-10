@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Typography, Card, CardContent, Grid, CardActions, InputBase } from '@material-ui/core';
+import { AppBar, CssBaseline, IconButton, makeStyles, Toolbar, createStyles, Theme, useMediaQuery, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Button, Typography, Card, CardContent, Grid, CardActions, InputBase, Chip, FormControl, InputLabel, Select, Input, MenuItem, useTheme } from '@material-ui/core';
 import { Menu as MenuIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon, Search as SearchIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 
-import { fetchQuestions, getQuestion } from '../../actions/question';
+import { fetchQuestions, getQuestion, getQuestionByTags } from '../../actions/question';
 import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
 import './styles.css';
@@ -83,9 +83,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: 0,
     },
     formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-    },
+		margin: theme.spacing(1),
+		minWidth: 120,
+		maxWidth: 300,
+	},
     drawerOpen: {
         width: drawerWidth,
         transition: theme.transitions.create("width", {
@@ -166,20 +167,60 @@ const useStyles = makeStyles((theme: Theme) =>
 			width: '20ch',
 		  },
 		},
+	},
+	chips: {
+		display: 'flex',
+		flexWrap: 'wrap',
+	},
+	chip: {
+		margin: 2,
 	}
   }),
 );
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+	PaperProps: {
+		style: {
+		maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+		width: 250,
+		},
+	},
+};
+
+function getStyles(name: string, personName: string[], theme: Theme) {
+	return {
+	  fontWeight:
+		personName.indexOf(name) === -1
+		  ? theme.typography.fontWeightRegular
+		  : theme.typography.fontWeightMedium,
+	};
+}
 
 const Home = () => {
 
     const classes = useStyles();
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const theme = useTheme();
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
     
     const [tab, setTab] = useState(false);
 	const [search, setSearch] = useState('');
 	const [questions, setQuestions] = useState<any>([]);
+	const [tags, setTags] = useState<string[]>([]);
+
+	const Tags = [
+		'Array', 'String', 'Hash Table', 'Dynamic Programming', 'Math', 'Depth-First Search', 'Sorting', 'Greedy', 'Breadth-First Search',
+		'Tree', 'Database', 'Binary Tree', 'Binary Search', 'Two Pointers', 'Matrix', 'Bit Manipulation', 'Backtracking', 'Heap (Priority Queue)',
+		'Design', 'Stack', 'Graph', 'Simulation', 'Sliding Window', 'Prefix Sum', 'Recursion', 'Counting', 'Union Find', 'Linked List', 'Binary Search Tree',
+		'Trie', 'Monotonic Stack', 'Bitmask', 'Queue', 'Ordered Set', 'Divide and Conquer', 'Memoization', 'Geometry', 'Game Theory', 'Segment Tree', 
+		'Topological Sort', 'Interactive', 'Hash FUnction', 'String Matching', 'Enumeration', 'Data Stream', 'Rolling Hash', 'Randomised', 'Binary Indexed Tree',
+		'Shortest Path', 'Combinatorics', 'Concurrency', 'Iterator', 'Probability and Statistics', 'BrainTeaser', 'Monotonic Queue', 'Number Theory', 
+		'Doubly-Linked List', 'Merge Sort', 'Counting Sort', 'Minimum Spanning Tree', 'Bucket Sort', 'Quickselect', 'Shell', 'Suffix Array', 'Line Sweep',
+		'Strongly Connected Component', 'Reservoir Sampling', 'Eulerian Circuit', 'Radix Sort', 'Rejection Sampling', 'Biconnected Conponent'
+	];
 
 	useEffect(() => {
 
@@ -217,6 +258,18 @@ const Home = () => {
 		dispatch(getQuestion(formData));
 		setTimeout(() => setQuestions([JSON.parse(localStorage.getItem('tmp') as string)?.data]), 200);
 	}
+
+	const handleDelete = (tag: string) => {
+		
+		setTags(tags.filter((val) => val!==tag));
+	};
+
+	const handlechange = (event: React.ChangeEvent<{ value: unknown }>) => {
+		setTags(event.target.value as string[]);
+		dispatch(getQuestionByTags(tags));
+		setQuestions(JSON.parse(localStorage.getItem('questionsbytags') as string) as any[]);
+		console.log(tags);
+	};
     
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
@@ -246,7 +299,28 @@ const Home = () => {
                                 </a>
                             </div>
                         </div>
-                        <div style={{ display: 'flex' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+							<FormControl className={classes.formControl}>
+								<InputLabel id="demo-mutiple-chip-label">Tags</InputLabel>
+								<Select
+								labelId="demo-mutiple-chip-label"
+								id="demo-mutiple-chip"
+								multiple
+								value={tags}
+								onChange={handlechange}
+								input={<Input id="select-multiple-chip" />}
+								renderValue={(selected) => (
+									<Typography variant="body2">{`${tags.length} selected`}</Typography>
+								)}
+								MenuProps={MenuProps}
+								>
+								{Tags.map((name) => (
+									<MenuItem key={name} value={name} style={getStyles(name, tags, theme)}>
+										{name}
+									</MenuItem>
+								))}
+								</Select>
+							</FormControl>
 							<div className={classes.search}>
 								<div className={classes.searchIcon}>
 									<SearchIcon />
@@ -350,6 +424,14 @@ const Home = () => {
                 </Drawer>
                 <main className={classes.content}>
 					<div className={classes.toolbar}/>
+					<Grid container spacing={1} style={{ marginLeft: '7.5vw', width: 'calc(100% - 7.5vw)' }}>
+						{tags.map((val) => (
+							<Grid item>
+								<Chip label={val} onDelete={ () => handleDelete(val)}/>
+							</Grid>
+						))}
+						<div className={classes.toolbar}/>
+					</Grid>
 					<Grid container spacing={3} style={{ marginLeft: '7.5vw', width: 'calc(100% - 7.5vw)' }}>
 						{questions.map((val: any) => (
 							<Grid item>

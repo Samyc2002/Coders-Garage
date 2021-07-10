@@ -9,7 +9,8 @@ interface Scheme {
     Constraints: string,
     SampleInput: string,
     SampleOutput: string,
-    Explanation: string
+    Explanation: string,
+    Tags: string[]
 }
 
 export type QuestionDocument = Scheme & Document;
@@ -51,6 +52,9 @@ const QuestionSchema: Schema = new Schema({
     Creator: {
         type: String,
         required: true
+    },
+    Tags: {
+        type: [String]
     }
 });
 

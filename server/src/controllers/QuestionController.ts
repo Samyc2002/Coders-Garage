@@ -86,4 +86,20 @@ export class QuestionController{
             next(error);
         }
     }
+
+    static async getQuestionByTags(req: Request, res: Response, next: NextFunction) {
+
+        try{
+            
+            const result = await Question.find({ Tags: { $all: req.body } });
+
+            res.status(200).json({
+                data: result,
+                success: true
+            })
+        } catch(error) {
+
+            next(error);
+        }
+    }
 }

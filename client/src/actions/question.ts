@@ -57,3 +57,15 @@ export const fetchQuestions = () => async(dispatch: Function) => {
         console.log(error);
     }
 }
+
+export const getQuestionByTags = (formData: any) => async(dispatch: Function) => {
+
+    try{
+
+        const { data }: any = await api.getQuestionByTags(formData);
+        localStorage.setItem('questionsbytags', JSON.stringify(data.data));
+    } catch(error) {
+
+        console.log(error);
+    }
+}
