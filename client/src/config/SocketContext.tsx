@@ -5,7 +5,7 @@ import Peer from 'simple-peer';
 import { SocketContext } from '../Hooks/SocketContext';
 import useLocalStorage from '../Hooks/useLocalStore';
 
-const socket = io('http://localhost:5000');
+const socket = io('https://coders-garage.herokuapp.com/');
 
 interface Child{
 	children?: React.ReactNode;
