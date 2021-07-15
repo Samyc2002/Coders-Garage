@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Button, createStyles, CssBaseline, Divider, Grid, IconButton, makeStyles, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, useMediaQuery } from '@material-ui/core';
+import { AppBar, Button, Chip, createStyles, CssBaseline, Divider, Grid, IconButton, makeStyles, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, useMediaQuery } from '@material-ui/core';
 import { AddCircleRounded as AddCircleRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
@@ -93,6 +93,21 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+interface Question{
+    QuestionID: string,
+    ProblemStatement: string,
+    Input: string,
+    Output: string,
+    Constraints: string,
+    SampleInput: string,
+    SampleOutput: string,
+    Explanation: string,
+    Creator: string,
+    Tags: string[],
+    TimeLimit: string,
+    MemoryLimit: number
+}
+
 const Create_Questions = () => {
 
     const classes = useStyles();
@@ -100,9 +115,20 @@ const Create_Questions = () => {
     const history = useHistory();
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
 
+    const tags = [
+		'Array', 'String', 'Hash Table', 'Dynamic Programming', 'Math', 'Depth-First Search', 'Sorting', 'Greedy', 'Breadth-First Search',
+		'Tree', 'Database', 'Binary Tree', 'Binary Search', 'Two Pointers', 'Matrix', 'Bit Manipulation', 'Backtracking', 'Heap (Priority Queue)',
+		'Design', 'Stack', 'Graph', 'Simulation', 'Sliding Window', 'Prefix Sum', 'Recursion', 'Counting', 'Union Find', 'Linked List', 'Binary Search Tree',
+		'Trie', 'Monotonic Stack', 'Bitmask', 'Queue', 'Ordered Set', 'Divide and Conquer', 'Memoization', 'Geometry', 'Game Theory', 'Segment Tree', 
+		'Topological Sort', 'Interactive', 'Hash FUnction', 'String Matching', 'Enumeration', 'Data Stream', 'Rolling Hash', 'Randomised', 'Binary Indexed Tree',
+		'Shortest Path', 'Combinatorics', 'Concurrency', 'Iterator', 'Probability and Statistics', 'BrainTeaser', 'Monotonic Queue', 'Number Theory', 
+		'Doubly-Linked List', 'Merge Sort', 'Counting Sort', 'Minimum Spanning Tree', 'Bucket Sort', 'Quickselect', 'Shell', 'Suffix Array', 'Line Sweep',
+		'Strongly Connected Component', 'Reservoir Sampling', 'Eulerian Circuit', 'Radix Sort', 'Rejection Sampling', 'Biconnected Conponent'
+	];
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
-    const [question, setQuestion] = useState({
+    const [question, setQuestion] = useState<Question>({
         QuestionID: '',
         ProblemStatement: '',
         Input: '',
@@ -111,7 +137,10 @@ const Create_Questions = () => {
         SampleInput: '',
         SampleOutput: '',
         Explanation: '',
-        Creator: user.formData.Email
+        Creator: user.formData.Email,
+        Tags: [],
+        TimeLimit: '',
+        MemoryLimit: 0
     });
     const [okay, setOkay] = useState(true);
     const [success, setSuccess] = useState(false);
@@ -165,6 +194,15 @@ const Create_Questions = () => {
         } catch (error) {
             
             console.log(error);
+        }
+    }
+
+    const handleTags = (value: any) => {
+        if(question.Tags.includes(value)) {
+            setQuestion({ ...question, Tags: question.Tags.filter((val) => val!==value) });
+        }
+        else {
+            setQuestion({ ...question, Tags: [ ...question.Tags, value as string ] });
         }
     }
 
@@ -323,6 +361,28 @@ const Create_Questions = () => {
                                             onChange={(e) => setQuestion({ ...question, Constraints: e.target.value })}
                                         />
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            id="tl"
+                                            name="tl"
+                                            label="Time Limit (in seconds)"
+                                            fullWidth
+                                            variant="outlined"
+                                            onChange={(e) => setQuestion({ ...question, TimeLimit: e.target.value })}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            id="ml"
+                                            name="ml"
+                                            label="Memory Limit (in Bytes)"
+                                            fullWidth
+                                            variant="outlined"
+                                            onChange={(e) => setQuestion({ ...question, MemoryLimit: e.target.value as unknown as number })}
+                                        />
+                                    </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
                                             required
@@ -360,6 +420,11 @@ const Create_Questions = () => {
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, Explanation: e.target.value })}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {tags.map((value) => (
+                                            <Chip key={value} label={value} onClick={() => handleTags(value)} color={question.Tags.includes(value)?"primary":"default"} style={{ margin: '2px' }}/>
+                                        ))}
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>CREATE</Button>

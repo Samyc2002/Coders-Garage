@@ -10,7 +10,9 @@ interface Scheme {
     SampleInput: string,
     SampleOutput: string,
     Explanation: string,
-    Tags: string[]
+    Tags: string[],
+    TimeLimit: string,
+    MemoryLimit: number
 }
 
 export type QuestionDocument = Scheme & Document;
@@ -46,8 +48,7 @@ const QuestionSchema: Schema = new Schema({
         required: true
     },
     Explanation: {
-        type: String,
-        required: true
+        type: String
     },
     Creator: {
         type: String,
@@ -55,6 +56,12 @@ const QuestionSchema: Schema = new Schema({
     },
     Tags: {
         type: [String]
+    },
+    TimeLimit: {
+        type: String
+    },
+    MemoryLimit: {
+        type: Number
     }
 });
 

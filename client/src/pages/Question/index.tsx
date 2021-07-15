@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, makeStyles, Paper, Theme, Typography, createStyles, CssBaseline, Toolbar, IconButton, Button, Menu, MenuItem, FormControl, InputLabel, Select, Divider, AppBar, useMediaQuery, Drawer, List, ListItem, ListItemIcon, ListItemText, TextField, Tabs, Tab } from '@material-ui/core';
+import { Grid, makeStyles, Paper, Theme, Typography, createStyles, CssBaseline, Toolbar, IconButton, Button, Menu, MenuItem, FormControl, InputLabel, Select, Divider, AppBar, useMediaQuery, Drawer, List, ListItem, ListItemIcon, ListItemText, TextField, Tabs, Tab, Snackbar } from '@material-ui/core';
 import { Menu as MenuIcon, AddCircleRounded as AddCircleRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
+import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Alert } from '@material-ui/lab';
+import axios, { Method } from 'axios';
+import useSound from 'use-sound';
 import clsx from 'clsx';
 
+import { getEnvironmentVariables } from '../../environments/env';
+import FailureSFX from '../../assets/sounds/Failure.mp3';
+import SuccessSFX from '../../assets/sounds/Success.mp3';
 import useLocalStorage from '../../Hooks/useLocalStore';
+import SwitchSFX from '../../assets/sounds/Switch.mp3';
 import { getQuestion } from '../../actions/question';
 import Logo from '../../assets/images/LogoBlue.png';
 import Footer from '../../components/footer';
@@ -141,9 +148,16 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+interface Model{
+    method: Method,
+    url: string,
+    headers: any,
+    data: string
+}
+
 const Question = (props: any) => {
 
-    const QuestionID = props.match.params.id;
+    const QID = props.match.params.id;
     const dark = "material-darker";
     const light = "eclipse";
     const dispatch = useDispatch();
@@ -159,6 +173,23 @@ const Question = (props: any) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState<any>(JSON.parse(localStorage.getItem('tmp') as string)?.data);
+    const [input, setInput] = useState('');
+    const [output, setOutput] = useState('');
+    const [time, setTime] = useState('');
+    const [memory, setMemory] = useState(0);
+    const [snack, setSnack] = useState(false);
+    const [type, setType] = useState(true);
+    const [successSound] = useSound(SuccessSFX, { volume: 1 });
+    const [errorSound] = useSound(FailureSFX, { volume: 1 });
+    const [switchSound] = useSound(SwitchSFX, { volume: 1 });
+    const [WA, setWA] = useState(false);
+    const [TLE, setTLE] = useState(false);
+    const [MLE, setMLE] = useState(false);
+    const [CE, setCE] = useState(false);
+    const [err, setErr] = useState('');
+    const [submitSnack, setSubmitSnack] = useState(false);
+
+    const alert_type = type?"success":"error";
 
     const language = [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ];
     const format = [ 'c', 'cpp', 'csharp' , 'java', 'python3', 'ruby', 'kotlin', 'swift' ];
@@ -174,9 +205,9 @@ const Question = (props: any) => {
     ];
 
     useEffect(() => {
-        dispatch(getQuestion({ QuestionID: QuestionID }));
+        dispatch(getQuestion({ QuestionID: QID }));
         setTimeout(() => setQuestion(JSON.parse(localStorage.getItem('tmp') as string)?.data), 200);
-    }, [QuestionID, dispatch]);
+    }, [QID, dispatch]);
 
     const problemStatement = () => (
 		<Paper elevation={0} className={classes.action}>
@@ -186,7 +217,7 @@ const Question = (props: any) => {
 						Problem Statement
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bold' }}>
-						{question.ProblemStatement}
+						{question?.ProblemStatement}
 					</Typography>
 				</Grid>
 				<Grid item>
@@ -194,7 +225,7 @@ const Question = (props: any) => {
 						Input
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bold' }}>
-                        {question.Input}
+                        {question?.Input}
 					</Typography>
 				</Grid>
 				<Grid item>
@@ -202,7 +233,7 @@ const Question = (props: any) => {
 						Output
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bold' }}>
-                        {question.Output}
+                        {question?.Output}
 					</Typography>
 				</Grid>
 				<Grid item>
@@ -210,7 +241,7 @@ const Question = (props: any) => {
                     Constraints
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bold' }}>
-                        <pre>{question.Constraints}</pre>
+                        <pre>{question?.Constraints}</pre>
 					</Typography>
 				</Grid>
 				<Grid item>
@@ -218,7 +249,7 @@ const Question = (props: any) => {
 						Sample Input
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bold' }}>
-                        <pre>{question.SampleInput}</pre>
+                        <pre>{question?.SampleInput}</pre>
 					</Typography>
 				</Grid>
 				<Grid item>
@@ -226,7 +257,7 @@ const Question = (props: any) => {
 						Sample Output
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bold' }}>
-                        <pre>{question.SampleOutput}</pre>
+                        <pre>{question?.SampleOutput}</pre>
 					</Typography>
 				</Grid>
 				<Grid item>
@@ -234,7 +265,7 @@ const Question = (props: any) => {
 						Explanation
 					</Typography>
 					<Typography variant="subtitle1" gutterBottom style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder' }}>
-                        {question.Explanation}
+                        {question?.Explanation}
 					</Typography>
 				</Grid>
 			</Grid>
@@ -264,6 +295,67 @@ const Question = (props: any) => {
 			default: return <p>Nothing for you lol</p>
 		}
 	}
+
+    const handleclick = () => {
+
+        setSnack(true);
+    };
+
+    const compileRun = (lang: string) => {
+
+        setOutput('');
+
+        const config: Model = {
+
+            method: 'POST',
+            url: `${getEnvironmentVariables().url}/create`,
+            headers: {
+                'x-rapidapi-key': `${getEnvironmentVariables().apiKey}`,
+                'x-rapidapi-host': 'paiza-io.p.rapidapi.com',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                source_code: code,
+                language: lang,
+                input: input
+            })
+        }
+
+        axios(config)
+            .then((response) => {
+    
+                setTimeout(() => {
+    
+                    axios.get(`${getEnvironmentVariables().url}/get_details`, {
+    
+                        params: {
+                            id: response.data?.id
+                        },
+                        headers: {
+                            'x-rapidapi-key': `${getEnvironmentVariables().apiKey}`,
+                            'x-rapidapi-host': 'paiza-io.p.rapidapi.com'
+                        }
+                    })
+                    .then((res) => {
+                        
+                        setOutput(res.data?.stdout || res.data.build_stderr);
+                        setTime(res.data.time);
+                        setMemory(res.data.memory);
+                        handleclick();
+                        if(res.data.build_stderr) {
+                            setType(false);
+                            errorSound();
+                        }
+                        else {
+                            setType(true);
+                            successSound();
+                        }
+                    })
+                    .catch((err) => console.log(err));
+                }, 1000);
+            })
+            .catch((err) => console.log(err));
+    }
 
     const Logout = () => {
 
@@ -299,6 +391,7 @@ const Question = (props: any) => {
 
 	const handleTheme = () => {
         setTheme(!theme);
+        switchSound();
     }
 
     const handleDrawer = () => {
@@ -308,6 +401,95 @@ const Question = (props: any) => {
     const handleContent = (event: React.ChangeEvent<{}>, newContent: number) => {
 		setContent(newContent);
 	}
+
+    const handleclose = (event?: React.SyntheticEvent, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSnack(false);
+    };
+
+    const handlekilik = () => {
+
+        setSubmitSnack(true);
+    };
+
+    const handleSubmit = (lang: string) => {
+
+        for(let testcase of question?.Testcases) {
+
+            const config: Model = {
+
+                method: 'POST',
+                url: `${getEnvironmentVariables().url}/create`,
+                headers: {
+                    'x-rapidapi-key': `${getEnvironmentVariables().apiKey}`,
+                    'x-rapidapi-host': 'paiza-io.p.rapidapi.com',
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    source_code: code,
+                    language: lang,
+                    input: testcase.input
+                })
+            }
+
+            axios(config)
+                .then((response) => {
+        
+                    setTimeout(() => {
+        
+                        axios.get(`${getEnvironmentVariables().url}/get_details`, {
+        
+                            params: {
+                                id: response.data?.id
+                            },
+                            headers: {
+                                'x-rapidapi-key': `${getEnvironmentVariables().apiKey}`,
+                                'x-rapidapi-host': 'paiza-io.p.rapidapi.com'
+                            }
+                        })
+                        .then((res) => {
+                            
+                            if(res.data?.stderr) {
+                                setErr(res.data?.stderr);
+                                return;
+                            }
+                            setWA(testcase.output !== res.data?.stdout);
+                            setTLE(res.data.time > question?.TimeLimit);
+                            setMLE(res.data.memory > question?.MemoryLimit);
+                            handlekilik();
+                            if(res.data.build_stderr) setCE(true);
+                            else setCE(false);
+
+                            if(WA || TLE || MLE || CE) {
+                                setType(false);
+                                if(WA) setErr('Wrong Answer');
+                                if(TLE) setErr('Time Limit Exceeded');
+                                if(MLE) setErr('Memory Limit Exceeded');
+                                if(CE) setErr('Compilation Error');
+                                errorSound();
+                            }
+                            else {
+                                setType(true);
+                                successSound();
+                            }
+                        })
+                        .catch((err) => console.log(err));
+                    }, 1000);
+                })
+                .catch((err) => console.log(err));
+        }
+    }
+
+    const handlekilos = (event?: React.SyntheticEvent, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSubmitSnack(false);
+    };
 
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
@@ -559,6 +741,7 @@ const Question = (props: any) => {
                                             margin: '10px',
                                             color: '#121212'
                                         }}
+                                        onChange={(e) => setInput(e.target.value)}
                                     />
                                 </Paper>
                             </Grid>
@@ -577,14 +760,26 @@ const Question = (props: any) => {
                                         }}
                                         disabled
                                         autoFocus
+                                        value={output}
                                     />
                                 </Paper>
                             </Grid>
                             <Grid item style={{ height: '20px' }}/>
-                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }}>Run</Button>
+                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }} onClick={() => compileRun(format[index])}>Run</Button>
+                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }} onClick={() => handleSubmit(format[index])}>Submit</Button>
                         </Grid>
                     </Drawer>
                 )}
+                <Snackbar open={snack} autoHideDuration={6000} onClose={handleclose}>
+                    <Alert onClose={handleclose} severity={alert_type}>
+                        {type?`Compilation Successful in ${time} seconds and needed ${memory} bytes!`:`Compilation Error`}
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={submitSnack} autoHideDuration={6000} onClose={handlekilos}>
+                    <Alert onClose={handlekilos} severity={alert_type}>
+                        {(err==='')?'Accepted':err}
+                    </Alert>
+                </Snackbar>
                 <Footer/>
             </div>
         </Scrollbars>

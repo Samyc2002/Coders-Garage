@@ -270,6 +270,13 @@ const Home = () => {
 		setQuestions(JSON.parse(localStorage.getItem('questionsbytags') as string) as any[]);
 		console.log(tags);
 	};
+
+	const handleRedirect = (val: any) => {
+		dispatch(getQuestion({ QuestionID: val.QuestionID }));
+        setTimeout(() => {
+			history.push(`/question/${val.QuestionID}`)
+		}, 200);
+	}
     
     return (
         <Scrollbars autoHide autoHideTimeout={2000} style={{ height: '100vh', width: '100vw' }}>
@@ -445,7 +452,7 @@ const Home = () => {
 										</Typography>
 									</CardContent>
 									<CardActions>
-										<Button color="primary" fullWidth onClick={() => history.push(`/question/${val.QuestionID}`)}>
+										<Button color="primary" fullWidth onClick={ () => handleRedirect(val)}>
 											Go To Question
 										</Button>
 									</CardActions>
