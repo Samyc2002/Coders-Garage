@@ -1,5 +1,11 @@
 import { Document, model, Model, Schema } from "mongoose";
 
+interface TC{
+
+    Input: string,
+    Output: string
+}
+
 interface Scheme {
 
     QuestionID: string,
@@ -12,7 +18,8 @@ interface Scheme {
     Explanation: string,
     Tags: string[],
     TimeLimit: string,
-    MemoryLimit: number
+    MemoryLimit: number,
+    TestCases: TC[]
 }
 
 export type QuestionDocument = Scheme & Document;
@@ -62,6 +69,14 @@ const QuestionSchema: Schema = new Schema({
     },
     MemoryLimit: {
         type: Number
+    },
+    TestCases: {
+        type: [
+            {
+                Input: String,
+                Output: String
+            }
+        ]
     }
 });
 

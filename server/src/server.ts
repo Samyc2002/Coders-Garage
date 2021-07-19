@@ -9,6 +9,7 @@ import UserRouter from './routers/UserRouter';
 import QuestionRouter from './routers/QuestionRouter';
 import AuthRouter from './routers/AuthRouter';
 import InterviewRouter from './routers/InterviewRouter';
+import SubmissionRouter from './routers/SubmissionRouter';
 import { ContactEmail } from './middlewares/ContactEmail';
 
 export class server {
@@ -48,6 +49,7 @@ export class server {
 		this.app.use('/question', QuestionRouter);
 		this.app.use('/auth', AuthRouter);
 		this.app.use('/interview', InterviewRouter);
+		this.app.use('/submission', SubmissionRouter);
     }
 
     configureBodyParser() {

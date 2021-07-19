@@ -93,6 +93,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+interface TC {
+    
+    Input: string,
+    Output: string
+}
+
 interface Question{
     QuestionID: string,
     ProblemStatement: string,
@@ -105,7 +111,8 @@ interface Question{
     Creator: string,
     Tags: string[],
     TimeLimit: string,
-    MemoryLimit: number
+    MemoryLimit: number,
+    TestCases: TC[]
 }
 
 const Create_Questions = () => {
@@ -140,11 +147,16 @@ const Create_Questions = () => {
         Creator: user.formData.Email,
         Tags: [],
         TimeLimit: '',
-        MemoryLimit: 0
+        MemoryLimit: 0,
+        TestCases: [] as TC[]
     });
     const [okay, setOkay] = useState(true);
     const [success, setSuccess] = useState(false);
     const [typo, setTypo] = useState(false);
+    const [testcase, setTestcase] = useState<TC>({
+        Input: '',
+        Output: ''
+    });
 
     useEffect(() => {
 
@@ -164,6 +176,8 @@ const Create_Questions = () => {
     const handleSubmit = () => {
 
         setUser(JSON.parse(localStorage.getItem('profile') as string));
+
+        setQuestion({ ...question, TestCases: [ ...question.TestCases, testcase ] });
 
         try {
             
@@ -420,6 +434,32 @@ const Create_Questions = () => {
                                             variant="outlined"
                                             onChange={(e) => setQuestion({ ...question, Explanation: e.target.value })}
                                         />
+                                    </Grid>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                id="tci"
+                                                name="testcaseInput"
+                                                label="Input"
+                                                fullWidth
+                                                multiline
+                                                rows={4}
+                                                variant="outlined"
+                                                onChange={(e) => setTestcase({ ...testcase, Input: e.target.value })}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                id="tco"
+                                                name="testcaseOutput"
+                                                label="Output"
+                                                fullWidth
+                                                multiline
+                                                rows={4}
+                                                variant="outlined"
+                                                onChange={(e) => setTestcase({ ...testcase, Output: e.target.value })}
+                                            />
+                                        </Grid>
                                     </Grid>
                                     <Grid item xs={12}>
                                         {tags.map((value) => (

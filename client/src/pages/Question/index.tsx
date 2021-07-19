@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Grid, makeStyles, Paper, Theme, Typography, createStyles, CssBaseline, Toolbar, IconButton, Button, Menu, MenuItem, FormControl, InputLabel, Select, Divider, AppBar, useMediaQuery, Drawer, List, ListItem, ListItemIcon, ListItemText, TextField, Tabs, Tab, Snackbar } from '@material-ui/core';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Grid, makeStyles, Paper, Theme, Typography, createStyles, CssBaseline, Toolbar, IconButton, Button, Menu, MenuItem, FormControl, InputLabel, Select, Divider, AppBar, useMediaQuery, Drawer, List, ListItem, ListItemIcon, ListItemText, TextField, Tabs, Tab, Snackbar, Card, CardContent, CardActions } from '@material-ui/core';
 import { Menu as MenuIcon, AddCircleRounded as AddCircleRoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, Brightness7Rounded as Brightness7RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, Close as CloseIcon, PlayArrowRounded as PlayArrowRoundedIcon, HomeRounded as HomeRoundedIcon, CodeRounded as CodeRoundedIcon, ComputerRounded as ComputerRoundedIcon, Palette as PaletteIcon, DashboardRounded as DashboardRoundedIcon, ExitToAppRounded as ExitToAppRoundedIcon } from '@material-ui/icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useHistory } from 'react-router-dom';
@@ -9,6 +9,7 @@ import axios, { Method } from 'axios';
 import useSound from 'use-sound';
 import clsx from 'clsx';
 
+import { makeSubmission, getSubmissions } from '../../actions/submission';
 import { getEnvironmentVariables } from '../../environments/env';
 import FailureSFX from '../../assets/sounds/Failure.mp3';
 import SuccessSFX from '../../assets/sounds/Success.mp3';
@@ -140,6 +141,9 @@ const useStyles = makeStyles((theme: Theme) =>
         alignItems: 'center',
         justifyContent: 'center'
 	},
+	card: {
+		minWidth: 275,
+	},
     paper: {
         margin: '35px 0px',
         padding: '10px 20px',
@@ -191,7 +195,7 @@ const Question = (props: any) => {
 
     const alert_type = type?"success":"error";
 
-    const language = [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ];
+    const language = useMemo(() => [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ], []);
     const format = [ 'c', 'cpp', 'csharp' , 'java', 'python3', 'ruby', 'kotlin', 'swift' ];
     const modes = [
         'text/x-c++src',
@@ -208,6 +212,14 @@ const Question = (props: any) => {
         dispatch(getQuestion({ QuestionID: QID }));
         setTimeout(() => setQuestion(JSON.parse(localStorage.getItem('tmp') as string)?.data), 200);
     }, [QID, dispatch]);
+
+    useEffect(() => {
+        const submission = {
+            Creator: JSON.parse(localStorage.getItem('profile') as string)?.formData.Email
+        }
+
+        dispatch(getSubmissions(submission));
+    }, [dispatch])
 
     const problemStatement = () => (
 		<Paper elevation={0} className={classes.action}>
@@ -283,9 +295,39 @@ const Question = (props: any) => {
 		</div>
 	);
 
-	const submissions = () => (
-		<Paper elevation={0} className={classes.action}></Paper>
-	);
+	const submissions = () => {
+
+        const submissions = JSON.parse(localStorage.getItem('Submissions') as string);
+        return (
+            <div>
+                <div className={classes.toolbar}/>
+                <Grid container spacing={3} style={{ marginLeft: '7.5vw', width: 'calc(100% - 7.5vw)' }}>
+                    {submissions.map((val: any) => (
+                        <Grid item>
+                            <Card className={classes.card}>
+                                <CardContent>
+                                    <Typography variant="h5" color="primary" style={{ fontFamily: "'Quicksand', sans-serif", fontWeight: 'bolder' }}>
+                                        {val.QuestionID}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="primary" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+                                        {val._id}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button color="primary" fullWidth
+                                        // onClick={ () => handleRedirect(val)}
+                                    >
+                                        Go To Submission
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+                <div className={classes.toolbar}/>
+            </div>
+        )
+    };
 
 	const setAction = () => {
 		switch (content) {
@@ -417,7 +459,7 @@ const Question = (props: any) => {
 
     const handleSubmit = (lang: string) => {
 
-        for(let testcase of question?.Testcases) {
+        for(let testcase of question?.TestCases) {
 
             const config: Model = {
 
@@ -475,6 +517,17 @@ const Question = (props: any) => {
                                 setType(true);
                                 successSound();
                             }
+
+                            const submission = {
+                                QuestionID: question?.QuestionID,
+                                Creator: JSON.parse(localStorage.getItem('profile') as string)?.formData.Email,
+                                Code: code,
+                                Language: language[index],
+                                Status: (err==='')?'Accepted':err
+                            }
+
+                            dispatch(makeSubmission(submission));
+                            dispatch(getSubmissions(submission));
                         })
                         .catch((err) => console.log(err));
                     }, 1000);
@@ -728,9 +781,9 @@ const Question = (props: any) => {
                     >
                         <Grid item style={{ height: '20px' }}/>
                         <Toolbar/>
-                        <Grid container justify="center" direction="column">
-                            <Grid item xl={12}>
-                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center' }}>
+                        <Grid container style={{ marginTop: '20px' }}>
+                            <Grid item xl={12} style={{ marginBottom: '20px' }}>
+                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', width: '90%' }}>
                                     <TextField
                                         id="outlined-multiline-static"
                                         label="Input"
@@ -745,9 +798,8 @@ const Question = (props: any) => {
                                     />
                                 </Paper>
                             </Grid>
-                            <Grid item style={{ height: '20px' }}/>
-                            <Grid item xl={12}>
-                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <Grid item xl={12} style={{ marginBottom: '20px' }}>
+                                <Paper elevation={3} style={{ display: 'flex', marginLeft: '10px', marginRight: '10px', justifyContent: 'center', alignItems: 'center', height: '100%', width: '90%' }}>
                                     <TextField
                                         id="outlined-multiline-static"
                                         label="output"
@@ -765,8 +817,16 @@ const Question = (props: any) => {
                                 </Paper>
                             </Grid>
                             <Grid item style={{ height: '20px' }}/>
-                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }} onClick={() => compileRun(format[index])}>Run</Button>
-                            <Button color="primary" variant="contained" style={{ marginLeft: '10px', marginRight: '10px' }} onClick={() => handleSubmit(format[index])}>Submit</Button>
+                            <Grid item xs={12} style={{ marginBottom: '20px', paddingLeft: '10px', paddingRight: '10px' }}>
+                                <Button color="primary" variant="contained" style={{ marginRight: '10px' }} onClick={() => compileRun(format[index])} fullWidth>
+                                    Run
+                                </Button>
+                            </Grid>
+                            <Grid item xs={12} style={{ marginBottom: '20px', paddingLeft: '10px', paddingRight: '10px' }}>
+                                <Button color="primary" variant="contained" style={{ marginRight: '10px' }} onClick={() => handleSubmit(format[index])} fullWidth>
+                                    Submit
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Drawer>
                 )}
