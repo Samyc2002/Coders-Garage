@@ -1,0 +1,19 @@
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 2s linear;
+    }
+}
+
+.container {
+    background-color: white;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.App-logo {
+    max-width: 200px;
+	max-height: 200px;
+}

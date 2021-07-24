@@ -14,5 +14,8 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         fontFamily: "'Zen Tokyo Zoo', cursive",
         marginLeft: theme.spacing(2),
         marginTop: '4px'
+    },
+    icon: {
+        color: theme.palette.common.white
     }
 }));
