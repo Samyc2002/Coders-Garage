@@ -5,7 +5,7 @@ import { useStyles } from './styles';
 
 const SigninLogin = () => {
 
-    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+    const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
     const classes = useStyles(isTabletorMobile)();
     

@@ -16,9 +16,9 @@ import Interview_Bg from '../../assets/images/Interview_Bg.png';
 
 const Dashboard = () => {
 
-    const isTabletorMobile = useMediaQuery('(max-width: 600px)')
+    const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
-    const classes = useStyles();
+    const classes = useStyles(isTabletorMobile)();
 
     const history = useHistory();
 
@@ -43,7 +43,7 @@ const Dashboard = () => {
                     </Typography>
                 </Grid>
                 <Grid container spacing={3} className={classes.cards}>
-                    <Grid item xs={12} sm={2}>
+                    <Grid item xs={12} md={4} sm={6} xl={2}>
                         <Card image={Home_Bg} body="A home page that contains everything you need">
                             <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/home')}>
                                 <Typography variant="h6" className={classes.typography}>
@@ -52,7 +52,7 @@ const Dashboard = () => {
                             </Button>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} sm={2}>
+                    <Grid item xs={12} md={4} sm={6} xl={2}>
                         <Card image={IDE_Bg} body="A home page that contains everything you need">
                             <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/ide')}>
                                 <Typography variant="h6" className={classes.typography}>
@@ -61,7 +61,7 @@ const Dashboard = () => {
                             </Button>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} sm={2}>
+                    <Grid item xs={12} md={4} sm={6} xl={2}>
                         <Card image={Interview_Bg} body="A home page that contains everything you need">
                             <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/interview_home')}>
                                 <Typography variant="h6" className={classes.typography}>

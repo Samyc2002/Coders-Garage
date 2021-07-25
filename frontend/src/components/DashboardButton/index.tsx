@@ -6,7 +6,7 @@ import { useStyles } from './styles';
 
 const Signup = () => {
 
-    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+    const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
     const classes = useStyles(isTabletorMobile)();
 

@@ -24,10 +24,10 @@ const Header = ({ children }: Iprops) => {
         }
     }, [history.location.pathname])
     
-    const classes = useStyles(dashboard)();
+    const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
-    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
-
+    const classes = useStyles(dashboard, isTabletorMobile)();
+    
     const [open, setOpen] = useState(false);
 
     const toggleOpen = () => {
@@ -38,8 +38,8 @@ const Header = ({ children }: Iprops) => {
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appbar}>
                 <Toolbar variant={isTabletorMobile?'regular':'dense'} className={classes.toolbar}>
-                    <div onClick={() => history.push('/')} className={classes.a}>
-                        <Logo changeState={toggleOpen}/>
+                    <div>
+                        <Logo changeState={toggleOpen} state={open}/>
                     </div>
 					{!isTabletorMobile && (
 						<div className={classes.children}>
@@ -50,6 +50,9 @@ const Header = ({ children }: Iprops) => {
             </AppBar>
             <SwipeableDrawer anchor="left" open={open} onOpen={toggleOpen} onClose={toggleOpen}>
                 <div className={classes.drawer}>
+                    <div>
+                        <Logo changeState={toggleOpen} state={open}/>
+                    </div>
 					{ children }
 				</div>
             </SwipeableDrawer>
