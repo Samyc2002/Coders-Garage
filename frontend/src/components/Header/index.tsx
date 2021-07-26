@@ -16,13 +16,16 @@ const Header = ({ children }: Iprops) => {
     const [dashboard, setDashboard] = useState(false);
     
     useEffect(() => {
-        if(history.location.pathname === '/') {
+
+        const transparentBg = [ '/', '/signup', '/signin' ];
+
+        if(transparentBg.includes(history.location.pathname)) {
             setDashboard(true);
         }
         else {
             setDashboard(false);
         }
-    }, [history.location.pathname])
+    }, [history.location.pathname]);
     
     const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 

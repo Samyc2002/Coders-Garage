@@ -15,7 +15,7 @@ const SigninLogin = () => {
     return (
         <div>
             <Button variant="text" size="large" className={classes.button} onClick={() => history.push('/signin')}>
-                Signin/Login
+                Login
             </Button>
         </div>
     )
