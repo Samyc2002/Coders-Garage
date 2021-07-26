@@ -1,0 +1,11 @@
+@import 'codemirror/lib/codemirror.css';
+@import 'codemirror/theme/material-darker.css';
+@import 'codemirror/theme/eclipse.css';
+
+.CodeMirror{
+    height: 83vh;
+    width: 100%;
+}
+.CodeMirror-lines, .CodeMirror-code{
+    font-family: 'Fira Code', monospace;
+}
