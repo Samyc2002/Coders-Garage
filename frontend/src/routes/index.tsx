@@ -11,7 +11,7 @@ import Signup from '../pages/Signup';
 import Profile from '../pages/Profile';
 import Create_Questions from '../pages/Create_Questions';
 import Question from '../pages/Question';
-import { ContextProvider } from '../config/SocketContext';
+import { ContextProvider } from '../config/SocketContext'; 
 
 const Routes: React.FC = () => (
     
