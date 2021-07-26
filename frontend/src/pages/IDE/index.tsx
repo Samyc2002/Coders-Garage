@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, useMediaQuery } from '@material-ui/core';
 import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon } from '@material-ui/icons';
 
@@ -53,7 +54,7 @@ const IDE = () => {
     return (
         <div>
             <Header>
-                <FormControl className={classes.formControl} style={{ marginLeft: '10px' }}>
+                <FormControl className={clsx(classes.formControl, 'language')} style={{ marginLeft: '10px' }}>
                     <InputLabel id="demo-simple-select-label">Language</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
