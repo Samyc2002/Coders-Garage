@@ -57,12 +57,13 @@ const Interview_Home = () => {
                     </Grid>
                     <Grid item xs={12} md={4} sm={6} xl={2}>
                         <Card image={join} body="Join an Interview" fullWidth>
-                            <Grid container spacing={3}>
+                            <Grid container spacing={3} justifyContent="center" alignItems="center">
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         id="roomId"
                                         name="roomId"
                                         label="Room ID"
+                                        variant="outlined"
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>

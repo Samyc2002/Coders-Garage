@@ -21,6 +21,6 @@ export const useStyles = (fullWidth: boolean) => makeStyles((theme: Theme) => cr
     },
     actions: {
       width: fullWidth?'80%':'50%',
-      marginBottom: fullWidth?'5px':'16px'
+      marginBottom: fullWidth?'0px':'16px'
     }
   }));
