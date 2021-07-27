@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { useFormik } from 'formik';
 import { Button, Drawer, Grid, TextField, useMediaQuery } from '@material-ui/core';
 
@@ -12,7 +13,7 @@ interface Iprops{
 
 const IdeDrawer = ({ sidebar, toggleSidebar, language }: Iprops) => {
 
-    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+    const isTabletorMobile = useMediaQuery('(max-width: 959px)');
 
     const classes = useStyles();
 
@@ -42,7 +43,7 @@ const IdeDrawer = ({ sidebar, toggleSidebar, language }: Iprops) => {
                 <form onSubmit={formik.handleSubmit} className={classes.form}>
                     <Grid container spacing={3} className={classes.container}>
                         <Grid item xs={12}>
-                            <div className={classes.toolbar}/>
+                            <div className={clsx({ [classes.toolbar]: !isTabletorMobile })}/>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

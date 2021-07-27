@@ -19,5 +19,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     hidden: {
         display: 'none'
+    },
+    text:{
+        textAlign: 'center',
+        fontFamily: "'Poppins', sans-serif",
+        fontWeight: 500
     }
 }));

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper } from '@material-ui/core';
+import { Paper, useMediaQuery } from '@material-ui/core';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
 import { useStyles } from './styles';
@@ -14,7 +14,9 @@ interface Iprops {
 
 const Ide = ({ value, onChange, language, isLight }: Iprops) => {
 
-    const classes = useStyles();
+    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+
+    const classes = useStyles(isTabletorMobile)();
 
     const light = "eclipse";
     const dark = "material-darker";

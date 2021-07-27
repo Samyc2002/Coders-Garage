@@ -130,6 +130,11 @@ const LoginForm = () => {
                             />
                         </Grid>
                         <Grid item xs={12} md={6}>
+                            <Typography variant="subtitle1" color="primary" className={classes.text}>
+                                Select Image
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
                             <FileBase64
                                 type="file"
                                 multiple={false}
