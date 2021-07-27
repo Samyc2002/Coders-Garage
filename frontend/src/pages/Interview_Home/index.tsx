@@ -10,10 +10,10 @@ import AddIcon from '../../components/AddIcon';
 import Logout from '../../components/LogoutButton';
 import Profile from '../../components/DashboardButton';
 
-const Interview_Home = () => {
+import schedule from '../../assets/images/schedule.png';
+import join from '../../assets/images/join.png';
 
-    const schedule = 'https://images.unsplash.com/photo-1609266378844-4a8af6d72fab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1868&q=80';
-    const join = 'https://images.unsplash.com/photo-1495653797063-114787b77b23?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80';
+const Interview_Home = () => {
 
     const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
