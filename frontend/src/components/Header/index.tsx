@@ -6,7 +6,7 @@ import Logo from '../Logo';
 import { useStyles } from './styles';
 
 interface Iprops{
-    children: React.ReactNode
+    children?: React.ReactNode
 }
 
 const Header = ({ children }: Iprops) => {
