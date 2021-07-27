@@ -4,15 +4,16 @@ import { Card, CardMedia, CardContent, CardActions, Typography } from '@material
 import { useStyles } from './styles';
 
 interface Iprops{
+    fullWidth?: boolean,
     image: string,
     heading?: string,
     body: string,
     children: React.ReactNode
 }
 
-const CardComponent = ({ image, heading, body, children}: Iprops) => {
+const CardComponent = ({ image, heading, body, children, fullWidth=false }: Iprops) => {
 
-    const classes = useStyles();
+    const classes = useStyles(fullWidth)();
 
     return (
         <div>

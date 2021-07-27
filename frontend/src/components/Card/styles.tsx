@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = (fullWidth: boolean) => makeStyles((theme: Theme) => createStyles({
     root: {
       maxWidth: 345,
       display: 'flex',
@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
       paddingBottom: '16px'
     },
     actions: {
-      width: '50%',
-      marginBottom: '16px'
+      width: fullWidth?'80%':'50%',
+      marginBottom: fullWidth?'5px':'16px'
     }
   }));

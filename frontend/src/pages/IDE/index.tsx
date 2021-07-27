@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import { useHistory } from 'react-router-dom';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, useMediaQuery } from '@material-ui/core';
-import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon } from '@material-ui/icons';
+import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon, ExitToApp as ExitToAppIcon, PersonOutline as PersonOutlineIcon, Computer as ComputerIcon, HomeRounded as HomeRoundedIcon } from '@material-ui/icons';
 
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/python/python';
@@ -11,8 +12,10 @@ import 'codemirror/mode/swift/swift';
 import { useStyles } from './styles';
 import Ide from '../../components/IDE';
 import Header from '../../components/Header';
+import AddIcon from '../../components/AddIcon';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import IdeDrawer from '../../components/General_IDE_Drawer';
+import {  handleLogout} from '../../components/LogoutButton';
 import './styles.css';
 
 const IDE = () => {
@@ -20,6 +23,8 @@ const IDE = () => {
     const isTabletorMobile = useMediaQuery('(max-width: 1279px)')
 
     const classes = useStyles(isTabletorMobile)();
+
+    const history = useHistory();
 
     const [code, setCode] = useLocalStorage('code', '');
     const [light, setLight] = useState(false);
@@ -51,6 +56,29 @@ const IDE = () => {
         'text/x-swift',
     ];
 
+    const elements = [
+        {
+            icon: <ExitToAppIcon/>,
+            title: 'Logout',
+            action: handleLogout
+        },
+        {
+            icon: <PersonOutlineIcon/>,
+            title: 'Dashboard',
+            action: () => history.push('/profile')
+        },
+        {
+            icon: <ComputerIcon/>,
+            title: 'Interview',
+            action: () => history.push('/interview_home')
+        },
+        {
+            icon: <HomeRoundedIcon/>,
+            title: 'Home',
+            action: () => history.push('/home')
+        }
+    ]
+
     return (
         <div>
             <Header>
@@ -80,6 +108,7 @@ const IDE = () => {
             <div className={classes.toolbar}/>
             <Ide value={code} onChange={setCode} isLight={light} language={modes[index]} />
             <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]}/>
+            <AddIcon elements={elements}/>
         </div>
     )
 }
