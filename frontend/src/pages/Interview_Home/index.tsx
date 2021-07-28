@@ -67,7 +67,7 @@ const Interview_Home = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <Button variant="contained" color="primary" onClick={() => history.push('/join')} fullWidth>
+                                    <Button variant="contained" color="primary" onClick={() => history.push('/interview')} fullWidth>
                                         Join
                                     </Button>
                                 </Grid>

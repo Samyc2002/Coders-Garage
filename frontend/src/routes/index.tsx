@@ -1,17 +1,18 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Dashboard from '../pages/Dashboard';
-import Home from '../pages/Home';
 import IDE from '../pages/IDE';
-import Interview_Home from '../pages/Interview_Home';
-import Interview from '../pages/Interview';
-import LoginSignin from '../pages/Login-Signin';
+import Home from '../pages/Home';
 import Signup from '../pages/Signup';
 import Profile from '../pages/Profile';
-import Create_Questions from '../pages/Create_Questions';
 import Question from '../pages/Question';
+import Dashboard from '../pages/Dashboard';
+import Interview from '../pages/Interview';
+import LoginSignin from '../pages/Login-Signin';
+import Interview_Home from '../pages/Interview_Home';
+import Create_Questions from '../pages/Create_Questions';
 import { ContextProvider } from '../config/SocketContext';
+import Interview_Schedule from '../pages/Interview_Schedule';
 
 const Routes: React.FC = () => (
     
@@ -25,6 +26,7 @@ const Routes: React.FC = () => (
         <Route path="/profile" component={Profile}/>
         <Route path="/create" component={Create_Questions}/>
         <Route path="/question/:id" component={Question}/>
+        <Route path="/schedule" component={Interview_Schedule}/>
         <ContextProvider>
             <Route path="/interview" component={Interview}/>
         </ContextProvider>
