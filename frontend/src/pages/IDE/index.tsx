@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import Pulse from 'react-reveal/Pulse';
 import { useHistory } from 'react-router-dom';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, useMediaQuery } from '@material-ui/core';
 import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon, ExitToApp as ExitToAppIcon, PersonOutline as PersonOutlineIcon, Computer as ComputerIcon, HomeRounded as HomeRoundedIcon } from '@material-ui/icons';
@@ -106,7 +107,9 @@ const IDE = () => {
                 </IconButton>
             </Header>
             <div className={classes.toolbar}/>
-            <Ide value={code} onChange={setCode} isLight={light} language={modes[index]} />
+            <Pulse delay={1000}>
+                <Ide value={code} onChange={setCode} isLight={light} language={modes[index]} />
+            </Pulse>
             <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]}/>
             <AddIcon elements={elements}/>
         </div>

@@ -1,4 +1,6 @@
 import React from 'react';
+import Fade from 'react-reveal/Fade';
+import Zoom from 'react-reveal/Zoom';
 import { useHistory } from 'react-router';
 import { Grid, Typography, useMediaQuery, Button, TextField } from '@material-ui/core';
 import { HomeRounded as HomeRoundedIcon, Code as CodeIcon } from '@material-ui/icons';
@@ -42,37 +44,47 @@ const Interview_Home = () => {
             </Header>
             <div className={classes.toolbar}/>
             <Grid container direction="column" className={classes.container}>
-                <Grid item>
-                    <Typography variant={isTabletorMobile?'h4':'h2'} className={classes.text}>
-                        Interview
-                    </Typography>
-                </Grid>
+                <Fade top>
+                    <Grid item>
+                        <Typography variant={isTabletorMobile?'h4':'h2'} className={classes.text}>
+                            Interview
+                        </Typography>
+                    </Grid>
+                </Fade>
                 <Grid container spacing={3} className={classes.cards}>
                     <Grid item xs={12} md={4} sm={6} xl={2}>
-                        <Card image={schedule} body="Schedule an Interview">
-                            <Button variant="contained" color="primary" onClick={() => history.push('/schedule')} fullWidth>
-                                Schedule
-                            </Button>
-                        </Card>
+                        <Fade left delay={2000}>
+                            <Zoom delay={2000}>
+                                <Card image={schedule} body="Schedule an Interview">
+                                    <Button variant="contained" color="primary" onClick={() => history.push('/schedule')} fullWidth>
+                                        Schedule
+                                    </Button>
+                                </Card>
+                            </Zoom>
+                        </Fade>
                     </Grid>
                     <Grid item xs={12} md={4} sm={6} xl={2}>
-                        <Card image={join} body="Join an Interview" fullWidth>
-                            <Grid container spacing={3} justifyContent="center" alignItems="center">
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        id="roomId"
-                                        name="roomId"
-                                        label="Room ID"
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <Button variant="contained" color="primary" onClick={() => history.push('/interview')} fullWidth>
-                                        Join
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Card>
+                        <Fade left delay={1000}>
+                            <Zoom delay={1000}>
+                                <Card image={join} body="Join an Interview" fullWidth>
+                                    <Grid container spacing={3} justifyContent="center" alignItems="center">
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                id="roomId"
+                                                name="roomId"
+                                                label="Room ID"
+                                                variant="outlined"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Button variant="contained" color="primary" onClick={() => history.push('/interview')} fullWidth>
+                                                Join
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </Card>
+                            </Zoom>
+                        </Fade>
                     </Grid>
                 </Grid>
             </Grid>

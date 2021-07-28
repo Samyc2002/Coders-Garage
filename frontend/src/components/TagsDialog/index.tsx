@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { TransitionProps } from '@material-ui/core/transitions';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fade, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 
 import { useStyles } from './styles';
 

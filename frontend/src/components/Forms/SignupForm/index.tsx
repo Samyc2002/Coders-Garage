@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import FileBase64 from 'react-file-base64';
-import { Button, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, Paper, TextField, Typography, Grow } from '@material-ui/core';
 
 import { useStyles } from './styles';
 
@@ -56,99 +56,101 @@ const LoginForm = () => {
 
     return (
         <div>
-            <Paper className={classes.root}>
-                <form onSubmit={formik.handleSubmit}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Typography variant="h4" color="primary" className={classes.title}>
-                                SIGNUP
-                            </Typography>
+            <Grow in timeout={3000}>
+                <Paper className={classes.root}>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <Typography variant="h4" color="primary" className={classes.title}>
+                                    SIGNUP
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="firstname"
+                                    name="firstname"
+                                    label="First Name"
+                                    value={formik.values.firstname}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.firstname && Boolean(formik.errors.firstname)}
+                                    helperText={formik.touched.firstname && formik.errors.firstname}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="lastname"
+                                    name="lastname"
+                                    label="Last Name"
+                                    value={formik.values.lastname}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.lastname && Boolean(formik.errors.lastname)}
+                                    helperText={formik.touched.lastname && formik.errors.lastname}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="username"
+                                    name="username"
+                                    label="Username"
+                                    value={formik.values.username}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.username && Boolean(formik.errors.username)}
+                                    helperText={formik.touched.username && formik.errors.username}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="password"
+                                    name="password"
+                                    label="Password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.password}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Typography variant="subtitle1" color="primary" className={classes.text}>
+                                    Select Image
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <FileBase64
+                                    type="file"
+                                    multiple={false}
+                                    onDone={({ base64 }: File) => setImage(base64)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button color="primary" variant="contained" fullWidth type="submit" className={classes.button}>
+                                    Submit
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="firstname"
-                                name="firstname"
-                                label="First Name"
-                                value={formik.values.firstname}
-                                onChange={formik.handleChange}
-                                error={formik.touched.firstname && Boolean(formik.errors.firstname)}
-                                helperText={formik.touched.firstname && formik.errors.firstname}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="lastname"
-                                name="lastname"
-                                label="Last Name"
-                                value={formik.values.lastname}
-                                onChange={formik.handleChange}
-                                error={formik.touched.lastname && Boolean(formik.errors.lastname)}
-                                helperText={formik.touched.lastname && formik.errors.lastname}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="username"
-                                name="username"
-                                label="Username"
-                                value={formik.values.username}
-                                onChange={formik.handleChange}
-                                error={formik.touched.username && Boolean(formik.errors.username)}
-                                helperText={formik.touched.username && formik.errors.username}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="email"
-                                name="email"
-                                label="Email"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                                error={formik.touched.email && Boolean(formik.errors.email)}
-                                helperText={formik.touched.email && formik.errors.email}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="password"
-                                name="password"
-                                label="Password"
-                                value={formik.values.password}
-                                onChange={formik.handleChange}
-                                error={formik.touched.password && Boolean(formik.errors.password)}
-                                helperText={formik.touched.password && formik.errors.password}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Typography variant="subtitle1" color="primary" className={classes.text}>
-                                Select Image
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <FileBase64
-                                type="file"
-                                multiple={false}
-                                onDone={({ base64 }: File) => setImage(base64)}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button color="primary" variant="contained" fullWidth type="submit" className={classes.button}>
-                                Submit
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Paper>
+                    </form>
+                </Paper>
+            </Grow>
         </div>
     )
 }

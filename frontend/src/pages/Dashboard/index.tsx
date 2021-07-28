@@ -1,4 +1,6 @@
 import React from 'react';
+import Fade from 'react-reveal/Fade';
+import Zoom from 'react-reveal/Zoom';
 import { Button, Grid, Typography, useMediaQuery } from '@material-ui/core';
 
 import SigninLogin from '../../components/Signin-LoginButton';
@@ -32,43 +34,57 @@ const Dashboard = () => {
             </Header>
             <div className={classes.toolbar}/>
             <Grid container direction="column" className={classes.container}>
-                <Grid item>
-                    <Typography variant={isTabletorMobile?'h4':'h2'} className={classes.text}>
-                        Have a cup of code for
-                    </Typography>
-                </Grid>
-                <Grid item>
-                    <Typography variant={isTabletorMobile?'h4':'h2'} className={classes.text}>
-                        breakfast
-                    </Typography>
-                </Grid>
+                <Fade top>
+                    <Grid item>
+                        <Typography variant={isTabletorMobile?'h4':'h2'} className={classes.text}>
+                            Have a cup of code for
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant={isTabletorMobile?'h4':'h2'} className={classes.text}>
+                            breakfast
+                        </Typography>
+                    </Grid>
+                </Fade>
                 <Grid container spacing={3} className={classes.cards}>
                     <Grid item xs={12} md={4} sm={6} xl={2}>
-                        <Card image={Home_Bg} body="A home page that contains everything you need">
-                            <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/home')}>
-                                <Typography variant="h6" className={classes.typography}>
-                                    Home
-                                </Typography>
-                            </Button>
-                        </Card>
+                        <Fade left delay={3000}>
+                            <Zoom delay={3000}>
+                                <Card image={Home_Bg} body="A home page that contains everything you need">
+                                    <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/home')}>
+                                        <Typography variant="h6" className={classes.typography}>
+                                            Home
+                                        </Typography>
+                                    </Button>
+                                </Card>
+                            </Zoom>
+                        </Fade>
                     </Grid>
                     <Grid item xs={12} md={4} sm={6} xl={2}>
-                        <Card image={IDE_Bg} body="A home page that contains everything you need">
-                            <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/ide')}>
-                                <Typography variant="h6" className={classes.typography}>
-                                    IDE
-                                </Typography>
-                            </Button>
-                        </Card>
+                        <Fade left delay={2000}>
+                            <Zoom delay={2000}>
+                                <Card image={IDE_Bg} body="A home page that contains everything you need">
+                                    <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/ide')}>
+                                        <Typography variant="h6" className={classes.typography}>
+                                            IDE
+                                        </Typography>
+                                    </Button>
+                                </Card>
+                            </Zoom>
+                        </Fade>
                     </Grid>
                     <Grid item xs={12} md={4} sm={6} xl={2}>
-                        <Card image={Interview_Bg} body="A home page that contains everything you need">
-                            <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/interview_home')}>
-                                <Typography variant="h6" className={classes.typography}>
-                                    Interview
-                                </Typography>
-                            </Button>
-                        </Card>
+                        <Fade left delay={1000}>
+                            <Zoom delay={1000}>
+                                <Card image={Interview_Bg} body="A home page that contains everything you need">
+                                    <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/interview_home')}>
+                                        <Typography variant="h6" className={classes.typography}>
+                                            Interview
+                                        </Typography>
+                                    </Button>
+                                </Card>
+                            </Zoom>
+                        </Fade>
                     </Grid>
                 </Grid>
             </Grid>
