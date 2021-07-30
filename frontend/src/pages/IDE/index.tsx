@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Pulse from 'react-reveal/Pulse';
 import { useHistory } from 'react-router-dom';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, useMediaQuery } from '@material-ui/core';
-import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon, ExitToApp as ExitToAppIcon, PersonOutline as PersonOutlineIcon, Computer as ComputerIcon, HomeRounded as HomeRoundedIcon } from '@material-ui/icons';
+import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon, ExitToApp as ExitToAppIcon, PersonOutline as PersonOutlineIcon, Computer as ComputerIcon, HomeRounded as HomeRoundedIcon, Create as CreateIcon, Dashboard as DashboardIcon } from '@material-ui/icons';
 
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/python/python';
@@ -31,6 +31,8 @@ const IDE = () => {
     const [light, setLight] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [index, setIndex] = useState(-1);
+    
+    const user = JSON.parse(localStorage.getItem('profile') as string);
 
     const toggleSidebar = () => {
         setSidebar(!sidebar);
@@ -59,14 +61,14 @@ const IDE = () => {
 
     const elements = [
         {
-            icon: <ExitToAppIcon/>,
-            title: 'Logout',
-            action: handleLogout
+            icon: user?<ExitToAppIcon/>:<PersonOutlineIcon/>,
+            title: user?'Logout':'Login',
+            action: user?handleLogout:() => history.push('/signin')
         },
         {
-            icon: <PersonOutlineIcon/>,
-            title: 'Dashboard',
-            action: () => history.push('/profile')
+            icon: user?<DashboardIcon/>:<CreateIcon/>,
+            title: user?'Dashboard':'Signup',
+            action: user?() => history.push('/profile'):() => history.push('/signup')
         },
         {
             icon: <ComputerIcon/>,

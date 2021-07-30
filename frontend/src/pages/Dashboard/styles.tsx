@@ -43,6 +43,12 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
                 fontFamily: "'Poppins', sans-serif",
                 fontWeight: 500,
                 textAlign: 'center'
+            },
+            headerDiv: {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexGrow: 0.01
             }
         })
     )

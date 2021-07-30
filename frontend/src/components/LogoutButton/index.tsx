@@ -4,7 +4,8 @@ import { Button, useMediaQuery } from '@material-ui/core';
 import { useStyles } from './styles';
 
 export const handleLogout = () => {
-    // logout code
+    localStorage.removeItem('profile');
+    window.location.reload();
 }
 
 const SigninLogin = () => {

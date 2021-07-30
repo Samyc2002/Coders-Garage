@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import { Button, Grid, Typography, useMediaQuery } from '@material-ui/core';
 
 import SigninLogin from '../../components/Signin-LoginButton';
 import Signup from '../../components/SignupButton';
-// import Profile from '../../components/DashboardButton'
-// import Logout from '../../components/LogoutButton';
+import Profile from '../../components/DashboardButton'
+import Logout from '../../components/LogoutButton';
 import { useHistory } from 'react-router-dom';
 import Header from '../../components/Header';
 import Card from '../../components/Card';
@@ -24,13 +24,29 @@ const Dashboard = () => {
 
     const history = useHistory();
 
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') as string));
+
+    useEffect(() => {
+        if(user === null || undefined) {
+            setUser(JSON.parse(localStorage.getItem('profile') as string));
+        }
+    }, [user]);
+
     return (
         <div className={classes.root}>
             <Header>
-                <SigninLogin/>
-                <Signup/>
-                {/* <Logout/>
-                <Profile/> */}
+                {user?(
+                    <div className={classes.headerDiv}>
+                        <Logout/>
+                        <Profile/>
+                    </div>
+                ):(
+                    <div className={classes.headerDiv}>
+                        <SigninLogin/>
+                        <Signup/>
+                    </div>
+                    
+                )}
             </Header>
             <div className={classes.toolbar}/>
             <Grid container direction="column" className={classes.container}>

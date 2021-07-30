@@ -5,10 +5,10 @@ import { useStyles } from './styles';
 
 interface Iprops{
     fullWidth?: boolean,
-    image: string,
+    image?: string,
     heading?: string,
-    body: string,
-    children: React.ReactNode
+    body?: string,
+    children?: React.ReactNode
 }
 
 const CardComponent = ({ image, heading, body, children, fullWidth=false }: Iprops) => {
@@ -19,11 +19,11 @@ const CardComponent = ({ image, heading, body, children, fullWidth=false }: Ipro
         <div>
             <Card className={classes.root} elevation={5}>
                 <div>
-                    <CardMedia
+                    {image && <CardMedia
                         className={classes.media}
                         image={image}
                         title="image"
-                    />
+                    />}
                     <CardContent className={classes.content}>
                         {heading && (
                             <Typography variant="h4" gutterBottom className={classes.typography}>

@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import FileBase64 from 'react-file-base64';
+import { useHistory } from 'react-router-dom';
 import { Button, Grid, Paper, TextField, Typography, Grow } from '@material-ui/core';
 
 import { useStyles } from './styles';
+import { signUp } from '../../../actions/auth';
+import { useAppDispatch } from '../../../Hooks/reduxHooks';
 
 interface File{
 	base64: string
@@ -34,6 +37,10 @@ const LoginForm = () => {
 
     const classes = useStyles();
 
+    const dispatch = useAppDispatch();
+
+    const history = useHistory();
+
     const [image, setImage] = useState('');
 
     const formik = useFormik({
@@ -47,10 +54,18 @@ const LoginForm = () => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const res = {
-                ...values,
-                image
+                UserName: values.username,
+                Password: values.password,
+                Email: values.email,
+                Name: values.firstname+' '+values.lastname,
+                Image: image
             }
             alert(JSON.stringify(res, null, 2));
+            try {
+                dispatch(signUp(res, history));
+            } catch (error) {
+                console.log(error);
+            }
         },
     });
 
@@ -124,6 +139,7 @@ const LoginForm = () => {
                                     id="password"
                                     name="password"
                                     label="Password"
+                                    type="password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     error={formik.touched.password && Boolean(formik.errors.password)}

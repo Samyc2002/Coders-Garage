@@ -1,10 +1,13 @@
 import React from 'react';
-import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { useHistory } from 'react-router-dom';
 import { Button, Grid, Paper, TextField, Typography, Grow } from '@material-ui/core';
 
 import { useStyles } from './styles';
+import { signIn } from '../../../actions/auth';
 import google from '../../../assets/images/Google.png';
+import { useAppDispatch } from '../../../Hooks/reduxHooks';
 
 const validationSchema = yup.object({
     username: yup
@@ -24,6 +27,10 @@ const LoginForm = () => {
 
     const classes = useStyles();
 
+    const dispatch = useAppDispatch();
+
+    const history = useHistory();
+
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -32,7 +39,16 @@ const LoginForm = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-          alert(JSON.stringify(values, null, 2));
+            const res = {
+                UserName: values.username,
+                Email: values.email,
+                Password: values.password
+            }
+            try {
+                dispatch(signIn(res, history));
+            } catch (error) {
+                console.log(error);
+            }
         },
     });
 
@@ -80,6 +96,7 @@ const LoginForm = () => {
                                     id="password"
                                     name="password"
                                     label="Password"
+                                    type="password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
                                     error={formik.touched.password && Boolean(formik.errors.password)}
