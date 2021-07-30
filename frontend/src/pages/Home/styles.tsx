@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 const drawerWidth = 300;
 
-export const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme) => createStyles({
     toolbar: theme.mixins.toolbar,
     drawer: {
         width: drawerWidth,
@@ -24,6 +24,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         borderRadius: '10px'
     },
     cards: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(isTabletorMobile?3:5),
+        width: `calc(100% - ${theme.spacing(isTabletorMobile?3:5)}px)`
     }
 }));

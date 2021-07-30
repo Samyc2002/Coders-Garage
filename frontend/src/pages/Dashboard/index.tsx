@@ -63,7 +63,7 @@ const Dashboard = () => {
                     </Grid>
                 </Fade>
                 <Grid container spacing={3} className={classes.cards}>
-                    <Grid item xs={12} md={4} sm={6} xl={2}>
+                    <Grid item xs={12} md={4} sm={6} xl={2} className={classes.card}>
                         <Fade left delay={3000}>
                             <Zoom delay={3000}>
                                 <Card image={Home_Bg} body="A home page that contains everything you need">
@@ -76,10 +76,10 @@ const Dashboard = () => {
                             </Zoom>
                         </Fade>
                     </Grid>
-                    <Grid item xs={12} md={4} sm={6} xl={2}>
+                    <Grid item xs={12} md={4} sm={6} xl={2} className={classes.card}>
                         <Fade left delay={2000}>
                             <Zoom delay={2000}>
-                                <Card image={IDE_Bg} body="A home page that contains everything you need">
+                                <Card image={IDE_Bg} body="An IDE where you can code your day off">
                                     <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/ide')}>
                                         <Typography variant="h6" className={classes.typography}>
                                             IDE
@@ -89,10 +89,10 @@ const Dashboard = () => {
                             </Zoom>
                         </Fade>
                     </Grid>
-                    <Grid item xs={12} md={4} sm={6} xl={2}>
+                    <Grid item xs={12} md={4} sm={6} xl={2} className={classes.card}>
                         <Fade left delay={1000}>
                             <Zoom delay={1000}>
-                                <Card image={Interview_Bg} body="A home page that contains everything you need">
+                                <Card image={Interview_Bg} body="A place where you can practice for interview">
                                     <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/interview_home')}>
                                         <Typography variant="h6" className={classes.typography}>
                                             Interview

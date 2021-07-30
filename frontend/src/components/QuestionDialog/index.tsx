@@ -8,10 +8,11 @@ interface Iprops{
     questions: string[],
     setQuestions: React.Dispatch<React.SetStateAction<string[]>>,
     open: boolean,
-    toggleOpen: () => void
+    toggleOpen: () => void,
+    userQuestions: string[]
 }
 
-const QuestionDrawer = ({ questions, setQuestions, open, toggleOpen }: Iprops) => {
+const QuestionDrawer = ({ questions, setQuestions, open, toggleOpen, userQuestions }: Iprops) => {
 
     const classes = useStyles();
 
@@ -29,8 +30,6 @@ const QuestionDrawer = ({ questions, setQuestions, open, toggleOpen }: Iprops) =
         toggleOpen();
     }
 
-    const userQuestions = [] as string[];
-
     return (
         <div>
             <Dialog
@@ -46,17 +45,25 @@ const QuestionDrawer = ({ questions, setQuestions, open, toggleOpen }: Iprops) =
                 <DialogTitle className={classes.listItem}>
                     Select Questions
                 </DialogTitle>
-                <DialogContent dividers>
-                    <List>
-                        {userQuestions.map((value) => (
-                            <ListItem onClick={() => changeQuestions(value)} key={value} className={clsx(classes.listItem, { [classes.listItemSelected]: questions.includes(value) })}>
-                                <ListItemText>
-                                    {value}
-                                </ListItemText>
-                            </ListItem>
-                        ))}
-                    </List>
-                </DialogContent>
+                {(userQuestions.length === 1)?(
+                    <DialogContent dividers>
+                        <Typography className={classes.text}>
+                            No Questions Created
+                        </Typography>
+                    </DialogContent>
+                ):(
+                    <DialogContent dividers>
+                        <List>
+                            {userQuestions.map((value) => (
+                                <ListItem onClick={() => changeQuestions(value)} key={value} className={clsx(classes.listItem, { [classes.listItemSelected]: questions.includes(value) })}>
+                                    <ListItemText>
+                                        {value}
+                                    </ListItemText>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </DialogContent>
+                )}
                 <DialogActions>
                     <Button variant="contained" color="primary" size="large" onClick={toggleOpen}>
                         <Typography variant="subtitle1" className={classes.buttonText}>

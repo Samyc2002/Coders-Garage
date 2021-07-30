@@ -26,7 +26,7 @@ const CardComponent = ({ image, heading, body, children, fullWidth=false }: Ipro
                     />}
                     <CardContent className={classes.content}>
                         {heading && (
-                            <Typography variant="h4" gutterBottom className={classes.typography}>
+                            <Typography variant="h4" gutterBottom className={classes.heading}>
                                 { heading }
                             </Typography>
                         )}

@@ -28,17 +28,26 @@ const ScheduleInterviewForm = () => {
 
     const [open, setOpen] = useState(false);
     const [questions, setQuestions] = useState([] as string[]);
+    const user = JSON.parse(localStorage.getItem('profile') as string);
 
     const formik = useFormik({
         initialValues: {
-            interviewerEmail: '',
             intervieweeEmail: '',
             duration: 60,
             startTime: new Date()
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            console.log('Hello');
+            const res = {
+                InterviewerEmail: user?.data.formData.Email,
+                IntervieweeEmail: values.intervieweeEmail,
+                Duration: values.duration,
+                StartTime: values.startTime.toISOString(),
+                Questions: questions
+            }
+            alert(JSON.stringify(res, null, 2));
+            console.log(JSON.stringify(res, null, 2));
         }
     });
 
@@ -103,7 +112,7 @@ const ScheduleInterviewForm = () => {
                                     fullWidth
                                     id="questions"
                                     name="questions"
-                                    label="Questions"
+                                    label="Questions Selected"
                                     disabled
                                     value={questions}
                                 />
@@ -126,7 +135,7 @@ const ScheduleInterviewForm = () => {
                     </form>
                 </Paper>
             </Grow>
-            <QuestionDrawer questions={questions} setQuestions={setQuestions} open={open} toggleOpen={toggleOpen}/>
+            <QuestionDrawer questions={questions} setQuestions={setQuestions} open={open} toggleOpen={toggleOpen} userQuestions={user?.data.formData.questionsCreated}/>
         </div>
     )
 }

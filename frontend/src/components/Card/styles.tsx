@@ -16,6 +16,12 @@ export const useStyles = (fullWidth: boolean) => makeStyles((theme: Theme) => cr
       fontWeight: 600,
       textAlign: 'center'
     },
+    heading: {
+      color: theme.palette.primary.dark,
+      fontFamily: "'Poppins', sans-serif",
+      fontWeight: 600,
+      textAlign: 'center'
+    },
     content: {
       paddingBottom: '16px'
     },

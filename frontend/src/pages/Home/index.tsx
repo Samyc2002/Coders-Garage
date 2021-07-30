@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Zoom from 'react-reveal/Zoom';
 import { useHistory } from 'react-router-dom';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography, useMediaQuery } from '@material-ui/core';
 import { Code as CodeIcon, Computer as ComputerIcon, PersonOutline as PersonOutlineIcon, ExitToApp as ExitToAppIcon, FilterList as FilterListIcon, Create as CreateIcon, Dashboard as DashboardIcon } from '@material-ui/icons';
 
 import { useStyles } from './styles';
@@ -16,7 +17,9 @@ import { handleLogout } from '../../components/LogoutButton';
 
 const Home = () => {
 
-    const classes = useStyles();
+    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+
+    const classes = useStyles(isTabletorMobile)();
 
     const history = useHistory();
 
@@ -90,16 +93,18 @@ const Home = () => {
                     </Header>
                     <div className={classes.toolbar}/>
                     <AddIcon elements={elements}/>
-                    <Grid container spacing={2} className={classes.cards}>
+                    <Grid container spacing={isTabletorMobile?3:5} className={classes.cards}>
                         {questions?.map((value) => (
                             <Grid item>
-                                <Card heading={value.QuestionID} body={value.Creator}>
-                                    <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push(`/question/${value._id}`)}>
-                                        <Typography variant="h6" className={classes.typography}>
-                                            Go to Question
-                                        </Typography>
-                                    </Button>
-                                </Card>
+                                <Zoom>
+                                    <Card heading={value.QuestionID} body={`made by ${value.Creator}`}>
+                                        <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push(`/question/${value._id}`)}>
+                                            <Typography variant="h6" className={classes.typography}>
+                                                Go to Question
+                                            </Typography>
+                                        </Button>
+                                    </Card>
+                                </Zoom>
                             </Grid>
                         ))}
                     </Grid>

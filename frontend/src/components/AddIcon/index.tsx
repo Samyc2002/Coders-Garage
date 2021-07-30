@@ -3,6 +3,7 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 
 import { useStyles } from './styles';
 import './styles.css';
+import { useMediaQuery } from '@material-ui/core';
 
 interface Element{
     icon: React.ReactElement,
@@ -16,7 +17,9 @@ interface Iprops{
 
 const AddIcon = ({ elements }: Iprops) => {
 
-    const classes = useStyles();
+    const isTabletorMobile = useMediaQuery('(max-width: 600px)');
+
+    const classes = useStyles(isTabletorMobile)();
 
     const [open, setOpen] = useState(false);
 

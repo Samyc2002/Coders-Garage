@@ -16,5 +16,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     buttonText: {
         fontfamily: "'Poppins', sans-serif",
         fontWeight: 500,
+    },
+    text: {
+        fontfamily: "'Poppins', sans-serif",
+        fontWeight: 500,
+        textAlign: 'center'
     }
 }));

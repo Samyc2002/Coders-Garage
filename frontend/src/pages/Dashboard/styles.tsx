@@ -30,7 +30,11 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
                 margin: theme.spacing(3),
                 width: `calc(100% - ${theme.spacing(3)}px)`,
                 marginTop: theme.spacing(5),
-                marginLeft: '0'
+                marginLeft: '0',
+                alignItems: 'center'
+            },
+            card: {
+                flexGrow: 1
             },
             button: {
                 backgroundColor: theme.palette.primary.light,
