@@ -9,8 +9,12 @@ export const getUser = (formData: any, history: any) => async(dispatch: Function
             dispatch({ type: actionTypes.LOGIN_FAILURE, payload: new Error('User does not exist') });
         }
         else {
-            localStorage.setItem('profile', JSON.stringify({ data: data.data }));
-            dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data.data });
+            const result = {
+                formData: data.data,
+                token : formData.token
+            }
+            localStorage.setItem('profile', JSON.stringify({ data: result }));
+            dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: result });
             console.log(data.data);
             history.push('/');
         }

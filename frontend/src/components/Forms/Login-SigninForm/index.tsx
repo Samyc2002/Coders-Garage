@@ -2,12 +2,14 @@ import React from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
+import { GoogleLogin } from 'react-google-login';
 import { Button, Grid, Paper, TextField, Typography, Grow } from '@material-ui/core';
 
 import { useStyles } from './styles';
-import { signIn } from '../../../actions/auth';
 import google from '../../../assets/images/Google.png';
+import { signIn, getUser } from '../../../actions/auth';
 import { useAppDispatch } from '../../../Hooks/reduxHooks';
+import { getEnvironmentVariables } from '../../../environments/env';
 
 const validationSchema = yup.object({
     username: yup
@@ -51,6 +53,19 @@ const LoginForm = () => {
             }
         },
     });
+
+    const googleSuccess = async (res: any) => {
+        const values = res?.profileObj;
+        const result = {
+            Email: values.email,
+            token: res?.tokenId
+        }
+        dispatch(getUser(result, history));
+    }
+
+    const googleFailure = () => {
+        console.log('Something went wrong :(');
+    }
 
     return (
         <div>
@@ -104,9 +119,17 @@ const LoginForm = () => {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <Button color="primary" variant="contained" fullWidth type="submit" className={classes.button} startIcon={<img src={google} alt="googleIcon" className={classes.image}/>}>
-                                    Google Login
-                                </Button>
+                                <GoogleLogin
+                                    clientId={getEnvironmentVariables().client_id}
+                                    render={(renderProps) => (
+                                        <Button color="primary" variant="contained" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} className={classes.button} startIcon={<img src={google} alt="googleIcon" className={classes.image}/>}>
+                                            Google Login
+                                        </Button>
+                                    )}
+                                    onSuccess={googleSuccess}
+                                    onFailure={googleFailure}
+                                    cookiePolicy="single_host_origin"
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <Button color="primary" variant="contained" fullWidth type="submit" className={classes.button}>
