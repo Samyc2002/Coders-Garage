@@ -16,6 +16,7 @@ interface Scheme {
     SampleInput: string,
     SampleOutput: string,
     Explanation: string,
+    Creator: string,
     Tags: string[],
     TimeLimit: string,
     MemoryLimit: number,

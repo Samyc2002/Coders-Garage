@@ -69,7 +69,7 @@ const TagsDialog = ({ toggleOpen, tags, setTags, open, action, actionTitle }: Ip
                             { actionTitle }
                         </Typography>
                     </Button>
-                    <Button color="primary" size="large" onClick={toggleOpen}>
+                    <Button color="primary" size="large" onClick={() => setTags([])}>
                         <Typography variant="subtitle1" className={classes.buttonText}>
                             Cancel
                         </Typography>
