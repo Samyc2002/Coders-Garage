@@ -33,5 +33,19 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    button: {
+        backgroundColor: theme.palette.primary.light,
+        color: theme.palette.primary.dark,
+        fontFamily: "'Poppins', sans-serif",
+        fontWeight: 'bolder',
+        borderRadius: '10px'
+    },
+    margin: {
+        margin: theme.spacing(10),
+        [theme.breakpoints.down('sm')]: {
+            margin: theme.spacing(2),
+            marginTop: theme.spacing(6)
+        }
     }
 }));
