@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import useSound from 'use-sound';
 import Pulse from 'react-reveal/Pulse';
 import { useHistory } from 'react-router-dom';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, useMediaQuery } from '@material-ui/core';
@@ -10,14 +11,15 @@ import 'codemirror/mode/python/python';
 import 'codemirror/mode/ruby/ruby';
 import 'codemirror/mode/swift/swift';
 
+import './styles.css';
 import { useStyles } from './styles';
 import Ide from '../../components/IDE';
 import Header from '../../components/Header';
 import AddIcon from '../../components/AddIcon';
+import SwitchSFX from '../../assets/sounds/Switch.mp3';
 import useLocalStorage from '../../Hooks/useLocalStore';
 import IdeDrawer from '../../components/General_IDE_Drawer';
 import {  handleLogout} from '../../components/LogoutButton';
-import './styles.css';
 
 const IDE = () => {
 
@@ -26,6 +28,8 @@ const IDE = () => {
     const classes = useStyles(isTabletorMobile)();
 
     const history = useHistory();
+
+    const [switchSound] = useSound(SwitchSFX, { volume: 1 });
 
     const [code, setCode] = useLocalStorage('code', '');
     const [light, setLight] = useState(false);
@@ -44,6 +48,11 @@ const IDE = () => {
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setIndex(event.target.value as number);
+    }
+
+    const themeChange = () => {
+        setLight(!light);
+        switchSound();
     }
 
     const language = [ 'C', 'C++', 'C#', 'Java', 'Python3', 'Ruby', 'Kotlin', 'Swift' ];
@@ -101,7 +110,7 @@ const IDE = () => {
                 <IconButton onClick={resetCode} className={classes.icon}>
                     <RotateLeftRoundedIcon/>
                 </IconButton>
-                <IconButton onClick={() => setLight(!light)} className={classes.icon}>
+                <IconButton onClick={themeChange} className={classes.icon}>
                     {light?<Brightness7RoundedIcon/>:<Brightness4RoundedIcon/>}
                 </IconButton>
                 <IconButton onClick={() => setSidebar(!sidebar)} className={classes.icon}>
@@ -112,7 +121,7 @@ const IDE = () => {
             <Pulse delay={1000}>
                 <Ide value={code} onChange={setCode} isLight={light} language={modes[index]} />
             </Pulse>
-            <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]}/>
+            <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]} code={code}/>
             <AddIcon elements={elements}/>
         </div>
     )
