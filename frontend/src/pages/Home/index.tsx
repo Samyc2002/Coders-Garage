@@ -26,7 +26,7 @@ const Home = () => {
     const dispatch = useAppDispatch();
 
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [tags, setTags] = useState([] as string[]);
     const user = JSON.parse(localStorage.getItem('profile') as string);
     const [questions, setQuestions] = useState<any[]>(JSON.parse(localStorage.getItem('questions') as string));
@@ -41,7 +41,6 @@ const Home = () => {
     }
 
     useEffect(() => {
-        setLoading(true);
         try {
             dispatch(fetchQuestions())
             .then(() => {
@@ -95,10 +94,10 @@ const Home = () => {
                     <AddIcon elements={elements}/>
                     <Grid container spacing={isTabletorMobile?3:5} className={classes.cards}>
                         {questions?.map((value) => (
-                            <Grid item>
+                            <Grid item key={value._id}>
                                 <Zoom>
                                     <Card heading={value.QuestionID} body={`made by ${value.Creator}`}>
-                                        <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push(`/question/${value._id}`)}>
+                                        <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push(`/question/${value.QuestionID}`)}>
                                             <Typography variant="h6" className={classes.typography}>
                                                 Go to Question
                                             </Typography>

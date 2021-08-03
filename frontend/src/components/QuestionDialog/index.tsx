@@ -45,7 +45,7 @@ const QuestionDrawer = ({ questions, setQuestions, open, toggleOpen, userQuestio
                 <DialogTitle className={classes.listItem}>
                     Select Questions
                 </DialogTitle>
-                {(userQuestions.length === 1)?(
+                {(userQuestions?.length === 1)?(
                     <DialogContent dividers>
                         <Typography className={classes.text}>
                             No Questions Created
@@ -54,7 +54,7 @@ const QuestionDrawer = ({ questions, setQuestions, open, toggleOpen, userQuestio
                 ):(
                     <DialogContent dividers>
                         <List>
-                            {userQuestions.map((value) => (
+                            {userQuestions?.map((value) => (
                                 <ListItem onClick={() => changeQuestions(value)} key={value} className={clsx(classes.listItem, { [classes.listItemSelected]: questions.includes(value) })}>
                                     <ListItemText>
                                         {value}

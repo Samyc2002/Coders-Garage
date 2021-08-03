@@ -17,10 +17,11 @@ export const getQuestion = (formData: any) => async (dispatch: Function) => {
     dispatch({ type: actionTypes.QUESTION_REQUEST });
     try {
         const { data } = await api.getQuestion(formData);
+        localStorage.setItem('question', JSON.stringify(data.data));
         dispatch({ type: actionTypes.QUESTION_SUCCESS, payload: data.data});
     } catch (error) {
         dispatch({ type: actionTypes.QUESTION_FAILURE, payload: error });
-        console.log(error);
+        console.log('redux', error);
     }
 }
 
