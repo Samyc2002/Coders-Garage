@@ -56,7 +56,9 @@ const Header = ({ children }: Iprops) => {
                     <div>
                         <Logo changeState={toggleOpen} state={open}/>
                     </div>
-					{ children }
+					<div className={classes.children}>
+                        { children }
+                    </div>
 				</div>
             </SwipeableDrawer>
         </div>

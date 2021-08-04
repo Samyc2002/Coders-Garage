@@ -18,6 +18,7 @@ export const useStyles = (dashboard: boolean, isScrollable: boolean) => makeStyl
     },
     children: {
 		display: 'flex',
+		flexDirection: isScrollable?'column':'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		flexGrow: 0.01

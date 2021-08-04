@@ -9,5 +9,9 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
         margin: theme.spacing(1),
         minWidth: 120,
         color: theme.palette.common.white
+    },
+    headerText: {
+        fontFamily: "'Poppins', sans-serif",
+        textTransform: 'capitalize'
     }
 }));

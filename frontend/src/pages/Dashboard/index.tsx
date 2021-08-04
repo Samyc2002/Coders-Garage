@@ -20,7 +20,9 @@ const Dashboard = () => {
 
     const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
-    const classes = useStyles(isTabletorMobile)();
+    const isMobile = useMediaQuery('(max-width: 600px)');
+
+    const classes = useStyles(isTabletorMobile, isMobile)();
 
     const history = useHistory();
 
@@ -36,10 +38,17 @@ const Dashboard = () => {
         <div className={classes.root}>
             <Header>
                 {user?(
-                    <div className={classes.headerDiv}>
-                        <Logout/>
-                        <Profile/>
-                    </div>
+                    isTabletorMobile?(
+                        <div className={classes.headerDiv}>
+                            <Profile/>
+                            <Logout/>
+                        </div>
+                    ):(
+                        <div className={classes.headerDiv}>
+                            <Logout/>
+                            <Profile/>
+                        </div>
+                    )
                 ):(
                     <div className={classes.headerDiv}>
                         <SigninLogin/>
@@ -64,8 +73,8 @@ const Dashboard = () => {
                 </Fade>
                 <Grid container spacing={3} className={classes.cards}>
                     <Grid item xs={12} md={4} sm={6} xl={2} className={classes.card}>
-                        <Fade left delay={3000}>
-                            <Zoom delay={3000}>
+                        <Fade right delay={1000}>
+                            <Zoom delay={1000}>
                                 <Card image={Home_Bg} body="A home page that contains everything you need">
                                     <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/home')}>
                                         <Typography variant="h6" className={classes.typography}>
@@ -77,7 +86,7 @@ const Dashboard = () => {
                         </Fade>
                     </Grid>
                     <Grid item xs={12} md={4} sm={6} xl={2} className={classes.card}>
-                        <Fade left delay={2000}>
+                        <Fade right delay={2000}>
                             <Zoom delay={2000}>
                                 <Card image={IDE_Bg} body="An IDE where you can code your day off">
                                     <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/ide')}>
@@ -90,8 +99,8 @@ const Dashboard = () => {
                         </Fade>
                     </Grid>
                     <Grid item xs={12} md={4} sm={6} xl={2} className={classes.card}>
-                        <Fade left delay={1000}>
-                            <Zoom delay={1000}>
+                        <Fade right delay={3000}>
+                            <Zoom delay={3000}>
                                 <Card image={Interview_Bg} body="A place where you can practice for interview">
                                     <Button variant="contained" className={classes.button} size="large" fullWidth onClick={() => history.push('/interview_home')}>
                                         <Typography variant="h6" className={classes.typography}>

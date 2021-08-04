@@ -1,8 +1,8 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme) => {
+export const useStyles = (isTabletorMobile: boolean, isMobile: boolean) => makeStyles((theme: Theme) => {
 
-    const margin = isTabletorMobile?50:100;
+    const margin = isTabletorMobile?(isMobile?30:50):100;
 
     return (
         createStyles({
@@ -21,6 +21,13 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
                 width: `calc(100% - ${theme.spacing(3)}px)`,
                 marginTop: theme.spacing(5),
                 marginLeft: '0'
+            },
+            headerDiv: {
+                display: 'flex',
+                flexDirection: isTabletorMobile?'column':'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexGrow: 0.01
             }
         })
     )

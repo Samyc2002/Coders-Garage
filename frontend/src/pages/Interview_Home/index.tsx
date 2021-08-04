@@ -9,8 +9,10 @@ import { useStyles } from './styles';
 import Card from '../../components/Card';
 import Header from '../../components/Header';
 import AddIcon from '../../components/AddIcon';
+import Signup from '../../components/SignupButton';
 import Logout from '../../components/LogoutButton';
 import Profile from '../../components/DashboardButton';
+import SigninLogin from '../../components/Signin-LoginButton';
 
 import schedule from '../../assets/images/schedule.png';
 import join from '../../assets/images/join.png';
@@ -19,9 +21,13 @@ const Interview_Home = () => {
 
     const isTabletorMobile = useMediaQuery('(max-width: 1279px)');
 
-    const classes = useStyles(isTabletorMobile)();
+    const isMobile = useMediaQuery('(max-width: 600px)')
+
+    const classes = useStyles(isTabletorMobile, isMobile)();
 
     const history = useHistory();
+
+    const user = JSON.parse(localStorage.getItem('profile') as string);
 
     const elements = [
         {
@@ -39,8 +45,25 @@ const Interview_Home = () => {
     return (
         <div>
             <Header>
-                <Logout/>
-                <Profile/>
+                {user?(
+                    isTabletorMobile?(
+                        <div className={classes.headerDiv}>
+                            <Profile/>
+                            <Logout/>
+                        </div>
+                    ):(
+                        <div className={classes.headerDiv}>
+                            <Logout/>
+                            <Profile/>
+                        </div>
+                    )
+                ):(
+                    <div className={classes.headerDiv}>
+                        <SigninLogin/>
+                        <Signup/>
+                    </div>
+                    
+                )}
             </Header>
             <div className={classes.toolbar}/>
             <Grid container direction="column" className={classes.container}>

@@ -131,7 +131,7 @@ const CreateQuestionsForm = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <Typography variant="h4" color="primary" className={classes.title}>
-                                        SIGNUP
+                                        CREATE QUESTION
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>

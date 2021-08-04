@@ -22,7 +22,7 @@ const Ide = ({ value, onChange, language, isLight }: Iprops) => {
     const dark = "material-darker";
 
     return (
-        <div>
+        <div className={classes.container}>
             <Paper elevation={5} className={classes.root}>
                 <CodeMirror
                     value={value}

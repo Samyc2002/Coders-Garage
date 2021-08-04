@@ -1,9 +1,9 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import background from '../../assets/images/Background.jpg'
 
-export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme) => {
+export const useStyles = (isTabletorMobile: boolean, isMobile: boolean) => makeStyles((theme: Theme) => {
 
-    const margin = isTabletorMobile?50:100;
+    const margin = isTabletorMobile?(isMobile?20:50):100;
 
     return (
         createStyles({
@@ -50,6 +50,7 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
             },
             headerDiv: {
                 display: 'flex',
+                flexDirection: isTabletorMobile?'column':'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexGrow: 0.01

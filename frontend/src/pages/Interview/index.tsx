@@ -1,10 +1,14 @@
 import React from 'react';
 
+import { ContextProvider } from '../../config/SocketContext';
+
 const Interview = () => {
     return (
-        <div>
-            Interview
-        </div>
+        <ContextProvider>
+            <div>
+                Interview
+            </div>
+        </ContextProvider>
     )
 }
 
