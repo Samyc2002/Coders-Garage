@@ -30,7 +30,7 @@ const Routes: React.FC = () => {
             <Route path='/create' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Create_Questions:UnauthorisedDialog}/>
             <Route path="/question/:id" component={Question}/>
             <Route path='/schedule' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Interview_Schedule:UnauthorisedDialog}/>
-            <Route path='/interview' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Interview:UnauthorisedDialog}/>
+            <Route path='/interview/:id' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Interview:UnauthorisedDialog}/>
             <Redirect to="/"/>
         </Switch>
     )

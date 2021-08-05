@@ -5,7 +5,7 @@ import Peer from 'simple-peer';
 import { SocketContext } from '../Hooks/SocketContext';
 import useLocalStorage from '../Hooks/useLocalStore';
 
-const socket = io('https://coders-garage.herokuapp.com/');
+const socket = io('http://localhost:5000/');
 
 interface Child{
 	children?: React.ReactNode;
@@ -60,7 +60,7 @@ const ContextProvider = ({ children }: Child) => {
 			console.log(message);
 			setCode(message);
 		});
-	}, [sendChange, setCode])
+	}, [sendChange, setCode]);
 
 	const answerCall = () => {
 		setCallAccepted(true);

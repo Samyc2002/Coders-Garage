@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import { useHistory } from 'react-router';
@@ -27,6 +27,7 @@ const Interview_Home = () => {
 
     const history = useHistory();
 
+    const [roomId, setRoomId] = useState('');
     const user = JSON.parse(localStorage.getItem('profile') as string);
 
     const elements = [
@@ -97,10 +98,12 @@ const Interview_Home = () => {
                                                 name="roomId"
                                                 label="Room ID"
                                                 variant="outlined"
+                                                value={roomId}
+                                                onChange={(e) => setRoomId(e.target.value)}
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
-                                            <Button variant="contained" color="primary" onClick={() => history.push('/interview')} fullWidth>
+                                            <Button variant="contained" color="primary" onClick={() => history.push(`/interview/${roomId}`)} fullWidth>
                                                 Join
                                             </Button>
                                         </Grid>

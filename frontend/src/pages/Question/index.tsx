@@ -203,8 +203,8 @@ const Question = (props: any) => {
                     <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]} code={code} testcases={question.TestCases} TimeLimit={question.TimeLimit} MemoryLimit={question.MemoryLimit} backup={{ input: question.sampleInput, output: question.sampleOutput}} question={question}/>
                     <Snackbar
                         anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
+                            vertical: 'bottom',
+                            horizontal: 'left',
                         }}
                         open={copied}
                         autoHideDuration={6000}
