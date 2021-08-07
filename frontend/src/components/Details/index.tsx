@@ -99,10 +99,12 @@ const Details = ({ interview, me, call, callUser, answerCall, callAccepted, read
                                 </Button>
                             </Grid>
                             {call.isReceivingCall && !callAccepted && (
-                                <Grid item xs={12}>
-                                    <Typography variant="h6" className={classes.heading}>Interviewee Came &nsp;</Typography>
+                                <Grid item xs={12} className={classes.answerCall}>
+                                    <Typography variant="h6" className={classes.heading}>Interviewee Came &nbsp; &nbsp;</Typography>
                                     <Button variant="contained" color="primary" onClick={answerCall}>
-                                        Answer
+                                        <Typography variant="body1" className={classes.heading}>
+                                            Answer
+                                        </Typography>
                                     </Button>
                                 </Grid>
                             )}

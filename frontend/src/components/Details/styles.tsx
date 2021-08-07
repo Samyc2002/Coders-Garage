@@ -11,6 +11,7 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     answerCall: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 }));
