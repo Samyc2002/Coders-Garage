@@ -15,7 +15,6 @@ export const getUser = (formData: any, history: any) => async(dispatch: Function
             }
             localStorage.setItem('profile', JSON.stringify({ data: result }));
             dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: result });
-            console.log(data.data);
             history.push('/');
         }
     } catch (error) {
@@ -34,7 +33,6 @@ export const signIn = (formData: any, history: any) => async (dispatch: Function
         else {
             localStorage.setItem('profile', JSON.stringify({ data: data.data }));
             dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data.data });
-            console.log(data.data);
             history.push('/');
         }
     } catch (error) {
@@ -53,7 +51,6 @@ export const signUp = (formData: any, history: any) => async (dispatch: Function
         else {
             localStorage.setItem('profile', JSON.stringify({ data: data.data }));
             dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data.data });
-            console.log(data.data);
             history.push('/');
         }
     } catch (error) {

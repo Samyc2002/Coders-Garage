@@ -36,7 +36,6 @@ const ContextProvider = ({ children }: Child) => {
 		
 		socket.on('me', (id, cb) => {
 			setMe(id);
-			cb();
 		});
 
 		socket.emit('join', localStorage.getItem('RoomID'))
@@ -57,7 +56,6 @@ const ContextProvider = ({ children }: Child) => {
 
 	useEffect(() => {
 		socket.on('code', message => {
-			console.log(message);
 			setCode(message);
 		});
 	}, [sendChange, setCode]);
