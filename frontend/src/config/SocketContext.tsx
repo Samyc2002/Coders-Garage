@@ -39,7 +39,7 @@ const ContextProvider = ({ children }: Child) => {
 			cb();
 		});
 
-		socket.emit('join', JSON.parse(localStorage.getItem('room') as string)?.RoomId)
+		socket.emit('join', localStorage.getItem('RoomID'))
 
 		socket.on('callEnded', () => {
 			connectionRef.current?.destroy();

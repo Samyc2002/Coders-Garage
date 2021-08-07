@@ -21,3 +21,11 @@ export const createInterview = (formData: any) => async (dispatch: Function) => 
         console.log(error);
     }
 }
+
+export const emailInterviewee = (formData: any) => async (dispatch: Function) => {
+    try{
+        await api.emailInterviewee(formData);
+    } catch(error) {
+        console.log(error);
+    }
+}

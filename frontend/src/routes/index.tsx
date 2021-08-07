@@ -13,6 +13,7 @@ import Interview_Home from '../pages/Interview_Home';
 import Create_Questions from '../pages/Create_Questions';
 import Interview_Schedule from '../pages/Interview_Schedule';
 import UnauthorisedDialog from '../components/UnauthorisedDialog';
+import { ContextProvider } from '../config/SocketContext';
 
 const Routes: React.FC = () => {
 
@@ -30,7 +31,9 @@ const Routes: React.FC = () => {
             <Route path='/create' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Create_Questions:UnauthorisedDialog}/>
             <Route path="/question/:id" component={Question}/>
             <Route path='/schedule' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Interview_Schedule:UnauthorisedDialog}/>
-            <Route path='/interview/:id' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Interview:UnauthorisedDialog}/>
+            <ContextProvider>
+                <Route path='/interview/:id' component={(JSON.parse(localStorage.getItem('profile') as string) !== null)?Interview:UnauthorisedDialog}/>
+            </ContextProvider>
             <Redirect to="/"/>
         </Switch>
     )

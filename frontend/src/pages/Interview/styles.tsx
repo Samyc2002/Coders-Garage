@@ -41,5 +41,20 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     problem: {
         marginLeft: theme.spacing(2)
+    },
+    video: {
+        maxWidth: '450px',
+        maxHeight: '450px',
+        right: '0px',
+        top: '100px',
+        zIndex: 9999
+    },
+    details: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    intro: {
+        margin: theme.spacing(3)
     }
 }));

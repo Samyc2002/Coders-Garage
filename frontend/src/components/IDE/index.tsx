@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Paper, useMediaQuery } from '@material-ui/core';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
+import { SocketContext } from '../../config/SocketContext';
 import { useStyles } from './styles';
 import './styles.css';
 
@@ -9,10 +10,13 @@ interface Iprops {
     value: any,
     onChange: any,
     language: string,
-    isLight: boolean
+    isLight: boolean,
+    interviewMode?: boolean
 }
 
-const Ide = ({ value, onChange, language, isLight }: Iprops) => {
+const Ide = ({ value, onChange, language, isLight, interviewMode }: Iprops) => {
+
+    const { sendChange }: any = useContext(SocketContext)
 
     const isTabletorMobile = useMediaQuery('(max-width: 600px)');
 
@@ -26,8 +30,11 @@ const Ide = ({ value, onChange, language, isLight }: Iprops) => {
             <Paper elevation={5} className={classes.root}>
                 <CodeMirror
                     value={value}
-                    onBeforeChange={(editor, data, value) => {
+                    onBeforeChange={!interviewMode?(editor, data, value) => {
                         onChange(value);
+                    }:(editor, data, value) => {
+                        onChange(value);
+                        sendChange(value);
                     }}
                     options={{
                         mode: language,

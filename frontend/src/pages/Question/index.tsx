@@ -25,7 +25,7 @@ const Question = (props: any) => {
 
     const [switchSound] = useSound(SwitchSFX, { volume: 1 });
 
-    const [code, setCode] = useLocalStorage('code', `question${props.match.params.id}`);
+    const [code, setCode] = useLocalStorage('code', '');
     const [light, setLight] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [index, setIndex] = useState(-1);
