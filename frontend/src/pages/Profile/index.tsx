@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { Typography, useMediaQuery } from '@material-ui/core';
+import { Grid, Typography, useMediaQuery } from '@material-ui/core';
 
 import QuestionsCreated from '../../components/QuestionsCreated';
 import QuestionsSolved from '../../components/QuestionsSolved';
+import LogoutButton from '../../components/LogoutButton';
 import ProfileData from '../../components/Profile';
+import Loading from '../../components/Loading';
 import Header from '../../components/Header';
 import { useStyles } from './styles';
 
@@ -15,34 +17,47 @@ const Profile = () => {
     const classes = useStyles(isTabletorMobile)();
     
     const [activeTab, setActiveTab] = useState(0);
+    const [loading, setLoading] = useState(true);
     const user = JSON.parse(localStorage.getItem('profile') as string);
 
-    const Tabs = [ <ProfileData user={user} />, <QuestionsCreated />, <QuestionsSolved /> ];
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000);
+    }, [])
 
     return (
         <div>
-            <Header>
-                <div className={classes.headerTabs} onClick={() => setActiveTab(0)}>
-                    <Typography variant="body1" className={clsx({ [classes.headerText]: (activeTab !== 0), [classes.headerActive]: (activeTab === 0) })}>
-                        Profile
-                    </Typography>
-                    <div className={clsx({ [classes.headerBorder]: !isTabletorMobile && (activeTab === 0) })}/>
+            {loading?(
+                <div>
+                    <Loading/>
                 </div>
-                <div className={classes.headerTabs} onClick={() => setActiveTab(1)}>
-                    <Typography variant="body1" className={clsx({ [classes.headerText]: (activeTab !== 1), [classes.headerActive]: (activeTab === 1) })}>
-                        Questions Created
-                    </Typography>
-                    <div className={clsx({ [classes.headerBorder]: !isTabletorMobile && (activeTab === 1) })}/>
+            ):(
+                <div>
+                    <Header>
+                        <LogoutButton/>
+                        <div className={classes.headerTabs} onClick={() => setActiveTab(0)}>
+                            <Typography variant="body1" className={clsx({ [classes.headerText]: (activeTab !== 0), [classes.headerActive]: (activeTab === 0) })}>
+                                Dashboard
+                            </Typography>
+                            <div className={clsx({ [classes.headerBorder]: !isTabletorMobile && (activeTab === 0) })}/>
+                        </div>
+                    </Header>
+                    <div className={classes.toolbar}/>
+                    <div  className={classes.root}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6} className={classes.fixed}>
+                                <ProfileData user={user} />
+                            </Grid>
+                            <Grid item xs={12} sm={6}/>
+                            <Grid item xs={12} sm={6}>
+                                <QuestionsCreated user={user} />
+                                <QuestionsSolved user={user} />
+                            </Grid>
+                        </Grid>
+                    </div>
                 </div>
-                <div className={classes.headerTabs} onClick={() => setActiveTab(2)}>
-                    <Typography variant="body1" className={clsx({ [classes.headerText]: (activeTab !== 2), [classes.headerActive]: (activeTab === 2) })}>
-                        Questions Solved
-                    </Typography>
-                    <div className={clsx({ [classes.headerBorder]: !isTabletorMobile && (activeTab === 2) })}/>
-                </div>
-            </Header>
-            <div className={classes.toolbar}/>
-            {Tabs[activeTab]}
+            )}
         </div>
     )
 }

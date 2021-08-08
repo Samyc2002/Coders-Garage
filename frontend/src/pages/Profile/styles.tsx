@@ -2,6 +2,9 @@ import { alpha, createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme) => createStyles({
     toolbar: theme.mixins.toolbar,
+    root: {
+        margin: theme.spacing(5)
+    },
     headerTabs: {
         display: 'flex',
         flexDirection: isTabletorMobile?'row':'column',
@@ -31,5 +34,12 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
         color: isTabletorMobile?theme.palette.primary.dark:theme.palette.primary.light,
         fontFamily: "'Poppins', sans-serif",
         fontWeight: 500
+    },
+    fixed: {
+        position: 'fixed',
+        display: 'flex',
+        alignItems: 'center',
+        justifycontent: 'center',
+        width: '100%'
     }
 }));

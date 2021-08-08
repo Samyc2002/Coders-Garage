@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
-        margin: theme.spacing(5)
+        marginBottom: theme.spacing(5)
     },
     avatar: {
         color: theme.palette.common.white,
@@ -17,5 +17,10 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
     paper: {
         width: '100%',
         padding: theme.spacing(3),
+    },
+    main: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
 }));
