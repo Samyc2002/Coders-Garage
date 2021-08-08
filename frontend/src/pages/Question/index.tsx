@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import useSound from 'use-sound';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FormControl, IconButton, InputLabel, MenuItem, Select, Grid, useMediaQuery, Typography, Snackbar } from '@material-ui/core';
+import { FormControl, IconButton, InputLabel, MenuItem, Select, Grid, useMediaQuery, Typography, Snackbar, Button } from '@material-ui/core';
 import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon,  FileCopy as FileCopyIcon } from '@material-ui/icons';
 
 import IdeDrawer from '../../components/Submission_IDE_Drawer';
@@ -12,7 +12,11 @@ import SwitchSFX from '../../assets/sounds/Switch.mp3';
 import { getQuestion } from '../../actions/question';
 import Loading from '../../components/Loading';
 import Header from '../../components/Header';
+import Slide from 'react-reveal/Slide';
 import IDE from '../../components/IDE';
+import Zoom from 'react-reveal/Zoom';
+import Fade from 'react-reveal/Fade';
+import Spin from 'react-reveal/Spin';
 import { useStyles } from './styles';
 
 const Question = (props: any) => {
@@ -85,28 +89,76 @@ const Question = (props: any) => {
             ):(
                 <div>
                     <Header>
-                        <FormControl className={clsx(classes.formControl, 'language')} style={{ marginLeft: '10px' }}>
-                            <InputLabel id="demo-simple-select-label">Language</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={language[index]}
-                                onChange={handleChange}
-                            >
-                                {language.map((value, i) => (
-                                    <MenuItem value={i}>{value}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <IconButton onClick={resetCode} className={classes.icon}>
-                            <RotateLeftRoundedIcon/>
-                        </IconButton>
-                        <IconButton onClick={themeChange} className={classes.icon}>
-                            {light?<Brightness7RoundedIcon/>:<Brightness4RoundedIcon/>}
-                        </IconButton>
-                        <IconButton onClick={() => setSidebar(!sidebar)} className={classes.icon}>
-                            {sidebar?<CloseIcon/>:<PlayArrowRoundedIcon/>}
-                        </IconButton>
+                        {isTabletorMobile?(
+                            <FormControl className={clsx(classes.formControl, 'language')} style={{ marginLeft: '10px' }}>
+                                <InputLabel id="demo-simple-select-label">Language</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={language[index]}
+                                    onChange={handleChange}
+                                >
+                                    {language.map((value, i) => (
+                                        <MenuItem value={i}>{value}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        ):(
+                            <Slide top>
+                                <FormControl className={clsx(classes.formControl, 'language')} style={{ marginLeft: '10px' }}>
+                                    <InputLabel id="demo-simple-select-label">Language</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={language[index]}
+                                        onChange={handleChange}
+                                    >
+                                        {language.map((value, i) => (
+                                            <MenuItem value={i}>{value}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Slide>
+                        )}
+                        {isTabletorMobile?(
+                            <Button onClick={resetCode} className={classes.icon}>
+                                <Typography variant="body1" className={classes.headerText}>
+                                    Reset Code
+                                </Typography>
+                            </Button>
+                        ):(
+                            <Spin>
+                                <IconButton onClick={resetCode} className={classes.icon}>
+                                    <RotateLeftRoundedIcon/>
+                                </IconButton>
+                            </Spin>
+                        )}
+                        {isTabletorMobile?(
+                            <Button onClick={themeChange} className={classes.icon}>
+                                <Typography variant="body1" className={classes.headerText}>
+                                    Change IDE Theme
+                                </Typography>
+                            </Button>
+                        ):(
+                            <Zoom>
+                                <IconButton onClick={themeChange} className={classes.icon}>
+                                    {light?<Brightness7RoundedIcon/>:<Brightness4RoundedIcon/>}
+                                </IconButton>
+                            </Zoom>
+                        )}
+                        {isTabletorMobile?(
+                            <Button onClick={() => setSidebar(!sidebar)} className={classes.icon}>
+                                <Typography variant="body1" className={classes.headerText}>
+                                    Run your Code
+                                </Typography>
+                            </Button>
+                        ):(
+                            <Fade right>
+                                <IconButton onClick={() => setSidebar(!sidebar)} className={classes.icon}>
+                                    {isTabletorMobile?'Run your Code':(sidebar?<CloseIcon/>:<PlayArrowRoundedIcon/>)}
+                                </IconButton>
+                            </Fade>
+                        )}
                     </Header>
                     <div className={classes.toolbar}/>
                     <Grid container className={classes.container}>

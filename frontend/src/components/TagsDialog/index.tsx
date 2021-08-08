@@ -26,6 +26,11 @@ const TagsDialog = ({ toggleOpen, tags, setTags, open, action, actionTitle }: Ip
         }
     }
 
+    const cancel = () => {
+        setTags([]);
+        toggleOpen();
+    }
+
     const Tags = [
 		'Array', 'String', 'Hash Table', 'Dynamic Programming', 'Math', 'Depth-First Search', 'Sorting', 'Greedy', 'Breadth-First Search',
 		'Tree', 'Database', 'Binary Tree', 'Binary Search', 'Two Pointers', 'Matrix', 'Bit Manipulation', 'Backtracking', 'Heap (Priority Queue)',
@@ -69,7 +74,7 @@ const TagsDialog = ({ toggleOpen, tags, setTags, open, action, actionTitle }: Ip
                             { actionTitle }
                         </Typography>
                     </Button>
-                    <Button color="primary" size="large" onClick={() => setTags([])}>
+                    <Button color="primary" size="large" onClick={cancel}>
                         <Typography variant="subtitle1" className={classes.buttonText}>
                             Cancel
                         </Typography>

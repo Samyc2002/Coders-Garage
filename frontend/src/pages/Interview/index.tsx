@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
 import useSound from 'use-sound';
+import Countdown from "react-countdown";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, Grid, Typography, Snackbar, useMediaQuery } from '@material-ui/core';
 import { Brightness7Rounded as Brightness7RoundedIcon, Brightness4Rounded as Brightness4RoundedIcon, RotateLeftRounded as RotateLeftRoundedIcon, PlayArrowRounded as PlayArrowRoundedIcon, Close as CloseIcon,  FileCopy as FileCopyIcon } from '@material-ui/icons';
@@ -18,7 +19,11 @@ import MyVideo from '../../components/myVideo';
 import Loading from '../../components/Loading';
 import Details from '../../components/Details';
 import Header from '../../components/Header';
-import IDE from '../../components/IDE';
+import { InterviewIde } from '../../components/IDE';
+import Slide from 'react-reveal/Slide';
+import Zoom from 'react-reveal/Zoom';
+import Fade from 'react-reveal/Fade';
+import Spin from 'react-reveal/Spin';
 import { useStyles } from './styles';
 
 const Interview = (props: any) => {
@@ -32,6 +37,7 @@ const Interview = (props: any) => {
     const [switchSound] = useSound(SwitchSFX, { volume: 1 });
 
     const [index, setIndex] = useState(1);
+    const [snack, setSnack] = useState(false);
     const [ready, setReady] = useState(false);
     const [light, setLight] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -52,8 +58,10 @@ const Interview = (props: any) => {
                 localStorage.removeItem('interview');
                 localStorage.setItem('RoomID', props.match.params.id );
                 setLoading(false);
+                setSnack(false);
             });
         } catch (error) {
+            setSnack(true);
             console.log(error);
         }
     }, [dispatch, props.match.params.id]);
@@ -64,8 +72,10 @@ const Interview = (props: any) => {
             .then(() => {
                 setQuestion(JSON.parse(localStorage.getItem('question') as string));
                 localStorage.removeItem('question');
+                setSnack(false);
             });
         } catch (error) {
+            setSnack(true);
             console.log(error);
         }
     }, [dispatch, interview?.Questions, questionNo]);
@@ -128,6 +138,16 @@ const Interview = (props: any) => {
                     {loading?(
                         <div>
                             <Loading/>
+                            <Snackbar
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                open={snack}
+                                autoHideDuration={6000}
+                                onClose={() => setSnack(false)}
+                                message="Something went wrong!"
+                            />
                         </div>
                     ):(
                         <div>
@@ -137,35 +157,46 @@ const Interview = (props: any) => {
                                     <div className={classes.toolbar}/>
                                     <Grid container justifyContent="center" alignItems="center" className={classes.intro}>
                                         <Grid item xs={12} className={classes.details}>
-                                            <Details interview={interview} me={me} call={call} callUser={callUser} answerCall={answerCall} callAccepted={callAccepted} ready={ready} setReady={setReady}/>
+                                            <Details interview={interview} me={me} call={call} callUser={callUser} answerCall={answerCall} callAccepted={callAccepted} ready={ready} setReady={setReady} stream={stream} callEnded={callEnded}/>
                                         </Grid>
                                     </Grid>
                                 </div>
                             ):(
                                 <div>
                                     <Header>
-                                        <FormControl className={clsx(classes.formControl, 'language')} style={{ marginLeft: '10px' }}>
-                                            <InputLabel id="demo-simple-select-label">Language</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={index}
-                                                onChange={handleChange}
-                                            >
-                                                {language.map((value, i) => (
-                                                    <MenuItem value={i} key={i}>{value}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                        <IconButton onClick={resetCode} className={classes.icon}>
-                                            <RotateLeftRoundedIcon/>
-                                        </IconButton>
-                                        <IconButton onClick={themeChange} className={classes.icon}>
-                                            {light?<Brightness7RoundedIcon/>:<Brightness4RoundedIcon/>}
-                                        </IconButton>
-                                        <IconButton onClick={() => setSidebar(!sidebar)} className={classes.icon}>
-                                            {sidebar?<CloseIcon/>:<PlayArrowRoundedIcon/>}
-                                        </IconButton>
+                                        <Fade>
+                                            <Countdown date={Date.now() + interview?.Duration*60000} onComplete={() => setInterviewCompleted(true)} />
+                                        </Fade>
+                                        <Slide top>
+                                            <FormControl className={clsx(classes.formControl, 'language')} style={{ marginLeft: '10px' }}>
+                                                <InputLabel id="demo-simple-select-label">Language</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={index}
+                                                    onChange={handleChange}
+                                                >
+                                                    {language.map((value, i) => (
+                                                        <MenuItem value={i} key={i}>{value}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        </Slide>
+                                        <Spin>
+                                            <IconButton onClick={resetCode} className={classes.icon}>
+                                                <RotateLeftRoundedIcon/>
+                                            </IconButton>
+                                        </Spin>
+                                        <Zoom>
+                                            <IconButton onClick={themeChange} className={classes.icon}>
+                                                {light?<Brightness7RoundedIcon/>:<Brightness4RoundedIcon/>}
+                                            </IconButton>
+                                        </Zoom>
+                                        <Fade right>
+                                            <IconButton onClick={() => setSidebar(!sidebar)} className={classes.icon}>
+                                                {isTabletorMobile?'Run your Code':(sidebar?<CloseIcon/>:<PlayArrowRoundedIcon/>)}
+                                            </IconButton>
+                                        </Fade>
                                     </Header>
                                     <div className={classes.toolbar}/>
                                     <Grid container className={classes.container}>
@@ -272,7 +303,7 @@ const Interview = (props: any) => {
                                         </Grid>
                                         <Grid item xs={12} sm={9}>
                                             <div>
-                                                <IDE value={code} onChange={setCode} isLight={light} language={modes[index]} interviewMode />
+                                                <InterviewIde value={code} onChange={setCode} isLight={light} language={modes[index]} interviewMode />
                                             </div>
                                         </Grid>
                                     </Grid>

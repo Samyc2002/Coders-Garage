@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert } from '@material-ui/lab';
-import { Button, Grid, Paper, Snackbar, TextField, Typography } from '@material-ui/core';
+import { Button, Grid, Paper, Snackbar, TextField, Typography, Grow } from '@material-ui/core';
 
 import { emailInterviewee } from '../../actions/interview';
 import { useAppDispatch } from '../../Hooks/reduxHooks';
@@ -14,7 +14,9 @@ interface Iprops{
     answerCall: any,
     callAccepted: any,
     ready: boolean,
-    setReady: React.Dispatch<React.SetStateAction<boolean>>
+    setReady: React.Dispatch<React.SetStateAction<boolean>>,
+    stream: any
+    callEnded: any
 }
 
 interface SnackProps{
@@ -38,7 +40,7 @@ const FailureSnack = ({ open, toggleOpen }: SnackProps) => (
     </Snackbar>
 )
 
-const Details = ({ interview, me, call, callUser, answerCall, callAccepted, ready, setReady }: Iprops) => {
+const Details = ({ interview, me, call, callUser, answerCall, callAccepted, ready, setReady, stream, callEnded }: Iprops) => {
 
     const isInterviewer = (interview?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.data.formData.Email);
 
@@ -75,71 +77,73 @@ const Details = ({ interview, me, call, callUser, answerCall, callAccepted, read
     
     return (
         <div>
-            <Paper elevation={3} className={classes.paper}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography variant="h6" className={classes.heading}>
-                            Hey there! {isInterviewer?'Please email your interviewee with your id and wait for him. Once he connects, you can click ready!':`Please check your email for an email from our side containing your intervier's id. Once you get it, copy it and paste in the text field below. Then once you see your interviewer, you can click ready!` }
-                        </Typography>
-                    </Grid>
-                    {isInterviewer?(
-                        <>
-                            <Grid item xs={6}>
-                                <Button variant="contained" color="primary" fullWidth>
-                                    <Typography variant="body1" className={classes.heading} onClick={handleEmail}>
-                                        Email Interviewee
-                                    </Typography>
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button variant="text" color="primary" fullWidth>
-                                    <Typography variant="body1" className={classes.heading} onClick={() => setReady(true)}>
-                                        Ready
-                                    </Typography>
-                                </Button>
-                            </Grid>
-                            {call.isReceivingCall && !callAccepted && (
-                                <Grid item xs={12} className={classes.answerCall}>
-                                    <Typography variant="h6" className={classes.heading}>Interviewee Came &nbsp; &nbsp;</Typography>
-                                    <Button variant="contained" color="primary" onClick={answerCall}>
-                                        <Typography variant="body1" className={classes.heading}>
-                                            Answer
+            <Grow in>
+                <Paper elevation={3} className={classes.paper}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" className={classes.heading}>
+                                Hey there! {isInterviewer?'Please email your interviewee with your id and wait for him. Once he connects, you can click ready!':`Please check your email for an email from our side containing your intervier's id. Once you get it, copy it and paste in the text field below. Then once you see your interviewer, you can click ready!` }
+                            </Typography>
+                        </Grid>
+                        {isInterviewer?(
+                            <>
+                                <Grid item xs={6}>
+                                    <Button variant="contained" color="primary" fullWidth>
+                                        <Typography variant="body1" className={classes.heading} onClick={handleEmail}>
+                                            Email Interviewee
                                         </Typography>
                                     </Button>
                                 </Grid>
-                            )}
-                        </>
-                    ):(
-                        <>
-                            <Grid item xs={12}>
-                                <TextField
-                                    id="id"
-                                    name="id"
-                                    label="Enter Interviewer ID send by email"
-                                    value={id}
-                                    onChange={(e) => setId(e.target.value)}
-                                    fullWidth
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button variant="contained" color="primary" fullWidth>
-                                    <Typography variant="body1" className={classes.heading} onClick={() => callUser(id)}>
-                                        Connect
-                                    </Typography>
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button variant="text" color="primary" fullWidth>
-                                    <Typography variant="body1" className={classes.heading} onClick={() => setReady(true)}>
-                                        Ready
-                                    </Typography>
-                                </Button>
-                            </Grid>
-                        </>
-                    )}
-                </Grid>
-            </Paper>
+                                <Grid item xs={6}>
+                                    <Button variant="text" color="primary" fullWidth disabled={(!stream) || (!callAccepted && callEnded)}>
+                                        <Typography variant="body1" className={classes.heading} onClick={() => setReady(true)}>
+                                            Ready
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                                {call.isReceivingCall && !callAccepted && (
+                                    <Grid item xs={12} className={classes.answerCall}>
+                                        <Typography variant="h6" className={classes.heading}>Interviewee Came &nbsp; &nbsp;</Typography>
+                                        <Button variant="contained" color="primary" onClick={answerCall}>
+                                            <Typography variant="body1" className={classes.heading}>
+                                                Answer
+                                            </Typography>
+                                        </Button>
+                                    </Grid>
+                                )}
+                            </>
+                        ):(
+                            <>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="id"
+                                        name="id"
+                                        label="Enter Interviewer ID send by email"
+                                        value={id}
+                                        onChange={(e) => setId(e.target.value)}
+                                        fullWidth
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="contained" color="primary" fullWidth>
+                                        <Typography variant="body1" className={classes.heading} onClick={() => callUser(id)}>
+                                            Connect
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button variant="text" color="primary" fullWidth>
+                                        <Typography variant="body1" className={classes.heading} onClick={() => setReady(true)}>
+                                            Ready
+                                        </Typography>
+                                    </Button>
+                                </Grid>
+                            </>
+                        )}
+                    </Grid>
+                </Paper>
+            </Grow>
             {success?<SuccessSnack open={open} toggleOpen={toggleOpen}/>:<FailureSnack open={open} toggleOpen={toggleOpen}/>}
         </div>
     )

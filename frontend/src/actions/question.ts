@@ -13,6 +13,18 @@ export const fetchQuestions = () => async (dispatch: Function) => {
     }
 }
 
+export const getQuestionForHome = (formData: any) => async (dispatch: Function) => {
+    dispatch({ type: actionTypes.QUESTION_REQUEST });
+    try {
+        const { data } = await api.getQuestion(formData);
+        localStorage.setItem('questions', JSON.stringify([ data.data ]));
+        dispatch({ type: actionTypes.QUESTION_SUCCESS, payload: data.data});
+    } catch (error) {
+        dispatch({ type: actionTypes.QUESTION_FAILURE, payload: error });
+        console.log('redux', error);
+    }
+}
+
 export const getQuestion = (formData: any) => async (dispatch: Function) => {
     dispatch({ type: actionTypes.QUESTION_REQUEST });
     try {
@@ -40,6 +52,15 @@ export const createQuestion = (formData: any) => async (dispatch: Function) => {
         }
     } catch (error) {
         dispatch({ type: actionTypes.POST_QUESTION_FAILURE, payload: error });
+        console.log(error);
+    }
+}
+
+export const getQuestionByTags = (formData: any) => async(dispatch: Function) => {
+    try{
+        const { data }: any = await api.getQuestionByTags(formData);
+        localStorage.setItem('questions', JSON.stringify(data.data));
+    } catch(error) {
         console.log(error);
     }
 }

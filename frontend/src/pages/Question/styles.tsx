@@ -36,5 +36,9 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
     },
     problem: {
         marginLeft: theme.spacing(2)
+    },
+    headerText: {
+        fontFamily: "'Poppins', sans-serif",
+        textTransform: 'capitalize'
     }
 }));
