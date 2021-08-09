@@ -63,8 +63,8 @@ const LoginForm = () => {
         dispatch(getUser(result, history));
     }
 
-    const googleFailure = () => {
-        console.log('Something went wrong :(');
+    const googleFailure = (error: any) => {
+        console.log('Something went wrong :(', error);
     }
 
     return (
