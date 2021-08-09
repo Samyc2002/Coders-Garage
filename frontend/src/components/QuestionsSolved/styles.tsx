@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     table: {
-        minWidth: 650,
+        width: '100%'
     },
     typography: {
         fontFamily: "'Poppins', sans-serif",
@@ -10,7 +10,11 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         textAlign: 'center'
     },
     paper: {
-        width: '80%',
-        padding: theme.spacing(3)
+        width: '100%',
+        padding: theme.spacing(3),
+        [theme.breakpoints.down('sm')]: {
+            width: '88%',
+            padding: theme.spacing(2)
+        }
     }
 }));

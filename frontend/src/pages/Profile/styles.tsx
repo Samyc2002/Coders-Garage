@@ -3,7 +3,17 @@ import { alpha, createStyles, makeStyles, Theme } from "@material-ui/core";
 export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme) => createStyles({
     toolbar: theme.mixins.toolbar,
     root: {
-        margin: theme.spacing(5)
+        margin: theme.spacing(5),
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        [theme.breakpoints.down('sm')]: {
+            margin: theme.spacing(3),
+            marginTop: theme.spacing(5),
+        }
+    },
+    container: {
+        width: `calc(100% - ${theme.spacing(3)}px)`
     },
     headerTabs: {
         display: 'flex',
@@ -35,11 +45,21 @@ export const useStyles = (isTabletorMobile: boolean) => makeStyles((theme: Theme
         fontFamily: "'Poppins', sans-serif",
         fontWeight: 500
     },
-    fixed: {
-        position: 'fixed',
+    sticky: {
+        position: 'fixed'
+    },
+    vessel: {
         display: 'flex',
-        alignItems: 'center',
-        justifycontent: 'center',
+        flexDirection: 'column',
         width: '100%'
+    },
+    hidden: {
+        display: 'none'
+    },
+    center: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 }));

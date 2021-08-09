@@ -7,8 +7,14 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         textAlign: 'center'
     },
     paper: {
-        width: '80%',
+        width: '100%',
         padding: theme.spacing(3),
-        marginBottom: theme.spacing(3)
+        marginBottom: theme.spacing(3),
+        [theme.breakpoints.down('md')]: {
+            width: '100%'
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '80%'
+        }
     }
 }));

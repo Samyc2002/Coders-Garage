@@ -58,3 +58,15 @@ export const signUp = (formData: any, history: any) => async (dispatch: Function
         console.log(error);
     }
 }
+
+export const updateUser = (formData: any, token: string) => async (dispatch: Function) => {
+    dispatch({ type: actionTypes.LOGIN_REQUEST });
+    try {
+        const { data }: any = await api.updateUser(formData);
+        localStorage.setItem(('profile'), JSON.stringify({ data: { formData: data.data, token } }));
+        dispatch({ type: actionTypes.LOGIN_SUCCESS, data: { ...data.data, token } });
+    } catch (error) {
+        dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error });
+        console.log(error);
+    }
+}

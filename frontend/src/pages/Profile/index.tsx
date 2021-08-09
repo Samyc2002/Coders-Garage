@@ -16,9 +16,9 @@ const Profile = () => {
 
     const classes = useStyles(isTabletorMobile)();
     
+    const user = JSON.parse(localStorage.getItem('profile') as string);
     const [activeTab, setActiveTab] = useState(0);
     const [loading, setLoading] = useState(true);
-    const user = JSON.parse(localStorage.getItem('profile') as string);
 
     useEffect(() => {
         setTimeout(() => {
@@ -45,12 +45,12 @@ const Profile = () => {
                     </Header>
                     <div className={classes.toolbar}/>
                     <div  className={classes.root}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6} className={classes.fixed}>
+                        <Grid container spacing={3} className={classes.container}>
+                            <Grid item xs={12} md={6} className={clsx(classes.vessel, { [classes.sticky]: !isTabletorMobile })}>
                                 <ProfileData user={user} />
                             </Grid>
-                            <Grid item xs={12} sm={6}/>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} md={6} className={clsx({ [classes.hidden]: isTabletorMobile })}/>
+                            <Grid item xs={12} md={6} className={classes.center}>
                                 <QuestionsCreated user={user} />
                                 <QuestionsSolved user={user} />
                             </Grid>
