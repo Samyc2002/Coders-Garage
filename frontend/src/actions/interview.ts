@@ -22,6 +22,15 @@ export const createInterview = (formData: any) => async (dispatch: Function) => 
     }
 }
 
+export const deleteInterview = (formData: any) => async (dispatch: Function) => {
+    try{
+        await api.deleteInterview(formData);
+        console.log('done');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const emailInterviewee = (formData: any) => async (dispatch: Function) => {
     try{
         await api.emailInterviewee(formData);

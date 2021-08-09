@@ -65,6 +65,23 @@ export class InterviewController {
         }
     }
 
+    static async deleteInterview(req: Request, res: Response, next: NextFunction) {
+
+        console.log(req.body);
+
+        try {
+            
+            await Interview.findOneAndDelete({ _id: req.body.id });
+
+            res.status(200).json({
+                success: true
+            })
+        } catch (error) {
+            
+            next(error);
+        }
+    }
+
     static async emailInterviewee(req: Request, res: Response, next: NextFunction) {
 
         const interview = req.body;

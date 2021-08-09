@@ -25,6 +25,7 @@ export const getQuestionByTags = (formData: any) => API.post('/question/tags', f
 export const getInterview = (formData: any) => API.post('/interview/data', formData);
 export const createInterview = (formData: any) => API.post('/interview', formData);
 export const emailInterviewee = (formData: any) => API.post('/interview/email', formData);
+export const deleteInterview = (formdata: any) => API.post('/interview/delete', formdata);
 
 export const getSubmissions = (formData: any) => API.get(`/submission/${formData.Creator}`);
 export const makeSubmission = (formData: any) => API.post('/submission', formData);

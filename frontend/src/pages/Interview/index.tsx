@@ -308,7 +308,7 @@ const Interview = (props: any) => {
                                         </Grid>
                                     </Grid>
                                     <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]} code={code} testcases={question?.TestCases} TimeLimit={question?.TimeLimit} MemoryLimit={question?.MemoryLimit} backup={{ input: question?.sampleInput, output: question?.sampleOutput}} question={question}/>
-                                    <InterviewCompletedDialog open={interviewCompleted && ready} />
+                                    <InterviewCompletedDialog open={interviewCompleted && ready} RoomId={interview?._id} />
                                     <Snackbar
                                         anchorOrigin={{
                                             vertical: 'bottom',

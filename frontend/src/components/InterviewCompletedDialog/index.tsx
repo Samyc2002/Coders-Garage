@@ -2,17 +2,33 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Dialog, DialogContent, DialogTitle, Typography, DialogActions, Button, DialogContentText } from '@material-ui/core';
 
+import { deleteInterview } from '../../actions/interview';
+import { useAppDispatch } from '../../Hooks/reduxHooks';
 import { useStyles } from './styles';
 
 interface Iprops{
-    open: boolean
+    open: boolean,
+    RoomId: any
 }
 
-const InterviewCompletedDialog = ({ open }: Iprops) => {
+const InterviewCompletedDialog = ({ open, RoomId }: Iprops) => {
 
     const classes = useStyles();
 
+    const dispatch = useAppDispatch();
+
     const history = useHistory();
+
+    const handleClick = () => {
+        try {
+            dispatch(deleteInterview({ id: RoomId }))
+            .then(() => {
+                history.push('/interview_home');
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     return (
         <div className={classes.root}>
@@ -30,7 +46,7 @@ const InterviewCompletedDialog = ({ open }: Iprops) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" color="primary" onClick={() => history.push('/interview_home')}>
+                    <Button variant="contained" color="primary" onClick={handleClick}>
                         <Typography variant="body1" className={classes.text}>
                             Understood
                         </Typography>
