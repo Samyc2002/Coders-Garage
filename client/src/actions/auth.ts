@@ -1,78 +1,72 @@
+import * as api from '../api';
 import * as actionTypes from '../constants/actionTypes';
-import * as api from '../api/index';
 
-export const signIn = (formData: any, router: any) => async (dispatch: Function) => {
-
+export const getUser = (formData: any, history: any) => async(dispatch: Function) => {
+    dispatch({ type: actionTypes.LOGIN_REQUEST });
     try {
-
-        const { data }: any = await api.signIn(formData);
-
+        const { data } = await api.getUser(formData);
         if(data.data === null) {
-            localStorage.setItem('profile', JSON.stringify({ ...data.data, token: data.data.token }));
-            dispatch({ type: actionTypes.AUTH, data: data.data });
+            dispatch({ type: actionTypes.LOGIN_FAILURE, payload: new Error('User does not exist') });
         }
         else {
-            localStorage.setItem('profile', JSON.stringify({ ...data.data, token: data.data.token }));
-            dispatch({ type: actionTypes.AUTH, data: data.data });
-            router.push('/');
+            const result = {
+                formData: data.data,
+                token : formData.token
+            }
+            localStorage.setItem('profile', JSON.stringify({ data: result }));
+            dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: result });
+            history.push('/');
         }
     } catch (error) {
-
+        dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error });
         console.log(error);
     }
 }
 
-export const signUp = (formData: any, router: any) => async (dispatch: Function) => {
-
+export const signIn = (formData: any, history: any) => async (dispatch: Function) => {
+    dispatch({ type: actionTypes.LOGIN_REQUEST });
     try {
-        
-        const { data }: any = await api.signUp(formData);
-
+        const { data } = await api.signIn(formData);
         if(data.data === null) {
-            localStorage.setItem('profile', JSON.stringify({ formData: null }));
-            dispatch({ type: actionTypes.AUTH, data: data.data });
+            dispatch({ type: actionTypes.LOGIN_FAILURE, payload: new Error('User does not exist') });
         }
         else {
-            localStorage.setItem('profile', JSON.stringify({ ...data.data, token: data.data.token }));
-            dispatch({ type: actionTypes.AUTH, data: data.data });
-            router.push('/');
+            localStorage.setItem('profile', JSON.stringify({ data: data.data }));
+            dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data.data });
+            history.push('/');
         }
     } catch (error) {
-
+        dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error });
         console.log(error);
     }
 }
 
-export const createUser = (formData: any, token: string) => async (dispatch: Function) => {
-
-    try{
-
-        const { data }: any = await api.getUser(formData);
+export const signUp = (formData: any, history: any) => async (dispatch: Function) => {
+    dispatch({ type: actionTypes.LOGIN_REQUEST });
+    try {
+        const { data } = await api.createUser(formData);
         if(data.data === null) {
-            const result: any = await api.createUser(formData);
-            localStorage.setItem(('profile'), JSON.stringify({ formData: result.data.data, token }));
-            dispatch({ type: actionTypes.CREATE, data: { ...result.data.data, token } });
+            dispatch({ type: actionTypes.LOGIN_FAILURE, payload: new Error('User already exists') });
         }
         else {
-            localStorage.setItem(('profile'), JSON.stringify({ formData: data.data, token }));
-            dispatch({ type: actionTypes.CREATE, data: { ...data.data, token } });
+            localStorage.setItem('profile', JSON.stringify({ data: data.data }));
+            dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data.data });
+            history.push('/');
         }
-    }
-    catch(error) {
-
+    } catch (error) {
+        dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error });
         console.log(error);
     }
 }
 
 export const updateUser = (formData: any, token: string) => async (dispatch: Function) => {
-
+    dispatch({ type: actionTypes.LOGIN_REQUEST });
     try {
-        
         const { data }: any = await api.updateUser(formData);
-        localStorage.setItem(('profile'), JSON.stringify({ formData: data.data, token }));
-        dispatch({ type: actionTypes.UPDATE, data: { ...data.data, token } });
+        localStorage.setItem(('profile'), JSON.stringify({ data: { formData: data.data, token } }));
+        dispatch({ type: actionTypes.LOGIN_SUCCESS, data: { ...data.data, token } });
     } catch (error) {
-
+        dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error });
         console.log(error);
     }
 }

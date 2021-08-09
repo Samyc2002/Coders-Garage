@@ -2,19 +2,40 @@ import { Reducer } from 'redux';
 
 import * as actionTypes from '../constants/actionTypes';
 
-export const interviewReducer: Reducer = (state = { interviewData: null }, action) => {
+interface interviewState{
+    interviewData: any,
+    isLoading: boolean,
+    error: any
+}
+
+const initialState: interviewState = {
+    interviewData: null,
+    isLoading: false,
+    error: null
+};
+
+export const interviewReducer: Reducer = (state = initialState, action) => {
+
     switch(action.type) {
-        
-        case actionTypes.GET_INTERVIEW:
-            return { ...state, interviewData: action.data};
-
-        case actionTypes.CREATE_INTERVIEW:
-            return { ...state, interviewData: action.data };
-
-        case actionTypes.UPDATE_QUESTION:
-            return { ...state, questionData: action.data };
-        
+        case actionTypes.INTERVIEW_REQUEST:
+            return {
+                ...state,
+                isLoading: true
+            }
+        case actionTypes.INTERVIEW_SUCCESS:
+            return {
+                ...state,
+                interviewData: action.payload,
+                isLoading: false
+            }
+        case actionTypes.INTERVIEW_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload
+            }
         default:
-            return state;
+            return state
     }
 }
+

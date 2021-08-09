@@ -8,7 +8,7 @@ import './styles.css';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     video: {
-        width: '550px',
+        width: '450px',
         zIndex: 10000,
         [theme.breakpoints.down('xs')]: {
             width: '300px',
@@ -70,25 +70,22 @@ const MyVideo = () => {
     const { myVideo }: any = useContext(SocketContext);
 
     return (
-
-        <div className="container">
-            <animated.div
-                ref={domTarget}
-                className="card"
-                style={{
-                    transform: 'perspective(600px)',
-                    x,
-                    y,
-                    scale: to([scale, zoom], (s, z) => s + z),
-                    rotateX,
-                    rotateY,
-                    rotateZ,
-                }}>
-                    <div className={classes.video}>
-                        <video muted ref={myVideo} autoPlay/>
-                    </div>
-            </animated.div>
-        </div>
+        <animated.div
+            ref={domTarget}
+            className="card"
+            style={{
+                transform: 'perspective(600px)',
+                x,
+                y,
+                scale: to([scale, zoom], (s, z) => s + z),
+                rotateX,
+                rotateY,
+                rotateZ,
+            }}>
+                <div className={classes.video}>
+                    <video muted ref={myVideo} autoPlay/>
+                </div>
+        </animated.div>
     )
 }
 

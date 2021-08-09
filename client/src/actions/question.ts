@@ -1,71 +1,66 @@
+import * as api from '../api';
 import * as actionTypes from '../constants/actionTypes';
-import * as api from '../api/index';
+
+export const fetchQuestions = () => async (dispatch: Function) => {
+    dispatch({ type: actionTypes.QUESTION_REQUEST });
+    try {
+        const { data } = await api.fetchQuestions();
+        localStorage.setItem('questions', JSON.stringify(data.data));
+        dispatch({ type: actionTypes.QUESTION_SUCCESS, payload: data.data});
+    } catch (error) {
+        dispatch({ type: actionTypes.QUESTION_FAILURE, payload: error });
+        console.log(error);
+    }
+}
+
+export const getQuestionForHome = (formData: any) => async (dispatch: Function) => {
+    dispatch({ type: actionTypes.QUESTION_REQUEST });
+    try {
+        const { data } = await api.getQuestion(formData);
+        localStorage.setItem('questions', JSON.stringify([ data.data ]));
+        dispatch({ type: actionTypes.QUESTION_SUCCESS, payload: data.data});
+    } catch (error) {
+        dispatch({ type: actionTypes.QUESTION_FAILURE, payload: error });
+        console.log('redux', error);
+    }
+}
 
 export const getQuestion = (formData: any) => async (dispatch: Function) => {
-
+    dispatch({ type: actionTypes.QUESTION_REQUEST });
     try {
-        
-        const { data }: any = await api.getQuestion(formData);
-        localStorage.setItem('tmp', JSON.stringify(data));
-        dispatch({ type: actionTypes.GET_QUESTION, data: formData });
+        const { data } = await api.getQuestion(formData);
+        localStorage.setItem('question', JSON.stringify(data.data));
+        dispatch({ type: actionTypes.QUESTION_SUCCESS, payload: data.data});
     } catch (error) {
-        
-        console.log(error);
+        dispatch({ type: actionTypes.QUESTION_FAILURE, payload: error });
+        console.log('redux', error);
     }
 }
 
 export const createQuestion = (formData: any) => async (dispatch: Function) => {
-
+    dispatch({ type: actionTypes.POST_QUESTION_REQUEST });
     try {
-        
-        const { data }: any = await api.getQuestion(formData);
-        if(data.data === null) {
-
-            const result: any = await api.createQuestion(formData);
-            dispatch({ type: actionTypes.CREATE_QUESTION, data: { ...result.data.data } });
+        const result = await api.getQuestion(formData);
+        if(result.data.data !== null) {
+            dispatch({ type: actionTypes.POST_QUESTION_FAILURE, payload: new Error('Question ID already exists!') });
+            console.log('Question ID already exists!');
         }
         else {
-
-            console.log('Question ID already exists');
+            const { data } = await api.createQuestion(formData);
+            localStorage.setItem('question', JSON.stringify(data.data));
+            dispatch({ type: actionTypes.POST_QUESTION_SUCCESS, payload: data.data });
         }
     } catch (error) {
-        
-        console.log(error);
-    }
-}
-
-export const updateQuestion = (formData: any) => async(dispatch: Function) => {
-
-    try {
-        
-        const { data }: any = await api.updateQuestion(formData);
-        dispatch({ type: actionTypes.UPDATE_QUESTION, data: data.data });
-    } catch (error) {
-        
-        console.log(error);
-    }
-}
-
-export const fetchQuestions = () => async(dispatch: Function) => {
-
-    try {
-        
-        const { data }: any = await api.fetchQuestions();
-        localStorage.setItem('questions', JSON.stringify(data.data));
-    } catch (error) {
-        
+        dispatch({ type: actionTypes.POST_QUESTION_FAILURE, payload: error });
         console.log(error);
     }
 }
 
 export const getQuestionByTags = (formData: any) => async(dispatch: Function) => {
-
     try{
-
         const { data }: any = await api.getQuestionByTags(formData);
-        localStorage.setItem('questionsbytags', JSON.stringify(data.data));
+        localStorage.setItem('questions', JSON.stringify(data.data));
     } catch(error) {
-
         console.log(error);
     }
 }

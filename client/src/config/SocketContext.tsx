@@ -36,10 +36,9 @@ const ContextProvider = ({ children }: Child) => {
 		
 		socket.on('me', (id, cb) => {
 			setMe(id);
-			cb();
 		});
 
-		socket.emit('join', JSON.parse(localStorage.getItem('room') as string)?.RoomId)
+		socket.emit('join', localStorage.getItem('RoomID'))
 
 		socket.on('callEnded', () => {
 			connectionRef.current?.destroy();
@@ -57,10 +56,9 @@ const ContextProvider = ({ children }: Child) => {
 
 	useEffect(() => {
 		socket.on('code', message => {
-			console.log(message);
 			setCode(message);
 		});
-	}, [sendChange, setCode])
+	}, [sendChange, setCode]);
 
 	const answerCall = () => {
 		setCallAccepted(true);

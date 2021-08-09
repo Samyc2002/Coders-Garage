@@ -1,39 +1,26 @@
-import * as api from '../api/index';
-import { updateUser } from './auth';
+import * as api from '../api';
+import * as actionTypes from '../constants/actionTypes';
 
 export const getSubmissions = (formData: any) => async (dispatch: Function) => {
-
+    dispatch({ type: actionTypes.SUBMISSION_REQUEST });
     try {
-        
         const { data } = await api.getSubmissions(formData);
-        localStorage.setItem('Submissions', JSON.stringify(data.data));
+        localStorage.setItem('submission', JSON.stringify(data.data));
+        dispatch({ type: actionTypes.SUBMISSION_SUCCESS, payload: data.data});
     } catch (error) {
-        
+        dispatch({ type: actionTypes.SUBMISSION_FAILURE, payload: error });
         console.log(error);
     }
 }
 
 export const makeSubmission = (formData: any) => async (dispatch: Function) => {
-
+    dispatch({ type: actionTypes.SUBMISSION_REQUEST });
     try {
-        
-        const { data } = await api.makeSubmission(formData);
-        if(data.data !== null) {
-
-            let user = JSON.parse(localStorage.getItem('profile') as string);
-
-            if(!user?.formData.questionsSolved.includes(formData.QuestionID)) {
-
-                user?.formData.questionsSolved.push(formData.QuestionID);
-                dispatch(updateUser(user?.formData, user?.token));
-            }
-        }
-        else {
-
-            console.log('Something went wrong');
-        }
+        const { data } = await api.createQuestion(formData);
+        localStorage.setItem('submission', JSON.stringify(data.data));
+        dispatch({ type: actionTypes.SUBMISSION_SUCCESS, payload: data.data });
     } catch (error) {
-        
+        dispatch({ type: actionTypes.SUBMISSION_FAILURE, payload: error });
         console.log(error);
     }
 }

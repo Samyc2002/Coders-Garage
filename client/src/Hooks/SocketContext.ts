@@ -18,4 +18,4 @@ interface Context{
 	setCode: any
 }
 
-export const SocketContext = createContext<Context | null>(null);
+export const SocketContext = createContext<Context>(null!);

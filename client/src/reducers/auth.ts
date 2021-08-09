@@ -2,16 +2,40 @@ import { Reducer } from 'redux';
 
 import * as actionTypes from '../constants/actionTypes';
 
-export const authReducer: Reducer = (state = { authData: null }, action) => {
-    switch(action.type) {
-        case actionTypes.AUTH:
-            return { ...state, authData: action.data };
+interface authState{
+    authData: any,
+    isLoading: boolean,
+    error: any
+}
 
-        case actionTypes.LOGOUT:
-            localStorage.removeItem('profile');
-            return { ...state, authdata: null };
-        
+const initialState: authState = {
+    authData: null,
+    isLoading: false,
+    error: null
+};
+
+export const authReducer: Reducer = (state = initialState, action) => {
+
+    switch(action.type) {
+        case actionTypes.LOGIN_REQUEST:
+            return {
+                ...state,
+                isLoading: true
+            }
+        case actionTypes.LOGIN_SUCCESS:
+            return {
+                ...state,
+                authData: action.payload,
+                isLoading: false
+            }
+        case actionTypes.LOGIN_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload
+            }
         default:
-            return state;
+            return state
     }
 }
+

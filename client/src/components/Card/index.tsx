@@ -1,48 +1,46 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Card, CardMedia, CardContent, CardActions, Typography } from '@material-ui/core';
 
-import './styles.css'
-import { CardActionArea, CardMedia } from '@material-ui/core';
+import { useStyles } from './styles';
 
-const useStyles = makeStyles({
-	root: {
-		width: 345
-	},
-	media: {
-		height: 140,
-	},
-});
-
-interface Content{
-    image: string,
-    heading: string,
-    body: string | null,
-    handleClick?: any,
-	children?:React.ReactChild
+interface Iprops{
+    fullWidth?: boolean,
+    image?: string,
+    heading?: string,
+    body?: string,
+    children?: React.ReactNode
 }
 
-const SimpleCard = ({ image, heading, body, handleClick, children }: Content) => {
-	const classes = useStyles();
+const CardComponent = ({ image, heading, body, children, fullWidth=false }: Iprops) => {
 
-	return (
-		<Card className={classes.root}>
-		<CardActionArea onClick={handleClick}>
-			<CardMedia
-				className={classes.media}
-				image={image}
-				title={heading}
-			/>
-			<CardContent>
-			<Typography gutterBottom variant="h5" component="h2">{ heading }</Typography>
-			<Typography variant="body2" color="textSecondary" component="p">{ body }</Typography>
-			</CardContent>
-			{children}
-		</CardActionArea>
-		</Card>
-	);
+    const classes = useStyles(fullWidth)();
+
+    return (
+        <div>
+            <Card className={classes.root} elevation={5}>
+                <div>
+                    {image && <CardMedia
+                        className={classes.media}
+                        image={image}
+                        title="image"
+                    />}
+                    <CardContent className={classes.content}>
+                        {heading && (
+                            <Typography variant="h4" gutterBottom className={classes.heading}>
+                                { heading }
+                            </Typography>
+                        )}
+                        <Typography variant="h6" className={classes.typography}>
+                            { body }
+                        </Typography>
+                    </CardContent>
+                </div>
+                <CardActions className={classes.actions}>
+                    { children }
+                </CardActions>
+            </Card>
+        </div>
+    )
 }
 
-export default SimpleCard;
+export default CardComponent;
