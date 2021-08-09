@@ -1,6 +1,8 @@
 @import 'codemirror/lib/codemirror.css';
-@import 'codemirror/theme/material-darker.css';
 @import 'codemirror/theme/eclipse.css';
+@import 'codemirror/theme/material-darker.css';
+@import 'codemirror/addon/fold/foldgutter.css';
+@import 'codemirror/addon/display/fullscreen.css';
 
 .CodeMirror{
     height: 83vh;
