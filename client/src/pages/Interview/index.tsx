@@ -48,7 +48,7 @@ const Interview = (props: any) => {
     const [question, setQuestion] = useState(JSON.parse(localStorage.getItem('question') as string));
     const [interview, setInterview] = useState(JSON.parse(localStorage.getItem('interview') as string));
     const isInterviewer = (interview?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.data.formData.Email);
-    const { stream, callAccepted, callEnded, name, setName, call, answerCall, me, callUser, code, setCode }: any = useContext(SocketContext);
+    const { stream, callAccepted, callEnded, setName, call, answerCall, me, callUser, code, setCode }: any = useContext(SocketContext);
 
     useEffect(() => {
         try {
@@ -82,12 +82,12 @@ const Interview = (props: any) => {
 
     useEffect(() => {
         document.addEventListener('visibilitychange', () => {
-            if(document.hidden && name !== 'Interviewer') {
+            if(document.hidden && !isInterviewer) {
                 setInterviewCompleted(true);
                 console.log('Caught yah!');
             }
         });
-    }, [name]);
+    }, [isInterviewer]);
 
     useEffect(() => {
         setName(isInterviewer?'Interviewer':'Interviewee');
