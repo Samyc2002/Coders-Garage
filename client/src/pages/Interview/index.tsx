@@ -46,7 +46,7 @@ const Interview = (props: any) => {
     const [loading , setLoading] = useState(true);
     const [questionNo, setQuestionNo] = useState(0);
     const [instructions, setInstructions] = useState(false);
-    const [interviewCompleted, setInterviewCompleted] = useState(true);
+    const [interviewCompleted, setInterviewCompleted] = useState(false);
     const [question, setQuestion] = useState(JSON.parse(localStorage.getItem('question') as string));
     const [interview, setInterview] = useState(JSON.parse(localStorage.getItem('interview') as string));
     const isInterviewer = (interview?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.data.formData.Email);
@@ -160,7 +160,7 @@ const Interview = (props: any) => {
                     ):(
                         <div>
                             <div>
-                                {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>}
+                                {/* {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>} */}
                                 <Header>
                                     <Fade>
                                         <Countdown date={Date.now() + interview?.Duration*60000} onComplete={() => setInterviewCompleted(true)} />
