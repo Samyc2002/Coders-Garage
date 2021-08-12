@@ -7,7 +7,6 @@ export const useStyles = makeStyles((theme: Theme) => createStyles({
         textAlign: 'center'
     },
     text: {
-        fontFamily: "'Poppins', sans-serif",
-        fontWeight: 600
+        fontFamily: "'Poppins', sans-serif"
     }
 }));
