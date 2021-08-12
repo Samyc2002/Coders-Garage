@@ -14,7 +14,7 @@ const InstructionsDialog = ({ open, toggleOpen}: Iprops) => {
 
     return (
         <div>
-            <Dialog open={open} onClose={toggleOpen}>
+            <Dialog open={open} onClose={toggleOpen} maxWidth='sm' fullWidth>
                 <DialogTitle>
                     <Typography variant="h6" color="primary" className={classes.heading}>
                         Instructions
@@ -61,7 +61,7 @@ const InstructionsDialog = ({ open, toggleOpen}: Iprops) => {
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" color="primary" onClick={toggleOpen}>
-                        <Typography variant="body1" color="primary" className={classes.heading}>
+                        <Typography variant="body1" className={classes.heading}>
                             Understood
                         </Typography>
                     </Button>

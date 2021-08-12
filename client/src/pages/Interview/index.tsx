@@ -45,12 +45,12 @@ const Interview = (props: any) => {
     const [sidebar, setSidebar] = useState(false);
     const [loading , setLoading] = useState(true);
     const [questionNo, setQuestionNo] = useState(0);
-    const [interviewCompleted, setInterviewCompleted] = useState(false);
+    const [instructions, setInstructions] = useState(false);
+    const [interviewCompleted, setInterviewCompleted] = useState(true);
     const [question, setQuestion] = useState(JSON.parse(localStorage.getItem('question') as string));
     const [interview, setInterview] = useState(JSON.parse(localStorage.getItem('interview') as string));
     const isInterviewer = (interview?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.data.formData.Email);
     const { stream, callAccepted, callEnded, setName, call, answerCall, me, callUser, code, setCode }: any = useContext(SocketContext);
-    const [instructions, setInstructions] = useState(!isInterviewer);
 
     useEffect(() => {
         try {
@@ -66,7 +66,7 @@ const Interview = (props: any) => {
             setSnack(true);
             console.log(error);
         }
-    }, [dispatch, props.match.params.id]);
+    }, [dispatch, isInterviewer, props.match.params.id]);
 
     useEffect(() => {
         try {
@@ -159,7 +159,7 @@ const Interview = (props: any) => {
                         </div>
                     ):(
                         <div>
-                            <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>
+                            {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>}
                             {!ready?(
                                 <div>
                                     <Header/>
