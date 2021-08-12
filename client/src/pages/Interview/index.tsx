@@ -39,18 +39,17 @@ const Interview = (props: any) => {
 
     const [index, setIndex] = useState(1);
     const [snack, setSnack] = useState(false);
-    const [ready, setReady] = useState(false);
     const [light, setLight] = useState(false);
     const [copied, setCopied] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [loading , setLoading] = useState(true);
     const [questionNo, setQuestionNo] = useState(0);
-    const [instructions, setInstructions] = useState(false);
+    const [instructions, setInstructions] = useState(true);
+    const { setName, code, setCode }: any = useContext(SocketContext);
     const [interviewCompleted, setInterviewCompleted] = useState(false);
     const [question, setQuestion] = useState(JSON.parse(localStorage.getItem('question') as string));
     const [interview, setInterview] = useState(JSON.parse(localStorage.getItem('interview') as string));
     const isInterviewer = (interview?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.data.formData.Email);
-    const { stream, callAccepted, callEnded, setName, call, answerCall, me, callUser, code, setCode }: any = useContext(SocketContext);
 
     useEffect(() => {
         try {
@@ -85,13 +84,13 @@ const Interview = (props: any) => {
     useEffect(() => {
         if(!isInterviewer) {
             document.addEventListener('visibilitychange', () => {
-                if(document.hidden) {
+                if(document.hidden && !instructions) {
                     setInterviewCompleted(true);
                     console.log('Caught yah!');
                 }
             });
         }
-    }, [isInterviewer]);
+    }, [instructions, isInterviewer]);
 
     useEffect(() => {
         setName(isInterviewer?'Interviewer':'Interviewee');
@@ -160,7 +159,7 @@ const Interview = (props: any) => {
                     ):(
                         <div>
                             <div>
-                                {/* {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>} */}
+                                {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>}
                                 <Header>
                                     <Fade>
                                         <Countdown date={Date.now() + interview?.Duration*60000} onComplete={() => setInterviewCompleted(true)} />

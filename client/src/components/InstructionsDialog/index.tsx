@@ -14,7 +14,16 @@ const InstructionsDialog = ({ open, toggleOpen}: Iprops) => {
 
     return (
         <div>
-            <Dialog open={open} onClose={toggleOpen} maxWidth='sm' fullWidth>
+            <Dialog
+                open={open}
+                onClose={(event, reason) => {
+                    if(!reason) {
+                        toggleOpen();
+                    }
+                }}
+                maxWidth='sm'
+                fullWidth
+            >
                 <DialogTitle>
                     <Typography variant="h6" color="primary" className={classes.heading}>
                         Instructions
