@@ -90,15 +90,8 @@ const Interview = (props: any) => {
                     console.log('Caught yah!');
                 }
             });
-
-            // return document.removeEventListener('visibilitychange', () => {
-            //     if(document.hidden && ready) {
-            //         setInterviewCompleted(true);
-            //         console.log('Caught yah!');
-            //     }
-            // });
         }
-    }, [isInterviewer, ready]);
+    }, [isInterviewer]);
 
     useEffect(() => {
         setName(isInterviewer?'Interviewer':'Interviewee');
@@ -313,7 +306,7 @@ const Interview = (props: any) => {
                                     </Grid>
                                 </Grid>
                                 <IdeDrawer sidebar={sidebar} toggleSidebar={toggleSidebar} language={format[index]} code={code} testcases={question?.TestCases} TimeLimit={question?.TimeLimit} MemoryLimit={question?.MemoryLimit} backup={{ input: question?.sampleInput, output: question?.sampleOutput}} question={question}/>
-                                <InterviewCompletedDialog open={interviewCompleted && ready && !isInterviewer} RoomId={interview?._id} />
+                                <InterviewCompletedDialog open={interviewCompleted && !isInterviewer} RoomId={interview?._id} />
                                 <Snackbar
                                     anchorOrigin={{
                                         vertical: 'bottom',
