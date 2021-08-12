@@ -159,7 +159,7 @@ const Interview = (props: any) => {
                         </div>
                     ):(
                         <div>
-                            {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>}
+                            {/* {!isInterviewer && <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>} */}
                             {!ready?(
                                 <div>
                                     <Header/>
