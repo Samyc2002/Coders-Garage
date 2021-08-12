@@ -10,6 +10,7 @@ import InterviewCompletedDialog from '../../components/InterviewCompletedDialog'
 import SmallScreenDialog from '../../components/SmallScreenDialog';
 import IdeDrawer from '../../components/Submission_IDE_Drawer';
 import { SocketContext } from '../../config/SocketContext';
+import InstructionsDialog from '../../components/InstructionsDialog';
 import { useAppDispatch } from '../../Hooks/reduxHooks';
 import SwitchSFX from '../../assets/sounds/Switch.mp3';
 import { getInterview } from '../../actions/interview';
@@ -49,6 +50,7 @@ const Interview = (props: any) => {
     const [interview, setInterview] = useState(JSON.parse(localStorage.getItem('interview') as string));
     const isInterviewer = (interview?.InterviewerEmail === JSON.parse(localStorage.getItem('profile') as string)?.data.formData.Email);
     const { stream, callAccepted, callEnded, setName, call, answerCall, me, callUser, code, setCode }: any = useContext(SocketContext);
+    const [instructions, setInstructions] = useState(!isInterviewer);
 
     useEffect(() => {
         try {
@@ -83,13 +85,13 @@ const Interview = (props: any) => {
     useEffect(() => {
         if(!isInterviewer) {
             document.addEventListener('visibilitychange', () => {
-                if(document.hidden) {
+                if(document.hidden && ready) {
                     setInterviewCompleted(true);
                     console.log('Caught yah!');
                 }
             });
         }
-    }, [isInterviewer]);
+    }, [isInterviewer, ready]);
 
     useEffect(() => {
         setName(isInterviewer?'Interviewer':'Interviewee');
@@ -97,6 +99,10 @@ const Interview = (props: any) => {
 
     const toggleSidebar = () => {
         setSidebar(!sidebar);
+    }
+
+    const toggleInstructions = () => {
+        setInstructions(!instructions);
     }
 
     const resetCode = () => {
@@ -153,6 +159,7 @@ const Interview = (props: any) => {
                         </div>
                     ):(
                         <div>
+                            <InstructionsDialog open={instructions} toggleOpen={toggleInstructions}/>
                             {!ready?(
                                 <div>
                                     <Header/>
