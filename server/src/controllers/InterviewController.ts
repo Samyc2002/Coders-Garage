@@ -33,11 +33,11 @@ export class InterviewController {
 
             const message = {
 
-                to: `${req.body.IntervieweeEmail}`,
+                to: `${req.body.IntervieweeEmail}, ${req.body.InterviewerEmail}`,
                 from: `Coder's Garage <`+`${req.body.InterviewerEmail}>`,
                 subject: `Interview scheduled on ${req.body.StartTime}`,
-                text: `This email confirms your interview shedule on ${req.body.StartTime}. Thank You.`,
-                html: `<p>This email confirms your interview shedule on ${req.body.StartTime}.<br><br>Thank You.</p>`
+                text: `This email confirms your interview shedule on ${req.body.StartTime}. Your Room ID is ${req.body.RoomId}. Thank You.`,
+                html: `<p>This email confirms your interview shedule on ${req.body.StartTime}. Your Room ID is ${req.body.RoomId}.<br><br>Thank You.</p>`
             };
 
             const transporter = nodemailer.createTransport({

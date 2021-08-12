@@ -82,7 +82,7 @@ const Details = ({ interview, me, call, callUser, answerCall, callAccepted, read
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Typography variant="h6" className={classes.heading}>
-                                Hey there! {isInterviewer?'Please email your interviewee with your id and wait for him. Once he connects, you can click ready!':`Please check your email for an email from our side containing your intervier's id. Once you get it, copy it and paste in the text field below. Then once you see your interviewer, you can click ready!` }
+                                Hey there! {isInterviewer?'Please email your interviewee with your id and wait for him. Once he connects, you can click ready!':`Please check your email for an email from our side containing your interviewer's id. Once you get it, copy it and paste in the text field below. Then once you see your interviewer, you can click ready!` }
                             </Typography>
                         </Grid>
                         {isInterviewer?(

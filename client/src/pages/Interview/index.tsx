@@ -81,13 +81,15 @@ const Interview = (props: any) => {
     }, [dispatch, interview?.Questions, questionNo]);
 
     useEffect(() => {
-        document.addEventListener('visibilitychange', () => {
-            if(document.hidden) {
-                setInterviewCompleted(true);
-                console.log('Caught yah!');
-            }
-        });
-    }, []);
+        if(!isInterviewer) {
+            document.addEventListener('visibilitychange', () => {
+                if(document.hidden) {
+                    setInterviewCompleted(true);
+                    console.log('Caught yah!');
+                }
+            });
+        }
+    }, [isInterviewer]);
 
     useEffect(() => {
         setName(isInterviewer?'Interviewer':'Interviewee');
