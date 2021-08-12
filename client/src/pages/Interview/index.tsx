@@ -85,11 +85,18 @@ const Interview = (props: any) => {
     useEffect(() => {
         if(!isInterviewer) {
             document.addEventListener('visibilitychange', () => {
-                if(document.hidden && ready) {
+                if(document.hidden) {
                     setInterviewCompleted(true);
                     console.log('Caught yah!');
                 }
             });
+
+            // return document.removeEventListener('visibilitychange', () => {
+            //     if(document.hidden && ready) {
+            //         setInterviewCompleted(true);
+            //         console.log('Caught yah!');
+            //     }
+            // });
         }
     }, [isInterviewer, ready]);
 
