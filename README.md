@@ -1,5 +1,5 @@
 <h2 align="center">
-	React Coding Desktop App<br/>
+	React Coding App<br/>
 	<a href="https://coders-garage.netlify.app/" target="_blank">Coders Garage</a>
 </h2>
 
