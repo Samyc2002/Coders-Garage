@@ -1,5 +1,5 @@
 <h2 align="center">
-	React Coding Website<br/>
+	React Coding Desktop App<br/>
 	<a href="https://coders-garage.netlify.app/" target="_blank">Coders Garage</a>
 </h2>
 
@@ -29,10 +29,11 @@ You can fork this repo to modify and make changes of your own. Please give me pr
 
 ## Built With
 
-A coding website <a href="https://coders-garage.netlify.app/" target="_blank">Coders Garage</a> which has a Home page where questions are available, an IDE that can be used by anyone and has a user friendly interview platform. It has a soothing and minimal UI.<br/>
+A coding desktop app <a href="https://coders-garage.netlify.app/" target="_blank">Coders Garage</a> which has a Home screen where questions are available, an IDE that can be used by anyone and has a user friendly interview platform. It has a soothing and minimal UI.<br/>
 
 This project was built using these technologies.
 
+- Electron.js
 - React.js
 - Node.js
 - Express.js
@@ -45,7 +46,7 @@ This project was built using these technologies.
 
 ## Features
 
-**📖 Multi-Page Layout**
+**📖 Multi-Screen Layout**
 
 **🎨 Styled with Material UI and CSS with easy to customize colors**
 
@@ -63,6 +64,12 @@ Clone down this repository. You will need `node.js` and `git` installed globally
   cd client
   npm i
   npm start
+```
+
+Now open a new terminal tab in the client directory and run
+
+```bash
+  npm electron .
 ```
 
 Runs the client app in the development mode.\
@@ -90,4 +97,4 @@ You will find all the components used and you can edit your information accordin
 
 ### Show your support
 
-Give a ⭐ if you like this website!
+Give a ⭐ if you like this app!
