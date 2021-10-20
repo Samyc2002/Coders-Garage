@@ -91,3 +91,22 @@ You will find all the components used and you can edit your information accordin
 ### Show your support
 
 Give a ⭐ if you like this website!
+
+### How to contribute
+- Create an Issue and wait for being assigned to it. (I shall be assigning them about twice a day)
+- Fork the repository.
+- Make changes and commits on the forked repository
+- Create a pull request to the master branch of the original repository
+- Valid pull requests will be merged
+
+Make sure you update the documentation accordingly.
+
+### Enhancements available to do (difficulty mentioned out of 5 and graded relatively)
+
+- [ ] Fixing IDE code compilation bugs. - 2
+- [ ] Fixing bugs in the IDE for answering questions (mainly the part where the code is run in server and a verdict is given like AC, TLE, etc.) - 3
+- [ ] Fixing bugs in the interview section. - 4
+- [ ] Adding Video chat feature in the interview section - 5
+
+### An additional feature that can be implemented (bonus)
+For the interview section, a complete separate react project can be made in the same repo which uses the same server. On joining an interview, the client can be redirected to that URL and all interview logic can be shifted to that project. Note that this <b>should be done in the same repo, it should use the same server</b> and the existing interview logic needs to be removed. If someone wants to take up this one, please make sure all other issues are already over before signing up for it.
