@@ -19,10 +19,10 @@ const TagsDialog = ({ toggleOpen, tags, setTags, open, action, actionTitle }: Ip
 
     const changeTags = (val: string) => {
         if(!tags.includes(val)) {
-            setTags((prevtags: string[]) => [ ...prevtags, val ]);
+            setTags([ ...tags, val ]);
         }
         else {
-            setTags((prevtags: string[]) => prevtags.filter(tag => tag!==val));
+            setTags(tags.filter(tag => tag!==val));
         }
     }
 
