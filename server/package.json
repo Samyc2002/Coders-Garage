@@ -34,10 +34,10 @@
 		"moment": "^2.29.1",
 		"mongoose": "^5.12.14",
 		"nodemailer": "^6.6.1",
+		"nodemon": "^2.0.7",
 		"socket.io": "^4.1.2",
 		"ts-node": "^10.0.0",
-		"typescript": "^4.3.2",
-		"nodemon": "^2.0.7"
+		"typescript": "^4.3.2"
 	},
 	"devDependencies": {
 		"prettier": "^2.3.2",
