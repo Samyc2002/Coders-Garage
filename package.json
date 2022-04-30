@@ -1,0 +1,23 @@
+{
+  "name": "coders-garage",
+  "version": "1.0.0",
+  "description": "<h2 align=\"center\">\r \tReact Coding Website<br/>\r \t<a href=\"https://coders-garage.netlify.app/\" target=\"_blank\">Coders Garage</a>\r </h2>",
+  "scripts": {
+    "install": "cd client && npm i && cd ../server && npm i",
+    "test": "concurrently \"cd server && npm run dev\" \"cd client && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samyc2002/Coders-Garage.git"
+  },
+  "keywords": [],
+  "author": "Samy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Samyc2002/Coders-Garage/issues"
+  },
+  "homepage": "https://github.com/Samyc2002/Coders-Garage#readme",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
