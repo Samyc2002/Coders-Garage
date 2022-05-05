@@ -7,9 +7,11 @@ export class UserController {
 
     static async getUser(req: Request, res: Response, next: NextFunction) {
 
+        const email: string = req.query.Email as string;
+        
         try {
 
-            const user = await User.findOne({ Email: req.body.Email });
+            const user = await User.findOne({ Email: email });
 
             if(user === null) {
 

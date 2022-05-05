@@ -14,12 +14,12 @@ class QuestionRouter {
     getRoutes() {
 
         this.router.get('/', QuestionController.fetchQuestions);
+        this.router.get('/data', QuestionController.getQuestion);
     }
 
     postRoutes() {
 
         this.router.post('/', QuestionController.createQuestion);
-        this.router.post('/data', QuestionController.getQuestion);
         this.router.post('/tags', QuestionController.getQuestionByTags);
     }
 

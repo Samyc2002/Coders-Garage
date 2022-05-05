@@ -7,9 +7,10 @@ export class InterviewController {
 
     static async getInterview(req: Request, res: Response, next: NextFunction) {
 
+        const RoomID: string = req.query.RoomId as string;
         try {
 
-            const interview = await Interview.findOne({ RoomId: req.body.RoomId });
+            const interview = await Interview.findOne({ RoomId: RoomID });
 
             res.status(200).json({
                 data: interview,
@@ -71,7 +72,7 @@ export class InterviewController {
 
         try {
             
-            await Interview.findOneAndDelete({ _id: req.body.id });
+            await Interview.findOneAndDelete({ _id: req.params.id });
 
             res.status(200).json({
                 success: true

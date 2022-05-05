@@ -8,6 +8,7 @@ class InterviewRouter {
         this.router = Router();
         this.getRoutes();
         this.postRoutes();
+        this.deleteRoutes();
     }
 
     getRoutes() {
@@ -17,10 +18,13 @@ class InterviewRouter {
 
     postRoutes() {
 
-        this.router.post('/data', InterviewController.getInterview);
         this.router.post('/', InterviewController.createInterview);
         this.router.post('/email', InterviewController.emailInterviewee);
-        this.router.post('/delete', InterviewController.deleteInterview);
+    }
+    
+    deleteRoutes() {
+        
+        this.router.delete('/:id', InterviewController.deleteInterview);
     }
 }
 

@@ -9,7 +9,7 @@ export class QuestionController{
 
         try {
             
-            const question = await Question.findOne({ QuestionID: req.body.QuestionID });
+            const question = await Question.findOne({ QuestionID: req.query.QuestionID });
 
             if(question === null) {
 
