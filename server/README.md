@@ -196,7 +196,7 @@ src
     }
     ```
 
-#### Available Schema
+#### Available Models
 
 1. User
     - UserName: string
