@@ -35,7 +35,7 @@ src
 
 1. /user 
     - /user/
-    ```json
+    ```js
     Request Type: GET
     Response Type: {
         data: null | user
@@ -44,7 +44,7 @@ src
     ```
 
     - /user/
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: user
@@ -53,7 +53,7 @@ src
     ```
 
     - /user/
-    ```json
+    ```js
     Request Type: PUT
     Response Type: {
         data: user
@@ -63,7 +63,7 @@ src
 
 2. /question 
     - /question/
-    ```json
+    ```js
     Request Type: GET
     Response Type: {
         data: question[]
@@ -72,7 +72,7 @@ src
     ```
 
     - /question/data
-    ```json
+    ```js
     Request Type: GET
     Response Type: {
         data: null | question
@@ -81,7 +81,7 @@ src
     ```
 
     - /question/
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: question
@@ -90,7 +90,7 @@ src
     ```
 
     - /question/tags
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: question[]
@@ -99,7 +99,7 @@ src
     ```
 
     - /question/
-    ```json
+    ```js
     Request Type: PUT
     Response Type: {
         data: question
@@ -109,7 +109,7 @@ src
 
 3. /auth
     - /auth/signin
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: null | {
@@ -121,7 +121,7 @@ src
     ```
 
     - /auth/signup
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: null | {
@@ -134,7 +134,7 @@ src
 
 4. /interview
     - /interview/
-    ```json
+    ```js
     Request Type: GET
     Response Type: {
         data: null | interview
@@ -143,7 +143,7 @@ src
     ```
 
     - /interview/
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: interview
@@ -152,7 +152,7 @@ src
     ```
 
     - /interview/email
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: message (email content)
@@ -161,7 +161,7 @@ src
     ```
 
     - /interview/:id
-    ```json
+    ```js
     Request Type: DELETE
     Response Type: {
         success: boolean
@@ -170,7 +170,7 @@ src
 
 5. /submission
     - /submission/:user
-    ```json
+    ```js
     Request Type: GET
     Response Type: {
         data: submission
@@ -179,7 +179,7 @@ src
     ```
 
     - /submission/:user
-    ```json
+    ```js
     Request Type: GET
     Response Type: {
         data: submission
@@ -188,7 +188,7 @@ src
     ```
 
     - /submission/
-    ```json
+    ```js
     Request Type: POST
     Response Type: {
         data: submission
